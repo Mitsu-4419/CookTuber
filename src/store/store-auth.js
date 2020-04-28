@@ -38,7 +38,7 @@ const actions = {
         const sp = await firestoreDb
           .collection("userPublicInfo")
           .doc(user.uid)
-          .collection("favorite_Youtuber")
+          .collection("favorite_VTR")
           .get();
         // console.log(sp);
         let favoriteYoutuberObj = {};
@@ -76,9 +76,9 @@ const actions = {
         updated_at: firestorebase.FieldValue.serverTimestamp()
       });
   },
-  setNickName({ commit }, payload) {
-    commit("setNickNameMutate", payload);
-  },
+  // setNickName({ commit }, payload) {
+  //   commit("setNickNameMutate", payload);
+  // },
   //ユーザー情報更新から、自己紹介の更新
   update_displayIntroduction({ commit }, payload) {
     commit("update_displayIntroductionMutate", payload);

@@ -45,10 +45,10 @@ module.exports = function(/* ctx */) {
       all: "auto",
 
       components: [],
-      directives: [],
+      directives: ["Ripple", "ClosePopup"],
 
       // Quasar plugins
-      plugins: []
+      plugins: ["LocalStorage", "SessionStorage", "Dialog"]
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie

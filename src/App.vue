@@ -1,11 +1,20 @@
 <template>
-  <div id="q-app">
+  <div id="q-app" style="color:#333">
     <router-view />
   </div>
 </template>
 
-<script >
+<script>
+import { mapActions } from "vuex";
+import Vue from "vue";
 export default {
-  name: 'App'
-}
+  methods: {
+    ...mapActions("auth", ["handleAuthStateChange"]),
+    ...mapActions("usersPublic", ["getUsersPublicProfile"])
+  },
+  async created() {
+    this.handleAuthStateChange();
+    this.getUsersPublicProfile();
+  }
+};
 </script>
