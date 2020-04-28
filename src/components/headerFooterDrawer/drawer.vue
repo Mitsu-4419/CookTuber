@@ -12,21 +12,21 @@
         <div>
           <q-item clickable v-ripple flat to="/live" exact class="drawerIcon">
             <q-item-section avatar style="color:#9f7346;">
-              <q-icon name="fas fa-headset" />
+              <q-icon name="restaurant" />
             </q-item-section>
-            <q-item-section>ライブ配信中</q-item-section>
+            <q-item-section>料理動画一覧</q-item-section>
           </q-item>
           <q-item clickable v-ripple flat to="/wait" exact class="drawerIcon">
             <q-item-section avatar>
-              <q-icon name="fas fa-satellite-dish" />
+              <q-icon name="live_tv" />
             </q-item-section>
-            <q-item-section>ライブ待機中</q-item-section>
+            <q-item-section>料理チャンネル</q-item-section>
           </q-item>
           <q-item clickable v-ripple flat to="/youtubers" exact class="drawerIcon">
             <q-item-section avatar>
-              <q-icon name="live_tv" />
+              <q-icon name="fas fa-users" />
             </q-item-section>
-            <q-item-section>YouTubers</q-item-section>
+            <q-item-section>Reviewer一覧</q-item-section>
           </q-item>
           <q-item clickable v-ripple flat to="/news" exact class="drawerIcon">
             <q-item-section avatar>
