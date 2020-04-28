@@ -15,6 +15,25 @@ const routes = [
       {
         path: "/registerDisplayName",
         component: () => import("pages/SetUp/PageRegisterDisplayName.vue")
+      },
+      {
+        path: "/account",
+        component: () => import("pages/Navigation/AccountInfo.vue"),
+        name: "account"
+      },
+      {
+        path: "/contact",
+        component: () => import("pages/Navigation/Contact.vue")
+      },
+      {
+        path: "/withdrawal",
+        component: () => import("pages/Navigation/Withdrawal.vue"),
+        name: "withdrawal",
+        props: true
+      },
+      {
+        path: "/thanksbyebye",
+        component: () => import("pages/Navigation/Thanks.vue")
       }
     ]
   }
