@@ -4,7 +4,7 @@ import Vue from "vue";
 const state = {
   usersPublicInfo: {}
 };
-// console.log(state.usersPublicInfo);
+console.log(state.usersPublicInfo);
 const mutations = {
   setYoutuber_FavoriteCount(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
