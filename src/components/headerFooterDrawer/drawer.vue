@@ -16,13 +16,13 @@
             </q-item-section>
             <q-item-section>料理動画一覧</q-item-section>
           </q-item>
-          <q-item clickable v-ripple flat to="/wait" exact class="drawerIcon">
+          <q-item clickable v-ripple flat to="/youtubers" exact class="drawerIcon">
             <q-item-section avatar>
               <q-icon name="live_tv" />
             </q-item-section>
             <q-item-section>料理チャンネル</q-item-section>
           </q-item>
-          <q-item clickable v-ripple flat to="/youtubers" exact class="drawerIcon">
+          <q-item clickable v-ripple flat to="/reviewers" exact class="drawerIcon">
             <q-item-section avatar>
               <q-icon name="fas fa-users" />
             </q-item-section>

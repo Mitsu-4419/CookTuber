@@ -17,6 +17,15 @@ const routes = [
         component: () => import("pages/SetUp/PageRegisterDisplayName.vue")
       },
       {
+        path: "/youtubers",
+        component: () => import("pages/Menu/PageYoutubers.vue")
+      },
+      {
+        path: "/show",
+        component: () => import("pages/YoutuberDetail/YoutuberDetail.vue"),
+        name: "show"
+      },
+      {
         path: "/account",
         component: () => import("pages/Navigation/AccountInfo.vue"),
         name: "account"

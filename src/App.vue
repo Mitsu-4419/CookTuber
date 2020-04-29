@@ -10,11 +10,13 @@ import Vue from "vue";
 export default {
   methods: {
     ...mapActions("auth", ["handleAuthStateChange"]),
-    ...mapActions("usersPublic", ["getUsersPublicProfile"])
+    ...mapActions("usersPublic", ["getUsersPublicProfile"]),
+    ...mapActions("youtubers", ["getYoutubers_info"])
   },
   async created() {
     this.handleAuthStateChange();
     this.getUsersPublicProfile();
+    this.getYoutubers_info();
   }
 };
 </script>

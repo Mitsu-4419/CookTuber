@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import auth from "./store-auth.js";
 import usersPublic from "./store-usersPublic.js";
+import youtubers from "./store-youtubers.js";
 // import example from './module-example'
 
 Vue.use(Vuex);
@@ -20,7 +21,8 @@ export default function(/* { ssrContext } */) {
     modules: {
       // example
       auth,
-      usersPublic
+      usersPublic,
+      youtubers
     },
 
     // enable strict mode (adds overhead!)
