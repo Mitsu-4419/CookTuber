@@ -83,7 +83,7 @@ const actions = {
     // console.log(snap);
     snap.forEach(async data => {
       let payload = {
-        id: data.id,
+        id: data.data().id,
         created_at: data.data().created_at,
         updated_at: data.data().updated_at,
         nickName: data.data().nickName,
