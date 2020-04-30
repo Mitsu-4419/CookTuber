@@ -10,11 +10,13 @@ import Vue from "vue";
 export default {
   methods: {
     ...mapActions("auth", ["handleAuthStateChange"]),
-    ...mapActions("usersPublic", ["getUsersPublicProfile"])
+    ...mapActions("usersPublic", ["getUsersPublicProfile"]),
+    ...mapActions("tags", ["getTags"])
   },
   async created() {
     this.handleAuthStateChange();
     this.getUsersPublicProfile();
+    this.getTags();
   }
 };
 </script>

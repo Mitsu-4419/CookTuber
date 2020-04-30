@@ -3,9 +3,7 @@
     <q-card class="registerNickName q-pa-sm">
       <q-card-section class="q-mb-lg">
         <div class="text-h6">ニックネームを登録してください</div>
-        <div class="subtitle-1" align="right">
-          （後でマイページから変更できます）
-        </div>
+        <div class="subtitle-1" align="right">（後でマイページから変更できます）</div>
       </q-card-section>
 
       <q-input
@@ -34,14 +32,14 @@ export default {
     };
   },
   computed: {
-    ...mapState("auth", ["userInfo"])
+    ...mapState("auth", ["userId"])
   },
   methods: {
     ...mapActions("usersPublic", ["getLoginUsersProfile"]),
     submitNickName() {
       this.$refs.nickNameInput.validate();
       if (!this.$refs.nickNameInput.hasError) {
-        const key = Object.keys(this.userInfo)[0];
+        const key = this.userId;
         firestoreDb
           .collection("userPublicInfo")
           .doc(key)

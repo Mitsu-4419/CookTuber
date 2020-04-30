@@ -1,30 +1,72 @@
 <template>
-  <q-page>
-    <div class="topPageImageWrapper">
-      <!-- <q-img class="topPageImage" src="statics/topPage/topPage_dishImg.jpg"></q-img> -->
-      <div class="column registerWrapper">
-        <q-input
-          bg-color="white"
-          class="registerURLInput"
-          rounded
-          outlined
-          v-model="register"
-          label="好きな料理Youtube動画のURLを貼ってください"
-          :rules="[val => val.includes('https://www.youtube.com/watch') || '登録できるのはYoutube動画のみです']"
-        />
-        <q-btn class="registerButton" label="登録" color="light-green-4"></q-btn>
+  <div>
+    <q-page>
+      <div class="topPageImageWrapper">
+        <!-- <q-img class="topPageImage" src="statics/topPage/topPage_dishImg.jpg"></q-img> -->
+        <div class="column registerWrapper">
+          <q-input
+            ref="VTRurl"
+            bg-color="white"
+            class="registerURLInput"
+            rounded
+            outlined
+            v-model="registerURL"
+            label="好きな料理Youtube動画のURLを貼ってください"
+            :rules="[
+              val =>
+                val.includes('https://www.youtube.com/watch?v=') ||
+                '登録できるのはYoutube動画のみです'
+            ]"
+          />
+          <q-btn
+            class="registerButton"
+            label="登録"
+            color="light-green-4"
+            @click="showReviewMakeModal"
+          ></q-btn>
+        </div>
       </div>
-    </div>
-    <div class="cookImageWrapper"></div>
-  </q-page>
+      <div class="cookImageWrapper"></div>
+    </q-page>
+
+    <!-- ユーザー登録をする様に促すDialog -->
+    <q-dialog v-model="alertToSignUp">
+      <ToLoginAlert />
+    </q-dialog>
+    <!-- レビューをかく促すDialog -->
+    <q-dialog v-model="reviewSubmit">
+      <registerReviewModal :registerURL="registerURL" />
+    </q-dialog>
+  </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      register: ""
+      registerURL: "",
+      alertToSignUp: false,
+      reviewSubmit: true
     };
+  },
+  computed: {
+    ...mapState("auth", ["loggedIn"])
+  },
+  methods: {
+    showReviewMakeModal() {
+      if (!this.loggedIn) {
+        // ログインしていなかったらユーザー登録する様にDialogをだす
+        this.alertToSignUp = true;
+      } else if (this.loggedIn && this.$refs.VTRurl.validate()) {
+        this.reviewSubmit = true;
+      }
+    }
+  },
+  components: {
+    ToLoginAlert: require("components/Card/ToLoginAlert.vue").default,
+    registerReviewModal: require("components/modal/registerReviewModal.vue")
+      .default
   }
 };
 </script>

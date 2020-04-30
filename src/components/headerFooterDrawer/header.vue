@@ -10,14 +10,7 @@
       <!-- 未ログインSTART -->
       <div class="loginWrapper">
         <div v-if="!loggedIn">
-          <q-btn
-            class="newRegisterButton"
-            push
-            color="black"
-            label="新規登録"
-            flat
-            to="/auth/sign_up"
-          ></q-btn>
+          <q-btn class="newRegisterButton" push color="black" label="新規登録" flat to="/auth/sign_up"></q-btn>
           <q-btn
             class="loginButtonLarge"
             push
@@ -41,13 +34,9 @@
         <div v-else>
           <div class="q-pa-md">
             <q-avatar size="md">
-              <img :src="Object.values(userInfo)[0].photoURL" />
+              <img :src="usersPublicInfo[userId].photoURL" />
             </q-avatar>
-            <q-btn-dropdown
-              color="black"
-              :label="Object.values(userInfo)[0].nickName"
-              flat
-            >
+            <q-btn-dropdown color="black" :label="usersPublicInfo[userId].nickName" flat>
               <q-list>
                 <router-link class="routerDec">
                   <q-item clickable v-close-popup class="text-black">
@@ -96,7 +85,8 @@ export default {
     return {};
   },
   computed: {
-    ...mapState("auth", ["loggedIn", "userInfo"])
+    ...mapState("auth", ["loggedIn", "userId"]),
+    ...mapState("usersPublic", ["usersPublicInfo"])
   },
   methods: {
     ...mapActions("auth", ["logoutUser"])

@@ -32,18 +32,21 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  props: ["userName", "userInfo"],
+  props: ["userName"],
   data() {
     return {
       editName: this.userName
     };
+  },
+  computed: {
+    ...mapState("auth", ["userId"])
   },
   methods: {
     ...mapActions("auth", ["update_displayName"]),
     ...mapActions("usersPublic", ["update_mypageName"]),
     submitName() {
       let payload = {
-        id: Object.keys(this.userInfo)[0],
+        id: this.userId,
         userName: this.editName
       };
       if (this.editName.length > 15) {
