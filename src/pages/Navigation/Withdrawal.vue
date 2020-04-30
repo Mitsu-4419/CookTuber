@@ -27,9 +27,7 @@ export default {
   data() {
     return {};
   },
-  computed: {
-    ...mapState("auth", ["userInfo"])
-  },
+  computed: {},
   methods: {
     ToWithdrawl() {
       try {

@@ -7,7 +7,7 @@
     </q-card-section>
     <div class="q-pa-md userIcon">
       <q-avatar size="120px">
-        <img :src="Object.values(this.userInfo)[0].photoURL" />
+        <img :src="usersPublicInfo[userId].photoURL" />
       </q-avatar>
     </div>
     <q-form id="file_upload" style="min-width:300px;" class="q-pa-md">
@@ -28,12 +28,12 @@ export default {
   data() {
     return {
       file: null,
-      userId: "",
       userPhotoName: ""
     };
   },
   computed: {
-    ...mapState("auth", ["userInfo"])
+    ...mapState("auth", ["userId"]),
+    ...mapState("usersPublic", ["usersPublicInfo"])
   },
   methods: {
     ...mapActions("auth", ["update_displayPhotoURL", "update_PhotoName"]),
@@ -72,8 +72,7 @@ export default {
     }
   },
   created() {
-    this.userId = Object.keys(this.userInfo)[0];
-    this.userPhotoName = Object.values(this.userInfo)[0].photoName;
+    this.userPhotoName = this.usersPublicInfo[this.userId].photoName;
   }
 };
 </script>

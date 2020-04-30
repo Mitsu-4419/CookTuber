@@ -24,13 +24,13 @@ export default {
     return {};
   },
   computed: {
-    ...mapState("auth", ["userInfo"])
+    ...mapState("auth", ["userId"])
   },
   methods: {
     submitAction() {
       this.$router.push({
         name: "withdrawal",
-        query: { id: Object.keys(this.userInfo)[0] }
+        query: { id: userId }
       });
     }
   }

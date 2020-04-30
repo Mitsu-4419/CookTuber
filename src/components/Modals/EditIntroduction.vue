@@ -28,14 +28,7 @@
           @click.prevent="submitIntroduction"
           v-close-popup
         />
-        <q-btn
-          label="キャンセル"
-          type="reset"
-          color="primary"
-          v-close-popup
-          flat
-          class="q-ml-sm"
-        />
+        <q-btn label="キャンセル" type="reset" color="primary" v-close-popup flat class="q-ml-sm" />
       </div>
     </q-form>
   </q-card>
@@ -44,18 +37,21 @@
 <script>
 import { mapActions } from "vuex";
 export default {
-  props: ["userIntroduction", "userInfo"],
+  props: ["userIntroduction"],
   data() {
     return {
       editIntroduction: this.userIntroduction
     };
+  },
+  computed: {
+    ...mapState("auth", ["userId"])
   },
   methods: {
     ...mapActions("auth", ["update_displayIntroduction"]),
     ...mapActions("usersPublic", ["update_mypageIntroduction"]),
     submitIntroduction() {
       let payload = {
-        id: Object.keys(this.userInfo)[0],
+        id: this.userId,
         userIntroduction: this.editIntroduction
       };
       if (this.editIntroduction.length > 35) {
