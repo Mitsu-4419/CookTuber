@@ -1,10 +1,10 @@
 import * as firebase from "firebase/app";
 import { firestoreDb, firestorebase } from "src/boot/firebase";
+import axios from "axios";
 import Vue from "vue";
 const state = {
   usersPublicInfo: {}
 };
-console.log(state.usersPublicInfo);
 const mutations = {
   setYoutuber_FavoriteCount(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
@@ -23,7 +23,6 @@ const mutations = {
     );
   },
   addReviewInfoMutate(state, payload) {
-    // console.log(payload);
     Vue.set(
       state.usersPublicInfo[payload.uid].favoriteYoutuberObj,
       payload.docId,
@@ -124,61 +123,101 @@ const actions = {
   },
   //ユーザー情報更新から、マイページのユーザーネームの更新
   update_mypageName({ commit }, payload) {
+    firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.id)
+      .update({
+        nickName: payload.userName,
+        updated_at: firestorebase.FieldValue.serverTimestamp()
+      });
     commit("update_mypageNameMutate", payload);
   },
   //ユーザー情報更新から、マイページの自己紹介の更新
   update_mypageIntroduction({ commit }, payload) {
     commit("update_mypageIntroductionMutate", payload);
+    firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.id)
+      .update({
+        introduction: payload.userIntroduction,
+        updated_at: firestorebase.FieldValue.serverTimestamp()
+      });
   },
   //ユーザー情報更新から、マイページのアイコンの更新
   update_mypagePhotoURL({ commit }, payload) {
     commit("update_mypagePhotoURLMutate", payload);
+    firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.id)
+      .update({
+        photoURL: payload.userPhotoURL,
+        updated_at: firestorebase.FieldValue.serverTimestamp(),
+        photoName: payload.userPhotoName
+      });
   },
   //ユーザー情報に登録youtuberの加算
-  async addReviewInfo({ commit }, payload) {
+  async addFavoriteVTR({ commit }, payload) {
     // ユーザーのSubCollectionにデータを入れる
     await firestoreDb
       .collection("userPublicInfo")
       .doc(payload.uid)
-      .collection("favorite_Youtuber")
+      .collection("favorite_VTR")
       .add({
         createdAt: firestorebase.FieldValue.serverTimestamp(),
         updatedAt: firestorebase.FieldValue.serverTimestamp(),
         review: payload.review,
         uid: payload.uid,
-        channelId: payload.favoriteTubersChannelId,
-        LikeArray: []
+        channelId: "",
+        LikeArray: [],
+        star_number: payload.star_number,
+        tagArray: payload.selectedTags,
+        videoId: payload.favoriteVTRvideoID
       });
-
     const sp = await firestoreDb
       .collection("userPublicInfo")
       .doc(payload.uid)
-      .collection("favorite_Youtuber")
+      .collection("favorite_VTR")
       .get();
-    console.log(sp);
-    let Obj = {};
-    sp.forEach(doc => {
-      Obj[doc.id] = doc.data();
-    });
     let getKey;
-    for (let key in Obj) {
-      if (Obj[key].channelId === payload.favoriteTubersChannelId) {
-        getKey = key;
+    sp.forEach(doc => {
+      if (doc.data().videoId == payload.favoriteVTRvideoID) {
+        getKey = doc.id;
       }
-    }
-    // console.log(getKey);
+    });
     let Payload = {
       docId: getKey,
       uid: payload.uid,
-      channelId: payload.favoriteTubersChannelId,
       obj: {
         createdAt: firestorebase.FieldValue.serverTimestamp(),
         review: payload.review,
         uid: payload.uid,
-        channelId: payload.favoriteTubersChannelId
+        videoId: payload.favoriteVTRvideoID,
+        star_number: payload.star_number,
+        tagArray: payload.selectedTags
       }
     };
     commit("addReviewInfoMutate", Payload);
+    const res = await axios.get(
+      "https://www.googleapis.com/youtube/v3/videos",
+      {
+        params: {
+          key: "AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s",
+          id: payload.favoriteVTRvideoID,
+          part: "snippet"
+        }
+      }
+    );
+    const snippet = res.data.items[0].snippet;
+    console.log(res.data.items[0].snippet);
+    firestoreDb
+      .collection("video_info")
+      .doc(payload.favoriteVTRvideoID)
+      .set({
+        channelId: snippet.channelId,
+        channelTitle: snippet.channelTitle,
+        videoTitle: snippet.title,
+        videoDescription: snippet.description
+      });
   },
   // レビューの更新をする
   changeReviewInfo({ commit }, payload) {

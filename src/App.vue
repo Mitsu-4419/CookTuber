@@ -11,12 +11,12 @@ export default {
   methods: {
     ...mapActions("auth", ["handleAuthStateChange"]),
     ...mapActions("usersPublic", ["getUsersPublicProfile"]),
-    ...mapActions("youtubers", ["getYoutubers_info"])
+    ...mapActions("tags", ["getTags"])
   },
   async created() {
     this.handleAuthStateChange();
     this.getUsersPublicProfile();
-    this.getYoutubers_info();
+    this.getTags();
   }
 };
 </script>

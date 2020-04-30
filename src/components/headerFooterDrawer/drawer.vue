@@ -49,7 +49,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("auth", ["loggedIn", "userInfo"]),
+    ...mapState("auth", ["loggedIn"]),
     ...mapState("youtubers", ["search"]),
     searchField: {
       get() {

@@ -43,6 +43,12 @@ const routes = [
       {
         path: "/thanksbyebye",
         component: () => import("pages/Navigation/Thanks.vue")
+      },
+      {
+        path: "/mypage",
+        component: () => import("pages/MyPage/PageMypage.vue"),
+        name: "mypage",
+        props: true
       }
     ]
   }
