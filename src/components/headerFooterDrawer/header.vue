@@ -31,14 +31,20 @@
         </div>
         <!-- 未ログインEND -->
         <!-- ログイン時の表示 -->
-        <div v-else>
+        <div v-else-if="loggedIn && LoginUserPublicData">
           <div class="q-pa-md">
             <q-avatar size="md">
-              <img :src="usersPublicInfo[userId].photoURL" />
+              <img :src="LoginUserPublicData['photoURL']" />
             </q-avatar>
-            <q-btn-dropdown color="black" :label="usersPublicInfo[userId].nickName" flat>
+            <q-btn-dropdown color="black" flat :label="LoginUserPublicData['nickName']">
               <q-list>
-                <router-link class="routerDec">
+                <router-link
+                  class="routerDec"
+                  :to="{
+                      name: 'mypage',
+                      query: { id: userId }
+                    }"
+                >
                   <q-item clickable v-close-popup class="text-black">
                     <q-item-section>
                       <q-item-label>マイページ</q-item-label>
@@ -86,7 +92,10 @@ export default {
   },
   computed: {
     ...mapState("auth", ["loggedIn", "userId"]),
-    ...mapState("usersPublic", ["usersPublicInfo"])
+    ...mapState("usersPublic", ["usersPublicInfo"]),
+    LoginUserPublicData() {
+      return this.usersPublicInfo[this.userId];
+    }
   },
   methods: {
     ...mapActions("auth", ["logoutUser"])
@@ -99,5 +108,8 @@ export default {
   color: #3c3c3c;
   font-weight: bold;
   font-size: 25px;
+}
+.routerDec {
+  text-decoration: none;
 }
 </style>

@@ -44,6 +44,7 @@ const uiConfig = {
   callbacks: {
     signInSuccessWithAuthResult: result => {
       if (result.additionalUserInfo.isNewUser == true) {
+        localStorage.setItem("isNewUser", true);
         firestoreDb
           .collection("userPublicInfo")
           .doc(result.user.uid)
@@ -51,12 +52,10 @@ const uiConfig = {
             nickName: result.user.displayName,
             photoURL: result.user.photoURL,
             introduction: "",
-            favoriteCount: 0,
             created_at: firebase.firestore.FieldValue.serverTimestamp(),
             updated_at: firebase.firestore.FieldValue.serverTimestamp(),
             photoName: ""
           });
-        localStorage.setItem("isNewUser", true);
       } else {
         localStorage.setItem("isNewUser", false);
       }

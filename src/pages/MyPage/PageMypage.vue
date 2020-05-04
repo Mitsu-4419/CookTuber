@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="ctlLayout">
+    <div class="ctlLayout" v-if="usersPublicInfo[pageUserId]">
       <!-- ユーザープロフィール情報 -->
       <div class="row profileWrapper">
         <q-avatar class="myPageAvator">
@@ -13,9 +13,15 @@
       </div>
       <!-- 全てのYoutuber -->
       <!-- 検索Wordがない場合 TabがAll　でかつSelectが登録者が多い-->
-      <div class="row YOUTUBERCardWrapper widthAdjust" name="youtubers">
-        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
-          <MyPageCookVideoReviewCard />
+      <div class="row cookVideoReview widthAdjust">
+        <transition-group appear enter-active-class="animated fadeInLeft" class>
+          <MyPageCookVideoReviewCard
+            v-for="(reviewInfo, key) in getfavoriteObject(pageUserId)"
+            :key="key"
+            :docId="key"
+            :reviewInfo="reviewInfo"
+            :userOrNot="userOrNot"
+          />
         </transition-group>
       </div>
     </div>
@@ -25,17 +31,19 @@
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 import { firestoreDb } from "src/boot/firebase";
+import { getParam } from "src/functions/getParam.js";
 export default {
   data() {
     return {
       alert: false,
       pageUserId: "",
       nickName: "",
-      current: 1
+      current: 1,
+      userOrNot: false
     };
   },
   computed: {
-    ...mapState("auth", ["loggedIn"]),
+    ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapGetters("usersPublic", ["getfavoriteObject"])
   },
@@ -44,10 +52,13 @@ export default {
     MyPageCookVideoReviewCard: require("components/VideoCard/MyPageCookVideoReviewCard.vue")
       .default
   },
-  created() {
-    this.pageUserId = this.$route.params.id;
-  },
-  mounted() {}
+  created() {},
+  mounted() {
+    this.pageUserId = getParam("id");
+    if (this.userId == this.pageUserId) {
+      this.userOrNot = true;
+    }
+  }
 };
 </script>
 
@@ -90,6 +101,10 @@ export default {
   width: 87%;
   margin-right: auto;
   margin-left: auto;
+}
+.cookVideoReview {
+  width: 100%;
+  margin-top: 30px;
 }
 /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* 
 /* 備忘録：こちらでwrapperの大きさを指定。

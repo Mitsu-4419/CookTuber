@@ -209,11 +209,7 @@
           </transition-group>
         </div>
         <!-- 簡単 -->
-        <div
-          class="row YouTuberCardWrapper widthAdjust"
-          name="youtubers"
-          v-if="tab == 'Easy'"
-        >
+        <div class="row YouTuberCardWrapper widthAdjust" name="youtubers" v-if="tab == 'Easy'">
           <transition-group appear enter-active-class="animated fadeInLeft" class="row">
             <YoutuberCard
               :channelInfo="channelInfo"
@@ -261,7 +257,11 @@
           </transition-group>
         </div>
         <!-- 唐揚げ -->
-        <div class="row YouTuberCardWrapper widthAdjust" name="youtubers" v-if="tab == 'Friedchicken'">
+        <div
+          class="row YouTuberCardWrapper widthAdjust"
+          name="youtubers"
+          v-if="tab == 'Friedchicken'"
+        >
           <transition-group appear enter-active-class="animated fadeInLeft" class="row">
             <YoutuberCard
               :channelInfo="channelInfo"
@@ -275,9 +275,12 @@
               Door="All"
             />
           </transition-group>
-        </div>
-        男の料理
-        <div class="row YouTuberCardWrapper widthAdjust" name="youtubers" v-if="tab == 'Menscooking'">
+        </div>男の料理
+        <div
+          class="row YouTuberCardWrapper widthAdjust"
+          name="youtubers"
+          v-if="tab == 'Menscooking'"
+        >
           <transition-group appear enter-active-class="animated fadeInLeft" class="row">
             <YoutuberCard
               :channelInfo="channelInfo"
@@ -338,7 +341,7 @@ export default {
         { Alchole: "酒のアテ" },
         { Breakfast: "朝食" },
         { Friedchicken: "唐揚げ" },
-        { Menscooking: "男の料理" },
+        { Menscooking: "男の料理" }
       ]
     };
   },
@@ -365,9 +368,9 @@ export default {
   },
   components: {
     //YouTuber一覧
-    YoutuberCard: require("components/Card/CardYoutuber.vue").default,
-    gameSelectModal: require("components/gameSelectModal/gameSelectModal.vue")
-      .default
+    YoutuberCard: require("components/Card/CardYoutuber.vue").default
+    // gameSelectModal: require("components/gameSelectModal/gameSelectModal.vue")
+    //   .default
   }
 };
 </script>

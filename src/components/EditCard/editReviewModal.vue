@@ -10,7 +10,7 @@
       <div class="starWrapper">
         <!-- <q-rating v-model="ratingModel" size="2.5em" :max="5" color="color" icon-half="star_half" /> -->
         <star-rating
-          v-model="ratingModel"
+          v-model="RatingModel"
           :star-size="33"
           :increment="0.1"
           :padding="16"
@@ -19,10 +19,10 @@
           text-class="custom-text"
         ></star-rating>
       </div>
-      <q-form @submit="submitReview">
+      <q-form @submit="submitEdittedReview">
         <div class="q-pa-sm">
           <q-input
-            v-model="text"
+            v-model="Review"
             outlined
             type="textarea"
             :rules="[val => !!val || '* 料理のReviewを入力してください']"
@@ -45,7 +45,6 @@
             />
           </div>
         </div>
-        <q-card-section class>投稿したレビューはマイページで確認できます</q-card-section>
         <q-card-actions align="right" class="q-mt-md">
           <q-btn color="green-13" type="submit">
             <span style="font-weight:bold;">投稿</span>
@@ -61,12 +60,11 @@
 import { SessionStorage } from "quasar";
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
-  props: ["registerURL", "snippet"],
+  props: ["review", "tagArray", "starPoint", "videoId", "docId"],
   data() {
     return {
-      writeReview: false,
-      text: "",
-      ratingModel: 1,
+      Review: this.review,
+      RatingModel: 1,
       modelMultiple: [],
       options: []
     };
@@ -76,47 +74,63 @@ export default {
     ...mapState("auth", ["userId"])
   },
   methods: {
-    ...mapActions("usersPublic", ["addFavoriteVTR"]),
-    ...mapActions("tags", ["setVideoAtTag"]),
+    ...mapActions("usersPublic", ["updateFavoriteVTR"]),
+    ...mapActions("tags", ["updateVideoAtTag"]),
     // ...mapActions("youtubers", ["incrementFavorite"]),
-    submitReview() {
+    submitEdittedReview() {
       // tagのValueを再びKeyに変更する
-      let tagArray = [];
+      let selectedTagArray = [];
       for (let j = 0; j < this.modelMultiple.length; j++) {
         Object.keys(this.allTags).forEach(key => {
           if (this.modelMultiple[j] == this.allTags[key].tagName) {
-            tagArray.push(key);
+            selectedTagArray.push(key);
           }
         });
       }
       // VideoId をURLから取り出す
-      let splicedURL1 = this.registerURL.split("&")[0];
-      let videoId = splicedURL1.split("v=")[1];
-      this.addFavoriteVTR({
+      // またVideoInfoのところで星の数値の増減を反映させないといけないため最初のstarNumberも送る
+      this.updateFavoriteVTR({
         uid: this.userId,
-        review: this.text,
-        favoriteVTRvideoID: videoId,
-        selectedTags: tagArray,
-        star_number: this.ratingModel,
-        snippet: this.snippet
+        review: this.Review,
+        favoriteVTRvideoID: this.videoId,
+        selectedTags: selectedTagArray,
+        beforeTags: this.tagArray,
+        star_number: this.RatingModel,
+        beforeStarNumber: this.starPoint,
+        docId: this.docId
       });
-      // tagがつけられていたらState、Dbを更新する
-      if (this.modelMultiple.length > 0) {
-        // tagのStateの更新をする
-        this.setVideoAtTag({
-          selectedTags: tagArray,
-          videoId: videoId
-        });
+      // tagのStateの更新をする
+      // 最初に付いていたTagをremoveしなければ行けたないため、最初に付いていたTagの配列も送る
+      // ここで最初に登録されていたTagから除去されたタグの配列と、加えられた配列をつくる。
+      let deletedTagArray = [];
+      let addedTagArray = [];
+      for (let i in this.tagArray) {
+        if (!selectedTagArray.includes(this.tagArray[i])) {
+          deletedTagArray.push(this.tagArray[i]);
+        }
       }
-      this.writeReview = false;
-      this.$router.push({ name: "mypage", query: { id: this.userId } });
+      for (let j in selectedTagArray) {
+        if (!this.tagArray.includes(selectedTagArray[j])) {
+          addedTagArray.push(selectedTagArray[j]);
+        }
+      }
+      this.updateVideoAtTag({
+        selectedTags: selectedTagArray,
+        videoId: this.videoId,
+        deletedTagArray: deletedTagArray,
+        addedTagArray: addedTagArray
+      });
+      this.$emit("closeModal");
     }
   },
-  mounted() {
-    if (this.allTags) {
-      Object.keys(this.allTags).forEach(key => {
-        this.options.push(this.allTags[key].tagName);
-      });
+  created() {
+    Object.keys(this.allTags).forEach(key => {
+      this.options.push(this.allTags[key].tagName);
+    });
+    this.RatingModel = this.starPoint;
+    for (let j = 0; j < this.tagArray.length; j++) {
+      let key = this.tagArray[j];
+      this.modelMultiple.push(this.allTags[key].tagName);
     }
   }
 };

@@ -1,21 +1,31 @@
 <template>
   <q-dialog v-model="alert" persistent>
     <q-card class="registerNickName q-pa-sm">
-      <q-card-section class="q-mb-lg">
-        <div class="text-h6">ニックネームを登録してください</div>
+      <q-card-section class="nickNameRegisterTitle">
+        <div class="text-h6 text-bold">ニックネームを登録してください</div>
         <div class="subtitle-1" align="right">（後でマイページから変更できます）</div>
       </q-card-section>
-
-      <q-input
-        outlined
-        v-model="nickName"
-        label="ニックネーム"
-        :rules="[val => !!val || 'ニックネームを入れてください']"
-        class="nickNameField"
-        ref="nickNameInput"
-      />
+      <q-card-section>
+        <q-input
+          outlined
+          v-model="nickName"
+          label="ニックネーム"
+          :rules="[val => !!val || 'ニックネームを入れてください']"
+          class="nickNameField"
+          ref="nickNameInput"
+        />
+        <q-input
+          outlined
+          v-model="introduction"
+          label="簡単な自己紹介をしてください（※空欄可）"
+          :rules="[val => val.length <= 30 || '３０字以内です']"
+          ref="introduceInput"
+          type="textarea"
+          class="introductionField"
+        />
+      </q-card-section>
       <q-card-actions align="right">
-        <q-btn flat label="OK" color="primary" @click="submitNickName()" />
+        <q-btn flat label="OK" color="black" @click="submitNickName()" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -28,14 +38,15 @@ export default {
   data() {
     return {
       alert: true,
-      nickName: ""
+      nickName: "",
+      introduction: ""
     };
   },
   computed: {
     ...mapState("auth", ["userId"])
   },
   methods: {
-    ...mapActions("usersPublic", ["getLoginUsersProfile"]),
+    ...mapActions("usersPublic", ["updateNewLoginUsersProfile"]),
     submitNickName() {
       this.$refs.nickNameInput.validate();
       if (!this.$refs.nickNameInput.hasError) {
@@ -44,14 +55,15 @@ export default {
           .collection("userPublicInfo")
           .doc(key)
           .update({
-            nickName: this.nickName
+            nickName: this.nickName,
+            introduction: this.introduction
           });
         let payload = {
           id: key,
-          nickName: this.nickName
+          nickName: this.nickName,
+          introduction: this.introduction
         };
-        this.getLoginUsersProfile(payload);
-        // this.setNickName(payload);
+        this.updateNewLoginUsersProfile(payload);
         this.alert = false;
         localStorage.setItem("isNewUser", false);
         this.$router.push("/");
@@ -68,11 +80,19 @@ export default {
 .registerNickName {
   width: 410px;
   z-index: 10px;
+  padding: 0;
 }
-
 .nickNameField {
-  width: 350px;
+  width: 100%;
   margin-right: auto;
   margin-left: auto;
+}
+.introductionField {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.nickNameRegisterTitle {
+  background: #f7f3e8;
 }
 </style>
