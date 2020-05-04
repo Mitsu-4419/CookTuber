@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import auth from "./store-auth.js";
 import usersPublic from "./store-usersPublic.js";
 import tags from "./store-tags.js";
+import youtubers from "./store-youtubers.js";
 // import example from './module-example'
 
 Vue.use(Vuex);
@@ -22,7 +23,8 @@ export default function(/* { ssrContext } */) {
       // example
       auth,
       usersPublic,
-      tags
+      tags,
+      youtubers
     },
 
     // enable strict mode (adds overhead!)

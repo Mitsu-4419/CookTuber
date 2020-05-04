@@ -1,7 +1,5 @@
-import * as firebase from "firebase/app";
 import { LocalStorage, Loading } from "quasar";
-import { firestoreDb, firestorebase, firebaseAuth } from "src/boot/firebase";
-import Vue from "vue";
+import { firebaseAuth } from "src/boot/firebase";
 const state = {
   loggedIn: false,
   userId: ""
@@ -18,20 +16,21 @@ const actions = {
   logoutUser() {
     firebaseAuth.signOut();
   },
-  handleAuthStateChange({ commit }) {
+  handleAuthStateChange({ commit, dispatch }) {
     firebaseAuth.onAuthStateChanged(async user => {
       Loading.hide();
       let isNewUser = localStorage.getItem("isNewUser");
       if (user) {
         commit("setLoggedIn", true);
         commit("setUserInfo", user.uid);
-        LocalStorage.set("loggedIn", true);
         // 初めてのユーザーの場合最初にDisplayNameを決めてもらう。
         if (isNewUser == "true") {
           this.$router.push("/registerDisplayName").catch(err => {});
+          dispatch("usersPublic/setNewUserProfile", user.uid, { root: true });
         } else if (isNewUser == "false") {
           this.$router.push("/").catch(err => {});
         }
+        LocalStorage.set("loggedIn", true);
       } else {
         commit("setLoggedIn", false);
         LocalStorage.set("loggedIn", false);

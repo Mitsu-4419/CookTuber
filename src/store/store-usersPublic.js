@@ -1,16 +1,41 @@
 import * as firebase from "firebase/app";
 import { firestoreDb, firestorebase } from "src/boot/firebase";
-import axios from "axios";
 import Vue from "vue";
 const state = {
-  usersPublicInfo: {}
+  usersPublicInfo: {},
+  videos: {}
 };
 const mutations = {
   setYoutuber_FavoriteCount(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
   },
-  getLoginUsersProfileMutate(state, payload) {
-    state.usersPublicInfo[payload.id] = payload;
+  // 新規ユーザー登録時のMutation
+  setNewUserProfileMutate(state, payload) {
+    Vue.set(state.usersPublicInfo, payload.id, payload);
+  },
+  updateNewLoginUsersProfileMutate(state, payload) {
+    Vue.set(state.usersPublicInfo[payload.id], "nickName", payload.nickName);
+    Vue.set(
+      state.usersPublicInfo[payload.id],
+      "introduction",
+      payload.introduction
+    );
+  },
+  // 全てのビデオデータをStateに入れる
+  setVideosMutate(state, payload) {
+    Vue.set(state.videos, payload.id, payload);
+  },
+  // 新規のビデオデータをStateに入れる
+  addVideoInfoMutate(state, payload) {
+    Vue.set(state.videos, payload.id, payload);
+  },
+  // すでに登録してあった場合は数値を更新する
+  uploadVideoMutate(state, payload) {
+    state.videos[payload.id].registerCount =
+      Number(state.videos[payload.id].registerCount) + 1;
+    state.videos[payload.id].starPoint =
+      Number(state.videos[payload.id].starPoint) + Number(payload.starPoint);
+    Vue.set(state.videos[payload.id], "tagArray", payload.tagArray);
   },
   update_mypageNameMutate(state, payload) {
     Vue.set(state.usersPublicInfo[payload.id], "nickName", payload.userName);
@@ -24,17 +49,56 @@ const mutations = {
   },
   addReviewInfoMutate(state, payload) {
     Vue.set(
-      state.usersPublicInfo[payload.uid].favoriteYoutuberObj,
+      state.usersPublicInfo[payload.uid].favoriteVTRObj,
       payload.docId,
       payload.obj
     );
   },
+  // ＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+  // マイページからレビュー情報を変更する
+  // ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
   changeReviewInfoMutate(state, payload) {
     Vue.set(
-      state.usersPublicInfo[payload.uid].favoriteYoutuberObj[payload.docId],
+      state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
       "review",
       payload.obj.review
     );
+    Vue.set(
+      state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
+      "star_number",
+      payload.obj.star_number
+    );
+    Vue.set(
+      state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
+      "tagArray",
+      payload.obj.tagArray
+    );
+    Vue.set(
+      state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
+      "updatedAt",
+      payload.obj.updatedAt
+    );
+  },
+  // video情報の更新
+  updateVideoDataMutate(state, payload) {
+    Vue.set(state.videos[payload.id], "starPoint", payload.starPoint);
+  },
+  reduceTagsMutate(state, payload) {
+    Vue.set(
+      state.videos[payload.id].tagMap,
+      payload.key,
+      state.videos[payload.id].tagMap[payload.key]--
+    );
+  },
+  addTagsMutate(state, payload) {
+    Vue.set(
+      state.videos[payload.id].tagMap,
+      payload.key,
+      state.videos[payload.id].tagMap[payload.key]++
+    );
+  },
+  addNewTagsMutate(state, payload) {
+    Vue.set(state.videos[payload.id].tagMap, payload.key, 1);
   },
   delReviewInfoMutate(state, payload) {
     Vue.delete(
@@ -78,12 +142,12 @@ const mutations = {
 };
 
 const actions = {
+  // 全員のPublicDataを取ってくる。
   async getUsersPublicProfile({ commit }) {
     const snap = await firestoreDb.collection("userPublicInfo").get();
-    // console.log(snap);
     snap.forEach(async data => {
       let payload = {
-        id: data.data().id,
+        id: data.id,
         created_at: data.data().created_at,
         updated_at: data.data().updated_at,
         nickName: data.data().nickName,
@@ -96,31 +160,266 @@ const actions = {
         .doc(data.id)
         .collection("favorite_VTR")
         .get();
-      let favoriteYoutuberObj = {};
+      let favoriteVTRObj = {};
       sp.forEach(async doc => {
-        favoriteYoutuberObj[doc.id] = doc.data();
+        favoriteVTRObj[doc.id] = doc.data();
       });
-      payload["favoriteYoutuberObj"] = favoriteYoutuberObj;
+      payload["favoriteVTRObj"] = favoriteVTRObj;
       commit("setYoutuber_FavoriteCount", payload);
     });
   },
-  async getLoginUsersProfile({ commit }, payload) {
+  // 新規ログインユーザーが入った時にstore-authでこのアクションを発火させることで新規ユーザーの情報をまずステートに入れる
+  async setNewUserProfile({ commit }, value) {
+    console.log(value);
     const sp = await firestoreDb
       .collection("userPublicInfo")
-      .doc(payload.id)
+      .doc(value)
       .get();
     let obj = {
       id: sp.id,
       created_at: sp.data().created_at,
       updated_at: sp.data().updated_at,
-      nickName: payload.nickName,
+      nickName: sp.data().nickName,
       introduction: sp.data().introduction,
-      photoURL: sp.data().photoURL,
-      favoriteCount: sp.data().favoriteCount
+      photoURL: sp.data().photoURL
     };
-    obj["favoriteYoutuberObj"] = {};
-    commit("getLoginUsersProfileMutate", obj);
+    obj["favoriteVTRObj"] = {};
+    commit("setNewUserProfileMutate", obj);
   },
+  // Stateに新規ユーザーの情報を入れる。
+  // nickNameとIntroductionの情報の更新
+  async updateNewLoginUsersProfile({ commit }, payload) {
+    commit("updateNewLoginUsersProfileMutate", payload);
+  },
+  // -------------------------------
+  // 全てのVideoDataを取ってきてStateに入れる。
+  // -------------------------------
+  async getVideos({ commit }) {
+    const snap = await firestoreDb.collection("video_info").get();
+    snap.forEach(async data => {
+      let payload = {
+        id: data.id,
+        channelId: data.data().channelId,
+        channelTitle: data.data().channelTitle,
+        videoTitle: data.data().videoTitle,
+        videoDescription: data.data().videoDescription,
+        thumbnail: data.data().thumbnail,
+        registerCount: Number(data.data().registerCount),
+        starPoint: Number(data.data().starPoint),
+        tagMap: data.data().tagMap
+      };
+      commit("setVideosMutate", payload);
+    });
+  },
+  // ------------------------------
+  //ユーザー情報にお気に入りのVideoを登録
+  // ------------------------------
+  async addFavoriteVTR({ commit, state }, payload) {
+    // -----------------------------------
+    // userPublicにタグの情報を入れるときはtagArrayで入れている。
+    // videoにタグ情報を入れている時はtagMApにして入れている。（個数をカウントするため）
+    // ----------------------------------
+
+    // ーーーーーーーーーーーーーー
+    // ユーザーのSubCollectionにデータを入れる
+    await firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.uid)
+      .collection("favorite_VTR")
+      .add({
+        createdAt: firestorebase.FieldValue.serverTimestamp(),
+        updatedAt: firestorebase.FieldValue.serverTimestamp(),
+        review: payload.review,
+        uid: payload.uid,
+        channelId: "",
+        LikeArray: [],
+        star_number: payload.star_number,
+        tagArray: payload.selectedTags,
+        videoId: payload.favoriteVTRvideoID
+      });
+    // DocumentId を取ってきてStateに登録
+    const sp = await firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.uid)
+      .collection("favorite_VTR")
+      .get();
+    let getKey;
+    sp.forEach(doc => {
+      if (doc.data().videoId == payload.favoriteVTRvideoID) {
+        getKey = doc.id;
+      }
+    });
+    let Payload = {
+      docId: getKey,
+      uid: payload.uid,
+      obj: {
+        createdAt: firestorebase.FieldValue.serverTimestamp(),
+        review: payload.review,
+        uid: payload.uid,
+        videoId: payload.favoriteVTRvideoID,
+        star_number: payload.star_number,
+        tagArray: payload.selectedTags,
+        LikeArray: []
+      }
+    };
+    commit("addReviewInfoMutate", Payload);
+    // Video情報を取ってきて保存するところ
+    // Videoの情報がすでに登録されていなければ登録する
+    let tagMap = {};
+    for (let k = 0; k < payload.selectedTags.length; k++) {
+      tagMap[payload.selectedTags[k]] = 1;
+    }
+    if (!Object.keys(state.videos).includes(payload.favoriteVTRvideoID)) {
+      const snippet = payload.snippet;
+      firestoreDb
+        .collection("video_info")
+        .doc(payload.favoriteVTRvideoID)
+        .set({
+          channelId: snippet.channelId,
+          channelTitle: snippet.channelTitle,
+          videoTitle: snippet.title,
+          videoDescription: snippet.description,
+          thumbnail: snippet.thumbnails.medium.url,
+          //Videoを登録したユーザーのカウント
+          registerCount: 1,
+          // 星の点数を加算していく
+          starPoint: Number(payload.star_number),
+          tagMap: tagMap
+        });
+      let PAYLOAD = {
+        id: payload.favoriteVTRvideoID,
+        channelId: snippet.channelId,
+        channelTitle: snippet.channelTitle,
+        videoTitle: snippet.title,
+        videoDescription: snippet.description,
+        thumbnail: snippet.thumbnails.medium.url,
+        registerCount: 1,
+        starPoint: Number(payload.star_number),
+        tagMap: tagMap
+      };
+      commit("addVideoInfoMutate", PAYLOAD);
+    } else {
+      // ビデオがすでに登録してあった場合
+      // Stateからすでに登録しているTagを取ってきて、それ以外をUpDateするようにする
+      let videoTagMap = state.videos[payload.favoriteVTRvideoID].tagMap;
+      // ビデオが登録してあったけどTagは付いていなかった時
+      if (!videoTagMap) {
+        firestoreDb
+          .collection("video_info")
+          .doc(payload.favoriteVTRvideoID)
+          .update({
+            registerCount: firestorebase.FieldValue.increment(1),
+            // 星の点数を加算していく
+            starPoint: firestorebase.FieldValue.increment(
+              Number(payload.star_number)
+            ),
+            tagMap: tagMap
+          });
+        let payloaded = {
+          id: payload.favoriteVTRvideoID,
+          starPoint: Number(payload.star_number),
+          tagMap: tagMap
+        };
+        commit("uploadVideoMutate", payloaded);
+      } else {
+        // 今回選ばれたタグの配列
+        let selectedArray = payload.selectedTags;
+        for (let t = 0; t < selectedArray.length; t++) {
+          if (Object.keys(tagMap).includes(selectedArray[t])) {
+            tagMap[selectedArray[t]]++;
+          } else {
+            tagMap[selectedArray[t]] = 1;
+          }
+        }
+        firestoreDb
+          .collection("video_info")
+          .doc(payload.favoriteVTRvideoID)
+          .update({
+            registerCount: firestorebase.FieldValue.increment(1),
+            // 星の点数を加算していく
+            starPoint: firestorebase.FieldValue.increment(
+              Number(payload.star_number)
+            ),
+            tagMap: tagMap
+          });
+        let payloaded = {
+          id: payload.favoriteVTRvideoID,
+          starPoint: Number(payload.star_number),
+          tagMap: tagMap
+        };
+        commit("uploadVideoMutate", payloaded);
+      }
+    }
+  },
+  // ==================================
+  // マイページの自分のレビューを更新するところ
+  // ===================================
+  updateFavoriteVTR({ commit, state }, payload) {
+    // Userの情報の変更
+    let Payload = {
+      uid: payload.uid,
+      channelId: payload.favoriteTubers,
+      docId: payload.docId,
+      obj: {
+        updatedAt: firestorebase.FieldValue.serverTimestamp(),
+        review: payload.review,
+        star_number: payload.star_number,
+        tagArray: payload.selectedTags
+      }
+    };
+    commit("changeReviewInfoMutate", Payload);
+    firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.uid)
+      .collection("favorite_VTR")
+      .doc(payload.docId)
+      .update({
+        review: payload.review,
+        star_number: payload.star_number,
+        tagArray: payload.selectedTags,
+        updatedAt: firestorebase.FieldValue.serverTimestamp()
+      });
+    //=================
+    // Video情報の変更
+    //=================
+    // まず最初に付いていてタグを減算してから、新しくつけたタグを加える
+    let TAGMAP = state.videos[payload.favoriteVTRvideoID].tagMap;
+    let arrayBefore = payload.beforeTags;
+    for (let l = 0; l < arrayBefore.length; l++) {
+      let puyload = {
+        id: payload.favoriteVTRvideoID,
+        key: arrayBefore[l]
+      };
+      commit("reduceTagsMutate", puyload);
+    }
+    // 次に新しくつけたタグを加算していく
+    let arrayAfter = payload.selectedTags;
+    for (let o = 0; o < arrayBefore.length; o++) {
+      let poyload = {
+        id: payload.favoriteVTRvideoID,
+        key: arrayAfter[o]
+      };
+      if (Object.keys(TAGMAP).includes(arrayAfter[o])) {
+        commit("addTagsMutate", poyload);
+      } else {
+        commit("addNewTagsMutate", poyload);
+      }
+    }
+    // 次に星の計算をする
+    let changeAmount =
+      Number(payload.star_number) - Number(payload.beforeStarNumber);
+    let changedStarPoint =
+      state.videos[payload.favoriteVTRvideoID].starPoint + changeAmount;
+    let payyload = {
+      starPoint: changedStarPoint,
+      id: payload.favoriteVTRvideoID
+    };
+    console.log("hage6");
+    commit("updateVideoDataMutate", payyload);
+  },
+  // ーーーーーーーーーーーーーーーーーーーーーーーーーー
+  // プロフィールの編集のところ
+  // ーーーーーーーーーーーーーーーーーーーーーーーーーー
   //ユーザー情報更新から、マイページのユーザーネームの更新
   update_mypageName({ commit }, payload) {
     firestoreDb
@@ -155,140 +454,51 @@ const actions = {
         photoName: payload.userPhotoName
       });
   },
-  //ユーザー情報に登録youtuberの加算
-  async addFavoriteVTR({ commit }, payload) {
-    // ユーザーのSubCollectionにデータを入れる
-    await firestoreDb
-      .collection("userPublicInfo")
-      .doc(payload.uid)
-      .collection("favorite_VTR")
-      .add({
-        createdAt: firestorebase.FieldValue.serverTimestamp(),
-        updatedAt: firestorebase.FieldValue.serverTimestamp(),
-        review: payload.review,
-        uid: payload.uid,
-        channelId: "",
-        LikeArray: [],
-        star_number: payload.star_number,
-        tagArray: payload.selectedTags,
-        videoId: payload.favoriteVTRvideoID
-      });
-    const sp = await firestoreDb
-      .collection("userPublicInfo")
-      .doc(payload.uid)
-      .collection("favorite_VTR")
-      .get();
-    let getKey;
-    sp.forEach(doc => {
-      if (doc.data().videoId == payload.favoriteVTRvideoID) {
-        getKey = doc.id;
-      }
-    });
-    let Payload = {
-      docId: getKey,
-      uid: payload.uid,
-      obj: {
-        createdAt: firestorebase.FieldValue.serverTimestamp(),
-        review: payload.review,
-        uid: payload.uid,
-        videoId: payload.favoriteVTRvideoID,
-        star_number: payload.star_number,
-        tagArray: payload.selectedTags
-      }
-    };
-    commit("addReviewInfoMutate", Payload);
-    const res = await axios.get(
-      "https://www.googleapis.com/youtube/v3/videos",
-      {
-        params: {
-          key: "AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s",
-          id: payload.favoriteVTRvideoID,
-          part: "snippet"
-        }
-      }
-    );
-    const snippet = res.data.items[0].snippet;
-    console.log(res.data.items[0].snippet);
-    firestoreDb
-      .collection("video_info")
-      .doc(payload.favoriteVTRvideoID)
-      .set({
-        channelId: snippet.channelId,
-        channelTitle: snippet.channelTitle,
-        videoTitle: snippet.title,
-        videoDescription: snippet.description
-      });
-  },
-  // レビューの更新をする
-  changeReviewInfo({ commit }, payload) {
-    let Payload = {
-      uid: payload.uid,
-      channelId: payload.favoriteTubers,
-      docId: payload.docId,
-      obj: {
-        createdAt: firestorebase.FieldValue.serverTimestamp(),
-        review: payload.review,
-        uid: payload.id,
-        channelId: payload.favoriteTubers
-      }
-    };
-    commit("changeReviewInfoMutate", Payload);
-    firestoreDb
-      .collection("userPublicInfo")
-      .doc(payload.uid)
-      .collection("favorite_Youtuber")
-      .doc(payload.docId)
-      .update({
-        review: payload.review,
-        updatedAt: firestorebase.FieldValue.serverTimestamp()
-      });
-  },
 
   //ユーザー情報に登録youtuberの加算
-  async addReviewInfo({ commit }, payload) {
-    // ユーザーのSubCollectionにデータを入れる
-    await firestoreDb
-      .collection("userPublicInfo")
-      .doc(payload.uid)
-      .collection("favorite_Youtuber")
-      .add({
-        createdAt: firestorebase.FieldValue.serverTimestamp(),
-        updatedAt: firestorebase.FieldValue.serverTimestamp(),
-        review: payload.review,
-        uid: payload.uid,
-        channelId: payload.favoriteTubersChannelId,
-        LikeArray: []
-      });
-    const sp = await firestoreDb
-      .collection("userPublicInfo")
-      .doc(payload.uid)
-      .collection("favorite_Youtuber")
-      .get();
-    let Obj = {};
-    sp.forEach(doc => {
-      Obj[doc.id] = doc.data();
-    });
-    let getKey;
-    for (let key in Obj) {
-      if (Obj[key].channelId === payload.favoriteTubersChannelId) {
-        getKey = key;
-      }
-    }
-    // console.log(getKey);
-    let Payload = {
-      docId: getKey,
-      uid: payload.uid,
-      channelId: payload.favoriteTubersChannelId,
-      obj: {
-        createdAt: firestorebase.FieldValue.serverTimestamp(),
-        review: payload.review,
-        uid: payload.uid,
-        channelId: payload.favoriteTubersChannelId
-      }
-    };
-    commit("addReviewInfoMutate", Payload);
-  },
-
+  // async addReviewInfo({ commit }, payload) {
+  //   // ユーザーのSubCollectionにデータを入れる
+  //   await firestoreDb
+  //     .collection("userPublicInfo")
+  //     .doc(payload.uid)
+  //     .collection("favorite_Youtuber")
+  //     .add({
+  //       createdAt: firestorebase.FieldValue.serverTimestamp(),
+  //       updatedAt: firestorebase.FieldValue.serverTimestamp(),
+  //       review: payload.review,
+  //       uid: payload.uid,
+  //       channelId: payload.favoriteTubersChannelId,
+  //       LikeArray: []
+  //     });
+  //   const sp = await firestoreDb
+  //     .collection("userPublicInfo")
+  //     .doc(payload.uid)
+  //     .collection("favorite_Youtuber")
+  //     .get();
+  //   let Obj = {};
+  //   sp.forEach(doc => {
+  //     Obj[doc.id] = doc.data();
+  //   });
+  //   let getKey;
+  //   for (let key in Obj) {
+  //     if (Obj[key].channelId === payload.favoriteTubersChannelId) {
+  //       getKey = key;
+  //     }
+  //   }
+  //   // console.log(getKey);
+  //   let Payload = {
+  //     docId: getKey,
+  //     uid: payload.uid,
+  //     channelId: payload.favoriteTubersChannelId,
+  //     obj: {
+  //       createdAt: firestorebase.FieldValue.serverTimestamp(),
+  //       review: payload.review,
+  //       uid: payload.uid,
+  //       channelId: payload.favoriteTubersChannelId
+  //     }
+  //   };
+  //   commit("addReviewInfoMutate", Payload);
+  // },
   // レビューを消す
   delReviewInfo({ commit }, payload) {
     commit("delReviewInfoMutate", payload);
@@ -326,25 +536,11 @@ const actions = {
 };
 
 const getters = {
-  // ユーザー全員のお気に入りレビューなどを取ってきている
-  getfavoriteObject: state => (userId, live) => {
-    if (live) {
-      // console.log(live);//arrayで50個取れる
-      const valueArray = state.usersPublicInfo;
-      let userFavoriteArray = valueArray[userId].favoriteYoutuberObj;
-      let returnObj = {};
-      for (let key in userFavoriteArray) {
-        for (let i = 0; i < live.length; i++) {
-          if (userFavoriteArray[key].channelId === live[i]) {
-            returnObj[key] = userFavoriteArray[key];
-          }
-        }
-      }
-      return returnObj;
-    } else {
-      let valueArray = state.usersPublicInfo;
-      return valueArray[userId].favoriteYoutuberObj;
-    }
+  // ユーザーIDのお気に入りVideoReviewを取ってくる。
+  getfavoriteObject: state => userId => {
+    const valueArray = state.usersPublicInfo;
+    let userFavoriteArray = valueArray[userId].favoriteVTRObj;
+    return userFavoriteArray;
   },
   // channelIdごとにレビュー情報を取ってきている
   getYoutuberReview: (state, getters) => channelId => {
