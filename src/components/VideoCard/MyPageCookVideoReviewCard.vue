@@ -2,6 +2,7 @@
   <div>
     <q-card class="videoReviewCard q-pa-sm">
       <router-link :to="{ name: 'video', query: { key: reviewInfo.videoId} }" class="myCardWrapper">
+
         <div class="row" v-if="cookVideos[reviewInfo.videoId]">
           <div class="column reviewCardLeft">
             <q-img class="MyPageThumbnail" :src="cookVideos[reviewInfo.videoId].thumbnail"></q-img>
@@ -66,7 +67,7 @@
       </router-link>
     </q-card>
 
-    <!-- レビューの編集もだる -->
+    <!-- レビューの編集モーダル -->
     <q-dialog v-model="editReviewModal">
       <editReviewInfoModal
         :review="reviewInfo.review"

@@ -103,6 +103,7 @@ export default {
     },
     // ユーザーがお気に入り登録しているかどうかの判断
     // ユーザーがログインしていなかったら全てratingModelを１にする
+    // そのYoutuberに対してログインユーザーが書き込んだレビューを取ってくる
     // checkIfFavorite() {
     //   if (this.loggedIn == false) {
     //     this.ratingModel = 1;

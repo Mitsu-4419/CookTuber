@@ -4,6 +4,7 @@ import Vue from "vue";
 const state = {
   usersPublicInfo: {}
 };
+console.log(state.videos);
 const mutations = {
   setYoutuber_FavoriteCount(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
@@ -311,6 +312,7 @@ const getters = {
     let userFavoriteArray = valueArray[userId].favoriteVTRObj;
     return userFavoriteArray;
   },
+
   // ユーザーのObjにユーザーのレビュー数、付いたいいねの総数を入れる処理
   setLikeNumReviewNum: state => {
     const userInfoTotal = state.usersPublicInfo;
@@ -326,6 +328,7 @@ const getters = {
       });
       userInfoTotal[key]["reviewNum"] = reviewNum;
       userInfoTotal[key]["LikeNumber"] = LikeNum;
+
     });
     return userInfoTotal;
   },
@@ -351,6 +354,7 @@ const getters = {
     }
     return sortedByMany;
   },
+
   makeFavorite_VTRCount: state => {
     let valueArray = Object.values(state.usersPublicInfo);
     let favorite_VTRObject = {};
@@ -359,6 +363,7 @@ const getters = {
         favorite_VTRObject[key] = valueArray[i].favoriteVTRObj[key];
       });
     }
+
     return favorite_VTRObject;
   },
   getYoutuberReview: (state, getters) => videoId => {

@@ -30,6 +30,11 @@ const routes = [
         name: "show"
       },
       {
+        path: "/video",
+        component: () => import("pages/VideoDetail/videoDetailPage.vue"),
+        name: "video"
+      },
+      {
         path: "/account",
         component: () => import("pages/Navigation/AccountInfo.vue"),
         name: "account"
