@@ -76,6 +76,7 @@ export default {
   methods: {
     ...mapActions("usersPublic", ["updateFavoriteVTR"]),
     ...mapActions("tags", ["updateVideoAtTag"]),
+    ...mapActions("videos", ["updateVideoData"]),
     // ...mapActions("youtubers", ["incrementFavorite"]),
     submitEdittedReview() {
       // tagのValueを再びKeyに変更する
@@ -98,6 +99,13 @@ export default {
         star_number: this.RatingModel,
         beforeStarNumber: this.starPoint,
         docId: this.docId
+      });
+      this.updateVideoData({
+        favoriteVTRvideoID: this.videoId,
+        selectedTags: selectedTagArray,
+        beforeTags: this.tagArray,
+        star_number: this.RatingModel,
+        beforeStarNumber: this.starPoint
       });
       // tagのStateの更新をする
       // 最初に付いていたTagをremoveしなければ行けたないため、最初に付いていたTagの配列も送る

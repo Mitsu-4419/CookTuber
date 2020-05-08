@@ -22,7 +22,7 @@
             </q-item-section>
             <q-item-section>料理チャンネル</q-item-section>
           </q-item>
-          <q-item clickable v-ripple flat to="/reviewers" exact class="drawerIcon">
+          <q-item clickable v-ripple flat to="/reviewtotal" exact class="drawerIcon">
             <q-item-section avatar>
               <q-icon name="fas fa-users" />
             </q-item-section>

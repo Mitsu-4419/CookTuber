@@ -77,7 +77,9 @@ export default {
   },
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTR"]),
+    ...mapActions("videos", ["addVideoData"]),
     ...mapActions("tags", ["setVideoAtTag"]),
+    ...mapActions("youtubers", ["addYoutuberInfo"]),
     // ...mapActions("youtubers", ["incrementFavorite"]),
     submitReview() {
       // tagのValueを再びKeyに変更する
@@ -92,9 +94,27 @@ export default {
       // VideoId をURLから取り出す
       let splicedURL1 = this.registerURL.split("&")[0];
       let videoId = splicedURL1.split("v=")[1];
+      console.log(this.snippet);
       this.addFavoriteVTR({
         uid: this.userId,
         review: this.text,
+        favoriteVTRvideoID: videoId,
+        selectedTags: tagArray,
+        star_number: this.ratingModel,
+        snippet: this.snippet
+      });
+      // Video情報を更新する
+      this.addVideoData({
+        uid: this.userId,
+        favoriteVTRvideoID: videoId,
+        selectedTags: tagArray,
+        star_number: this.ratingModel,
+        snippet: this.snippet
+      });
+      // Youtuber情報を更新する
+      this.addYoutuberInfo({
+        uid: this.userId,
+        channelId: this.snippet.channelId,
         favoriteVTRvideoID: videoId,
         selectedTags: tagArray,
         star_number: this.ratingModel,

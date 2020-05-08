@@ -53,6 +53,14 @@ const routes = [
         component: () => import("pages/MyPage/PageMypage.vue"),
         name: "mypage",
         props: true
+      },
+      {
+        path: "/reviewtotal",
+        component: () => import("pages/Menu/ReviewerTotal.vue")
+      },
+      {
+        path: "/news",
+        component: () => import("pages/Menu/NewsPage.vue")
       }
     ]
   }
