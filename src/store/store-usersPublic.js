@@ -350,8 +350,28 @@ const getters = {
       sortedByMany[valArray[i].id] = valArray[i];
     }
     return sortedByMany;
+  },
+  makeFavorite_VTRCount: state => {
+    let valueArray = Object.values(state.usersPublicInfo);
+    let favorite_VTRObject = {};
+    for (let i = 0; i < valueArray.length; i++) {
+      Object.keys(valueArray[i].favoriteVTRObj).forEach(key => {
+        favorite_VTRObject[key] = valueArray[i].favoriteVTRObj[key];
+      });
+    }
+    return favorite_VTRObject;
+  },
+  getYoutuberReview: (state, getters) => videoId => {
+    const Favorite = getters.makeFavorite_VTRCount;
+    let resultObj = {};
+    Object.keys(Favorite).forEach(key => {
+      if (Favorite[key].videoId == videoId) {
+        resultObj[key] = Favorite[key];
+      }
+    });
+    return resultObj;
   }
-  // channelIdごとにレビュー情報を取ってきている
+  // videolIdごとにレビュー情報を取ってきている
   // getYoutuberReview: (state, getters) => channelId => {
   //   const FavoriteCount = getters.makeYoutuberFavoriteCount;
   //   let resultObj = {};

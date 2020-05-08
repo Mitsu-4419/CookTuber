@@ -61,6 +61,11 @@ const routes = [
       {
         path: "/news",
         component: () => import("pages/Menu/NewsPage.vue")
+      },
+      {
+        path: "/video",
+        component: () => import("pages/VideoDetail/videoDetailPage.vue"),
+        name: "video"
       }
     ]
   }
