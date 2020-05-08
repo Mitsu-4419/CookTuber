@@ -12,12 +12,12 @@
           class="q-mr-md q-mt-md"
         />
       </div>
-      <div class="row YouTuberCardWrapper widthAdjust" name="youtubers">
+      <div class="row ReviewrCardWrapper widthAdjust">
         <transition-group appear enter-active-class="animated fadeInLeft" class="row">
-          <YoutuberCard
-            :channelInfo="channelInfo"
-            :channelId="key"
-            v-for="(channelInfo, key) in getSortedYoutubers(model)"
+          <ReviewerTotalPageCard
+            :usersInfo="usersInfo"
+            :uid="key"
+            v-for="(usersInfo, key) in getSortedReviewer(model)"
             :key="key"
           />
         </transition-group>
@@ -33,40 +33,37 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      model: "高評価が多い順",
-      options: [
-        "高評価が多い順",
-        "登録者数が多い順",
-        "登録者数が少ない順",
-        "レビュー数が多い順"
-      ]
+      model: "参考になった数が多い順",
+      options: ["投稿数が多い順", "参考になった数が多い順"]
     };
   },
   computed: {
-    // ...mapState("youtubers", ["YoutubersChannel_info"]),
-    ...mapGetters("youtubers", ["getSortedYoutubers"])
+    ...mapGetters("usersPublic", ["getSortedReviewer"])
   },
   methods: {
-    ...mapActions("youtubers", ["setSearch"]),
-    getPageNum() {
-      const pageTotal = Math.ceil(
-        Object.keys(this.YoutubersChannel_info).length / 50
-      );
-      return pageTotal;
-    },
-    setSelectedTab(genre) {
-      this.tab = genre;
-      this.othersmodal = false;
-    }
+    ...mapActions("youtubers", ["setSearch"])
+    // getPageNum() {
+    //   const pageTotal = Math.ceil(
+    //     Object.keys(this.YoutubersChannel_info).length / 50
+    //   );
+    //   return pageTotal;
+    // },
+    // setSelectedTab(genre) {
+    //   this.tab = genre;
+    //   this.othersmodal = false;
+    // }
   },
   created() {
     // this.pageTotal = this.getPageNum();
   },
   components: {
-    YoutuberCard: require("components/Card/CardYoutuber.vue").default
+    ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
+      .default
   }
 };
 </script>
 
 <style>
+.ReviewrCardWrapper {
+}
 </style>

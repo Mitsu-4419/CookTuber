@@ -3,8 +3,8 @@
     <!-- ------- -->
     <!-- TopPage -->
     <!-- ------- -->
-    <q-card class="my-cardYoutuber">
-      <router-link :to="{ name: 'show', query: { key: channelInfo.id } }" class="myCardWrapper">
+    <q-card class="my-ReviewrCard">
+      <router-link :to="{ name: 'show', query: { key:uid } }" class="myCardWrapper">
         <!-- <q-img v-if="rankInfo.rank == 1" class="rankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
         <q-img
           v-else-if="rankInfo.rank == 2"
@@ -16,37 +16,37 @@
           class="rankIcon"
           src="statics/rankIcon/crown_copper.png"
         ></q-img>-->
-        <div class="iconWrapper">
-          <q-avatar size="160px">
-            <img :src="channelInfo.iconUrl" alt />
+        <div class="ReviewrIconWrapper">
+          <q-avatar size="140px">
+            <img :src="usersInfo.photoURL" alt />
           </q-avatar>
         </div>
         <div class="row">
           <q-btn rounded class="channelName" no-caps>
             {{
-            channelInfo.name
+            usersInfo.nickName
             }}
           </q-btn>
         </div>
         <q-card-section class="card_description">
           <!-- <div>登録日:{{ channelInfo.register_date }}</div> -->
           <div>
-            チャンネル登録者数:
+            レビュー投稿数:
             <span class="channelRegiNum">
               {{
-              channelInfo.subscriberCounts
+              usersInfo.reviewNum
               }}
             </span>
           </div>
           <div class="YoutuberReviewNumWrapper">
-            Review投稿数:
+            参考になった数:
             <span class="channelRegiNum">
               {{
-              channelInfo.reviewCount
+              usersInfo.LikeNumber
               }}
             </span>
           </div>
-          <div class="YoutuberStarWrapper">
+          <!-- <div class="YoutuberStarWrapper">
             <star-rating
               :read-only="true"
               v-model="starYoutuberGot"
@@ -56,7 +56,7 @@
               active-color="yellow"
               text-class="custom-Text"
             ></star-rating>
-          </div>
+          </div>-->
         </q-card-section>
         <!-- <div class="row">
           <div class="row favoriteCountWrapper" @click.prevent="switchFav()">
@@ -78,76 +78,69 @@
 import { SessionStorage } from "quasar";
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
-  props: ["channelInfo", "channelId"],
+  props: ["usersInfo", "uid"],
   data() {
-    return {
-      starYoutuberGot: 0
-    };
+    return {};
   },
-  computed: {
-    ...mapState("auth", ["loggedIn"])
-  },
+  computed: {},
   methods: {
     setYoutuberKey(value) {
       SessionStorage.set("YoutuberKey", value);
-    },
-    switchFav() {
-      if (this.loggedIn == false) {
-        // ログインしていなかったらユーザー登録する様にDialogをだす
-        this.alertToSignUp = true;
-      } else if (this.loggedIn == true && this.ratingModel == 0) {
-        this.writeReview = true;
-      } else if (this.loggedIn == true && this.ratingModel == 1) {
-        console.log("nothing");
-      }
-    },
+    }
+    // switchFav() {
+    //   if (this.loggedIn == false) {
+    //     // ログインしていなかったらユーザー登録する様にDialogをだす
+    //     this.alertToSignUp = true;
+    //   } else if (this.loggedIn == true && this.ratingModel == 0) {
+    //     this.writeReview = true;
+    //   } else if (this.loggedIn == true && this.ratingModel == 1) {
+    //     console.log("nothing");
+    //   }
+    // },
     // ユーザーがお気に入り登録しているかどうかの判断
     // ユーザーがログインしていなかったら全てratingModelを１にする
-    checkIfFavorite() {
-      if (this.loggedIn == false) {
-        this.ratingModel = 1;
-      } else if (this.loggedIn == true) {
-        let object = Object.values(this.userInfo)[0].favoriteYoutuberObj;
-        let array = [];
-        for (let j = 0; j < Object.values(object).length; j++) {
-          array.push(Object.values(object)[j].channelId);
-        }
-        if (array.includes(this.id)) {
-          this.ratingModel = 1;
-        } else {
-          this.ratingModel = 0;
-        }
-      } else {
-        console.log("何らかのエラーが発生しています。");
-      }
-    },
+    // checkIfFavorite() {
+    //   if (this.loggedIn == false) {
+    //     this.ratingModel = 1;
+    //   } else if (this.loggedIn == true) {
+    //     let object = Object.values(this.userInfo)[0].favoriteYoutuberObj;
+    //     let array = [];
+    //     for (let j = 0; j < Object.values(object).length; j++) {
+    //       array.push(Object.values(object)[j].channelId);
+    //     }
+    //     if (array.includes(this.id)) {
+    //       this.ratingModel = 1;
+    //     } else {
+    //       this.ratingModel = 0;
+    //     }
+    //   } else {
+    //     console.log("何らかのエラーが発生しています。");
+    //   }
+    // },
     // そのYoutuberに対してログインユーザーが書き込んだレビューを取ってくる
-    checkWritedReview() {
-      let getReview = this.getYoutuberReview(this.channelInfo.id);
-      let userReview;
-      if (this.loggedIn) {
-        Object.keys(getReview).forEach(key => {
-          if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
-            userReview = getReview[key].review;
-            // DocumentId をStateに入れる
-            this.documentId = key;
-          }
-        });
-        this.writedReview = userReview;
-        // this.ratingModel = 0;
-      }
-    },
-    closeReviewSubmi() {
-      (this.writeReview = false), (this.ratingModel = 0);
-    },
-    addstar() {
-      this.ratingModal = 1;
-    }
+    // checkWritedReview() {
+    //   let getReview = this.getYoutuberReview(this.channelInfo.id);
+    //   let userReview;
+    //   if (this.loggedIn) {
+    //     Object.keys(getReview).forEach(key => {
+    //       if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
+    //         userReview = getReview[key].review;
+    //         // DocumentId をStateに入れる
+    //         this.documentId = key;
+    //       }
+    //     });
+    //     this.writedReview = userReview;
+    //     // this.ratingModel = 0;
+    //   }
+    // },
+    // closeReviewSubmi() {
+    //   (this.writeReview = false), (this.ratingModel = 0);
+    // },
+    // addstar() {
+    //   this.ratingModal = 1;
+    // }
   },
-  components: {
-    ToLoginAlert: require("components/Card/ToLoginAlert.vue").default,
-    reviewSubmit: require("components/ReviewCard/reviewSubmit.vue").default
-  },
+  components: {},
   mounted() {
     // if (this.loggedIn) {
     //   this.userId = Object.values(this.userInfo)[0].id;
@@ -157,17 +150,17 @@ export default {
     // this.starModel = this.chkFavoriteTubers();
     // this.checkWritedReview();
     // this.checkIfFavorite();
-    this.starYoutuberGot = Number(
-      this.channelInfo.starPoint / this.channelInfo.reviewCount
-    );
+    // this.starYoutuberGot = Number(
+    //   this.channelInfo.starPoint / this.channelInfo.reviewCount
+    // );
   }
 };
 </script>
 
 <style>
-.my-cardYoutuber {
-  width: 195px;
-  height: 290px;
+.my-ReviewrCard {
+  width: 185px;
+  height: 238px;
   margin-right: 15px;
   margin-bottom: 15px;
   -webkit-box-sizing: border-box;
@@ -178,7 +171,7 @@ export default {
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25);
   text-align: center;
 }
-.my-card:hover {
+.my-ReviewrCard:hover {
   -webkit-transform: translateY(-5px);
   -ms-transform: translateY(-5px);
   transform: translateY(-5px);
@@ -189,11 +182,11 @@ export default {
   color: black;
 }
 /* アイコンを表示するところ */
-.iconWrapper {
+.ReviewrIconWrapper {
   width: 100%;
   display: flex;
   justify-content: center;
-  height: 200px;
+  height: 184px;
   padding: 10px;
 }
 .channelName {

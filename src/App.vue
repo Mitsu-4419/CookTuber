@@ -12,7 +12,8 @@ export default {
     ...mapActions("auth", ["handleAuthStateChange"]),
     ...mapActions("usersPublic", ["getUsersPublicProfile", "getVideos"]),
     ...mapActions("tags", ["getTags"]),
-    ...mapActions("videos", ["getAllCookingVideos"])
+    ...mapActions("videos", ["getAllCookingVideos"]),
+    ...mapActions("youtubers", ["getYoutubers_info"])
   },
   created() {
     this.handleAuthStateChange();
@@ -20,6 +21,7 @@ export default {
     this.getTags();
     this.getVideos();
     this.getAllCookingVideos();
+    this.getYoutubers_info();
   }
 };
 </script>
