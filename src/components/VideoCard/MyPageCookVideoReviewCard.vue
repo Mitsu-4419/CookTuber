@@ -1,67 +1,69 @@
 <template>
   <div>
     <q-card class="videoReviewCard q-pa-sm">
-      <div class="row" v-if="cookVideos[reviewInfo.videoId]">
-        <div class="column reviewCardLeft">
-          <q-img class="MyPageThumbnail" :src="cookVideos[reviewInfo.videoId].thumbnail"></q-img>
-          <div class="videoTitleWrapperWrapper">
-            <div class="videoTitleWrapper">
-              <span class="videoTitle">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
-            </div>
-            <div class="row videoChannelNameWrapper">
-              <q-space />
-              <span class="videoChannelName">{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
-            </div>
-            <div class="StarWrapper">
-              <star-rating
-                :read-only="true"
-                v-model="starPoint"
-                :star-size="21"
-                :increment="0.1"
-                :padding="12"
-                active-color="yellow"
-                text-class="custom-Text"
-              ></star-rating>
-            </div>
-            <div class="tagsWrapper">
-              <q-chip
-                size="sm"
-                v-for="tag in reviewInfo.tagArray"
-                :key="tag"
-              >{{allTags[tag].tagName}}</q-chip>
+      <router-link :to="{ name: 'video', query: { key: reviewInfo.videoId} }" class="myCardWrapper">
+        <div class="row" v-if="cookVideos[reviewInfo.videoId]">
+          <div class="column reviewCardLeft">
+            <q-img class="MyPageThumbnail" :src="cookVideos[reviewInfo.videoId].thumbnail"></q-img>
+            <div class="videoTitleWrapperWrapper">
+              <div class="videoTitleWrapper">
+                <span class="videoTitle">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
+              </div>
+              <div class="row videoChannelNameWrapper">
+                <q-space />
+                <span class="videoChannelName">{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
+              </div>
+              <div class="StarWrapper">
+                <star-rating
+                  :read-only="true"
+                  v-model="starPoint"
+                  :star-size="21"
+                  :increment="0.1"
+                  :padding="12"
+                  active-color="yellow"
+                  text-class="custom-Text"
+                ></star-rating>
+              </div>
+              <div class="tagsWrapper">
+                <q-chip
+                  size="sm"
+                  v-for="tag in reviewInfo.tagArray"
+                  :key="tag"
+                >{{allTags[tag].tagName}}</q-chip>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="column reviewCardRight">
-          <div class="column">
-            <div class="reviewWrapper">{{reviewInfo.review}}</div>
-            <div class="row bottomsWrapper">
-              <div class="likeCountWrapper">
-                <div>
+          <div class="column reviewCardRight">
+            <div class="column">
+              <div class="reviewWrapper">{{reviewInfo.review}}</div>
+              <div class="row bottomsWrapper">
+                <div class="likeCountWrapper">
+                  <div>
+                    <q-icon
+                      name="fas fa-utensils"
+                      size="1.9em"
+                      :class="cooked == true ? 'cookActive' : 'cookNonActive'"
+                    />
+                    <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
+                    <!-- <span class="favoriteNumber" style="color:black">0</span> -->
+                  </div>
+                </div>
+                <div class="likeCountWrapper row">
                   <q-icon
-                    name="fas fa-utensils"
+                    name="fas fa-heart"
                     size="1.9em"
-                    :class="cooked == true ? 'cookActive' : 'cookNonActive'"
+                    :class="userLike == true ? 'likeActive' : 'likeNonActive'"
                   />
                   <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
-                  <!-- <span class="favoriteNumber" style="color:black">0</span> -->
                 </div>
-              </div>
-              <div class="likeCountWrapper row">
-                <q-icon
-                  name="fas fa-heart"
-                  size="1.9em"
-                  :class="userLike == true ? 'likeActive' : 'likeNonActive'"
-                />
-                <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
-              </div>
-              <div class="likeCountWrapper" v-show="userOrNot">
-                <q-icon name="edit" size="1.9em" class="editIcon" @click="editReviewModal = true"></q-icon>
+                <div class="likeCountWrapper" v-show="userOrNot">
+                  <q-icon name="edit" size="1.9em" class="editIcon" @click="editReviewModal = true"></q-icon>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </router-link>
     </q-card>
 
     <!-- レビューの編集もだる -->
@@ -109,6 +111,10 @@ export default {
 </script>
 
 <style>
+.myCardWrapper {
+  text-decoration: none;
+  color: black;
+}
 .videoReviewCard {
   width: 100%;
   max-width: 600px;

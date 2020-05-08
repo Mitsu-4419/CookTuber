@@ -103,40 +103,40 @@ export default {
     },
     // ユーザーがお気に入り登録しているかどうかの判断
     // ユーザーがログインしていなかったら全てratingModelを１にする
-    checkIfFavorite() {
-      if (this.loggedIn == false) {
-        this.ratingModel = 1;
-      } else if (this.loggedIn == true) {
-        let object = Object.values(this.userInfo)[0].favoriteYoutuberObj;
-        let array = [];
-        for (let j = 0; j < Object.values(object).length; j++) {
-          array.push(Object.values(object)[j].channelId);
-        }
-        if (array.includes(this.id)) {
-          this.ratingModel = 1;
-        } else {
-          this.ratingModel = 0;
-        }
-      } else {
-        console.log("何らかのエラーが発生しています。");
-      }
-    },
-    // そのYoutuberに対してログインユーザーが書き込んだレビューを取ってくる
-    checkWritedReview() {
-      let getReview = this.getYoutuberReview(this.channelInfo.id);
-      let userReview;
-      if (this.loggedIn) {
-        Object.keys(getReview).forEach(key => {
-          if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
-            userReview = getReview[key].review;
-            // DocumentId をStateに入れる
-            this.documentId = key;
-          }
-        });
-        this.writedReview = userReview;
-        // this.ratingModel = 0;
-      }
-    },
+    // checkIfFavorite() {
+    //   if (this.loggedIn == false) {
+    //     this.ratingModel = 1;
+    //   } else if (this.loggedIn == true) {
+    //     let object = Object.values(this.userInfo)[0].favoriteYoutuberObj;
+    //     let array = [];
+    //     for (let j = 0; j < Object.values(object).length; j++) {
+    //       array.push(Object.values(object)[j].channelId);
+    //     }
+    //     if (array.includes(this.id)) {
+    //       this.ratingModel = 1;
+    //     } else {
+    //       this.ratingModel = 0;
+    //     }
+    //   } else {
+    //     console.log("何らかのエラーが発生しています。");
+    //   }
+    // },
+    // // そのYoutuberに対してログインユーザーが書き込んだレビューを取ってくる
+    // checkWritedReview() {
+    //   let getReview = this.getYoutuberReview(this.channelInfo.id);
+    //   let userReview;
+    //   if (this.loggedIn) {
+    //     Object.keys(getReview).forEach(key => {
+    //       if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
+    //         userReview = getReview[key].review;
+    //         // DocumentId をStateに入れる
+    //         this.documentId = key;
+    //       }
+    //     });
+    //     this.writedReview = userReview;
+    //     // this.ratingModel = 0;
+    //   }
+    // },
     closeReviewSubmi() {
       (this.writeReview = false), (this.ratingModel = 0);
     },
