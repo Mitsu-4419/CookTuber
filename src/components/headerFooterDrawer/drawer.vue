@@ -10,7 +10,7 @@
         </q-item>
         <!-- 通常のドロア -->
         <div>
-          <q-item clickable v-ripple flat to="/live" exact class="drawerIcon">
+          <q-item clickable v-ripple flat to="/cookvideos" exact class="drawerIcon">
             <q-item-section avatar style="color:#9f7346;">
               <q-icon name="restaurant" />
             </q-item-section>

@@ -88,7 +88,7 @@ export default {
       starPoint: 0,
       userLike: false,
       cooked: false,
-      editReviewModal: true
+      editReviewModal: false
     };
   },
   computed: {

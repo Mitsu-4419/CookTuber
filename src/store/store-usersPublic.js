@@ -284,7 +284,8 @@ const actions = {
           registerCount: 1,
           // 星の点数を加算していく
           starPoint: Number(payload.star_number),
-          tagMap: tagMap
+          tagMap: tagMap,
+          videoId: payload.favoriteVTRvideoID
         });
       let PAYLOAD = {
         id: payload.favoriteVTRvideoID,
