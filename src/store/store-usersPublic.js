@@ -5,6 +5,7 @@ const state = {
   usersPublicInfo: {},
   videos: {}
 };
+console.log(state.videos);
 const mutations = {
   setYoutuber_FavoriteCount(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
@@ -542,28 +543,31 @@ const getters = {
     let userFavoriteArray = valueArray[userId].favoriteVTRObj;
     return userFavoriteArray;
   },
-  // channelIdごとにレビュー情報を取ってきている
-  getYoutuberReview: (state, getters) => channelId => {
-    const FavoriteCount = getters.makeYoutuberFavoriteCount;
+  //videoIdごとにレビュー情報を取ってきている
+  getYoutuberReview: (state, getters) => videoId => {
+    const Favorite = getters.makeFavorite_VTRCount;
+    console.log(Favorite);
     let resultObj = {};
-    Object.keys(FavoriteCount).forEach(key => {
-      if (FavoriteCount[key].channelId == channelId) {
-        resultObj[key] = FavoriteCount[key];
+    Object.keys(Favorite).forEach(key => {
+      if (Favorite[key].videoId == videoId) {
+        resultObj[key] = Favorite[key];
       }
     });
     return resultObj;
   },
   // userPublicのデータからKeyをDocID、データをお気に入りのデータとしてお気に入りを全て取ってきたオブジェクトを作る
-  makeYoutuberFavoriteCount: state => {
+  makeFavorite_VTRCount: state => {
+    // console.log(state.usersPublicInfo);
     let valueArray = Object.values(state.usersPublicInfo);
-    let YoutuberFavoriteCountObject = {};
+    let favorite_VTRObject = {};
+    // console.log(valueArray);
     for (let i = 0; i < valueArray.length; i++) {
-      Object.keys(valueArray[i].favoriteYoutuberObj).forEach(key => {
-        YoutuberFavoriteCountObject[key] =
-          valueArray[i].favoriteYoutuberObj[key];
+      Object.keys(valueArray[i].favoriteVTRObj).forEach(key => {
+        favorite_VTRObject[key] = valueArray[i].favoriteVTRObj[key];
       });
     }
-    return YoutuberFavoriteCountObject;
+    console.log(favorite_VTRObject);
+    return favorite_VTRObject;
   },
   // 共通の処理
   // チャンネルIdとお気に入り数の一対一のオブジェクトを返すGetter

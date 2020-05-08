@@ -127,8 +127,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("auth", ["loggedIn", "userInfo"]),
-    ...mapGetters("usersPublic", ["getNumberArray", "getYoutuberReview"])
+    ...mapState("auth", ["loggedIn", "userInfo"])
+    // ...mapGetters("usersPublic", ["getNumberArray", "getYoutuberReview"])
   },
   methods: {
     setYoutuberKey(value) {
@@ -165,21 +165,21 @@ export default {
       }
     },
     // そのYoutuberに対してログインユーザーが書き込んだレビューを取ってくる
-    checkWritedReview() {
-      let getReview = this.getYoutuberReview(this.channelInfo.id);
-      let userReview;
-      if (this.loggedIn) {
-        Object.keys(getReview).forEach(key => {
-          if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
-            userReview = getReview[key].review;
-            // DocumentId をStateに入れる
-            this.documentId = key;
-          }
-        });
-        this.writedReview = userReview;
-        // this.ratingModel = 0;
-      }
-    },
+    // checkWritedReview() {
+    //   let getReview = this.getYoutuberReview(this.channelInfo.id);
+    //   let userReview;
+    //   if (this.loggedIn) {
+    //     Object.keys(getReview).forEach(key => {
+    //       if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
+    //         userReview = getReview[key].review;
+    //         // DocumentId をStateに入れる
+    //         this.documentId = key;
+    //       }
+    //     });
+    //     this.writedReview = userReview;
+    //     // this.ratingModel = 0;
+    //   }
+    // },
     closeReviewSubmi() {
       (this.writeReview = false), (this.ratingModel = 0);
     },

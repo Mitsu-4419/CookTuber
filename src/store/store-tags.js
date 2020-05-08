@@ -4,6 +4,7 @@ import Vue from "vue";
 const state = {
   allTags: {}
 };
+console.log(state.allTags);
 const mutations = {
   getAllTagsMutate(state, payload) {
     Vue.set(state.allTags, payload.id, payload.obj);
