@@ -21,6 +21,10 @@ const routes = [
         component: () => import("pages/Menu/PageYoutubers.vue")
       },
       {
+        path: "/cookvideos",
+        component: () => import("pages/Menu/CookVideoPage.vue")
+      },
+      {
         path: "/show",
         component: () => import("pages/YoutuberDetail/YoutuberDetail.vue"),
         name: "show"

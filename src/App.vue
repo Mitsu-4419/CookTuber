@@ -11,13 +11,15 @@ export default {
   methods: {
     ...mapActions("auth", ["handleAuthStateChange"]),
     ...mapActions("usersPublic", ["getUsersPublicProfile", "getVideos"]),
-    ...mapActions("tags", ["getTags"])
+    ...mapActions("tags", ["getTags"]),
+    ...mapActions("videos", ["getAllCookingVideos"])
   },
   created() {
     this.handleAuthStateChange();
     this.getUsersPublicProfile();
     this.getTags();
     this.getVideos();
+    this.getAllCookingVideos();
   }
 };
 </script>
