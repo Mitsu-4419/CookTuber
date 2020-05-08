@@ -21,6 +21,10 @@ const routes = [
         component: () => import("pages/Menu/PageYoutubers.vue")
       },
       {
+        path: "/cookvideos",
+        component: () => import("pages/Menu/CookVideoPage.vue")
+      },
+      {
         path: "/show",
         component: () => import("pages/YoutuberDetail/YoutuberDetail.vue"),
         name: "show"
@@ -54,6 +58,19 @@ const routes = [
         component: () => import("pages/MyPage/PageMypage.vue"),
         name: "mypage",
         props: true
+      },
+      {
+        path: "/reviewtotal",
+        component: () => import("pages/Menu/ReviewerTotal.vue")
+      },
+      {
+        path: "/news",
+        component: () => import("pages/Menu/NewsPage.vue")
+      },
+      {
+        path: "/video",
+        component: () => import("pages/VideoDetail/videoDetailPage.vue"),
+        name: "video"
       }
     ]
   }

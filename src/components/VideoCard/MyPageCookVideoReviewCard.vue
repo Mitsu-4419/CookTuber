@@ -2,16 +2,17 @@
   <div>
     <q-card class="videoReviewCard q-pa-sm">
       <router-link :to="{ name: 'video', query: { key: reviewInfo.videoId} }" class="myCardWrapper">
-        <div class="row" v-if="videos[reviewInfo.videoId]">
+
+        <div class="row" v-if="cookVideos[reviewInfo.videoId]">
           <div class="column reviewCardLeft">
-            <q-img class="MyPageThumbnail" :src="videos[reviewInfo.videoId].thumbnail"></q-img>
+            <q-img class="MyPageThumbnail" :src="cookVideos[reviewInfo.videoId].thumbnail"></q-img>
             <div class="videoTitleWrapperWrapper">
               <div class="videoTitleWrapper">
-                <span class="videoTitle">{{videos[reviewInfo.videoId].videoTitle}}</span>
+                <span class="videoTitle">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
-                <span class="videoChannelName">{{videos[reviewInfo.videoId].channelTitle}}</span>
+                <span class="videoChannelName">{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
               </div>
               <div class="StarWrapper">
                 <star-rating
@@ -90,23 +91,17 @@ export default {
       starPoint: 0,
       userLike: false,
       cooked: false,
-      editReviewModal: true
+      editReviewModal: false
     };
   },
   computed: {
-    ...mapState("usersPublic", ["videos"]),
+    ...mapState("videos", ["cookVideos"]),
     ...mapState("tags", ["allTags"])
   },
   actions: {
     ...mapActions("usersPublic", ["changeReviewInfo"])
   },
   created() {
-    // if (this.videos[this.reviewInfo.videoId]) {
-    //   const starrate =
-    //     this.videos[this.reviewInfo.videoId].starPoint /
-    //     this.videos[this.reviewInfo.videoId].registerCount;
-    //   this.starPoint = Math.round(starrate * 10) / 10;
-    // }
     this.starPoint = Number(this.reviewInfo.star_number);
   },
   components: {
