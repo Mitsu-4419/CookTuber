@@ -1,9 +1,6 @@
 <template>
   <q-card class="reviewCard">
-    <router-link
-      :to="{ name: 'mypage', query: { id: routerUserId } }"
-      class="routerDec"
-    >
+    <router-link :to="{ name: 'mypage', query: { id: routerUserId } }" class="routerDec">
       <!-- <router-link :to="'/mypage?key=' + review.uid" class="routerDec" v-bind:userId="routerUserId"> -->
       <q-card-section>
         <div class="row">
@@ -40,49 +37,49 @@ export default {
     };
   },
   methods: {
-    ...mapActions("usersPublic", ["increaseLike", "decreaseLike"]),
-    checkIfUserLikeOrNot() {
-      let loginUid = Object.keys(this.userInfo)[0];
-      if (this.review.LikeArray && this.review.LikeArray.includes(loginUid)) {
-        this.userLike = true;
-      } else {
-        this.userLike = false;
-      }
-    },
-    // いいねの数の増減をする
-    addDecreaseLike() {
-      // ここのUidはレビューを書いた人のId
-      if (this.userLike == true) {
-        let payload = {
-          docId: this.review.docId,
-          reviewerUID: this.id,
-          loginUID: Object.keys(this.userInfo)[0]
-        };
-        this.userLike = false;
-        this.LikeNumbers--;
+    ...mapActions("usersPublic", ["increaseLike", "decreaseLike"])
+    // checkIfUserLikeOrNot() {
+    //   let loginUid = Object.keys(this.userInfo)[0];
+    //   if (this.review.LikeArray && this.review.LikeArray.includes(loginUid)) {
+    //     this.userLike = true;
+    //   } else {
+    //     this.userLike = false;
+    //   }
+    // },
+    // // いいねの数の増減をする
+    // addDecreaseLike() {
+    //   // ここのUidはレビューを書いた人のId
+    //   if (this.userLike == true) {
+    //     let payload = {
+    //       docId: this.review.docId,
+    //       reviewerUID: this.id,
+    //       loginUID: Object.keys(this.userInfo)[0]
+    //     };
+    //     this.userLike = false;
+    //     this.LikeNumbers--;
 
-        this.decreaseLike(payload);
-      } else if (this.userLike == false) {
-        let payload = {
-          docId: this.review.docId,
-          reviewerUID: this.id,
-          loginUID: Object.keys(this.userInfo)[0]
-        };
-        this.userLike = true;
-        this.LikeNumbers++;
-        this.increaseLike(payload);
-      }
-    }
+    //     this.decreaseLike(payload);
+    //   } else if (this.userLike == false) {
+    //     let payload = {
+    //       docId: this.review.docId,
+    //       reviewerUID: this.id,
+    //       loginUID: Object.keys(this.userInfo)[0]
+    //     };
+    //     this.userLike = true;
+    //     this.LikeNumbers++;
+    //     this.increaseLike(payload);
+    //   }
+    // }
   },
   computed: {
     ...mapState("auth", ["userInfo"])
   },
   created() {
-    if (this.review.LikeArray) {
-      this.LikeNumbers = this.review.LikeArray.length;
-    }
-    this.routerUserId = this.review.uid;
-    this.checkIfUserLikeOrNot();
+    // if (this.review.LikeArray) {
+    //   this.LikeNumbers = this.review.LikeArray.length;
+    // }
+    // this.routerUserId = this.review.uid;
+    // this.checkIfUserLikeOrNot();
   }
 };
 </script>

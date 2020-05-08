@@ -22,11 +22,11 @@
         ></q-video>
         <div class="row q-mt-lg">
           <q-icon name="perm_identity" size="md" class="q-mr-sm" />
-          <div class="text-h6 tex-bold">{{ videos[key].channelTitle }}</div>
+          <div class="text-h6 tex-bold">{{cookVideos[key].channelTitle }}</div>
         </div>
         <div class="row q-mt-lg">
           <q-icon name="play_circle_outline" size="md" class="q-mr-sm" />
-          <div class="text-h6 tex-bold">{{ videos[key].videoTitle }}</div>
+          <div class="text-h6 tex-bold">{{ cookVideos[key].videoTitle }}</div>
         </div>
         <div class="StarWrapper">
           <star-rating
@@ -42,24 +42,24 @@
         <div class="tagsWrapper">
           <q-chip
             size="sm"
-            v-for="(tag,tagName) in videos[key].tagMap"
+            v-for="(tag,tagName) in cookVideos[key].tagMap"
             :key="tag"
           >{{allTags[tagName].tagName}}</q-chip>
         </div>
       </div>
 
-      <div class="cardDetailWrapper">
+      <div class="cardDetailWrapper" v-if="cookVideos[key]">
         <div class="row" @click.prevent="switchFav()">
           <q-icon
             name="fas fa-utensils"
             size="1.9em"
             :class="cooked == true ? 'cookActive' : 'cookNonActive'"
           />
-          <span class="favoriteNum">{{videos[key].registerCount }}</span>
+          <span class="favoriteNum">{{cookVideos[key].registerCount }}</span>
         </div>
         <div class="price-buy-detail q-mt-lg">
           <q-scroll-area style="height: 180px; max-width: 400px;">
-            <div class="text-body1 text-grey-7">{{ videos[key].videoDescription }}</div>
+            <div class="text-body1 text-grey-7">{{ cookVideos[key].videoDescription }}</div>
           </q-scroll-area>
         </div>
       </div>
@@ -120,9 +120,10 @@ export default {
     };
   },
   computed: {
-    ...mapState("usersPublic", ["usersPublicInfo", "videos"]),
+    ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapState("tags", ["allTags"]),
-    ...mapGetters("usersPublic", ["getYoutuberReview"])
+    ...mapGetters("usersPublic", ["getYoutuberReview"]),
+    ...mapState("videos", ["cookVideos"])
   },
   methods: {
     // URLのパラメーターからChannelIdを取る関数
@@ -222,8 +223,10 @@ export default {
   },
   created() {
     this.key = this.getParam("key");
-    this.starPoint = this.videos[this.key].starPoint;
-    // this.checkWritedReview();
+    if (this.cookVideos[this.key]) {
+      this.starPoint = this.cookVideos[this.key].starPoint;
+      // this.checkWritedReview();
+    }
   }
 };
 </script>

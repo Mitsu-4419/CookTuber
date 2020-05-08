@@ -328,7 +328,6 @@ const getters = {
       });
       userInfoTotal[key]["reviewNum"] = reviewNum;
       userInfoTotal[key]["LikeNumber"] = LikeNum;
-
     });
     return userInfoTotal;
   },
