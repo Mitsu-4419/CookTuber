@@ -4,7 +4,6 @@ import Vue from "vue";
 const state = {
   usersPublicInfo: {}
 };
-console.log(state.videos);
 const mutations = {
   setYoutuber_FavoriteCount(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
@@ -362,7 +361,6 @@ const getters = {
         favorite_VTRObject[key] = valueArray[i].favoriteVTRObj[key];
       });
     }
-
     return favorite_VTRObject;
   },
   getYoutuberReview: (state, getters) => videoId => {

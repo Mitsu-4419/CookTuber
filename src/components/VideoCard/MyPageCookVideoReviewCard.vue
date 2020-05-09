@@ -2,7 +2,6 @@
   <div>
     <q-card class="videoReviewCard q-pa-sm">
       <router-link :to="{ name: 'video', query: { key: reviewInfo.videoId} }" class="myCardWrapper">
-
         <div class="row" v-if="cookVideos[reviewInfo.videoId]">
           <div class="column reviewCardLeft">
             <q-img class="MyPageThumbnail" :src="cookVideos[reviewInfo.videoId].thumbnail"></q-img>

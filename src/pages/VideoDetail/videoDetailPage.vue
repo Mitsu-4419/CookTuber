@@ -1,16 +1,17 @@
 <template>
   <q-page padding>
     <div class="back_button row">
-      <router-link to="/youtubers">
+      <router-link to="/cookvideos">
         <q-icon name="chevron_left" size="xl" color="black" />
-        <span class="text-h6 text-grey-7 vertical-middle">YouTuber 一覧</span>
+        <span class="text-h6 text-grey-7 vertical-middle">料理動画一覧</span>
       </router-link>
     </div>
     <!-- ーーーーーーーーーーー -->
     <!-- ページ上部のプロフィール載せる欄 -->
     <!-- ーーーーーーーーーーー -->
     <div class="row card-holder">
-      <div class="card-wrapper">
+      <!-- ページの左側 -->
+      <div class="CookVideoWrapperLeft">
         <q-video
           id="ytplayer"
           type="text/html"
@@ -20,46 +21,45 @@
           "
           frameborder="0"
         ></q-video>
-        <div class="row q-mt-lg">
-          <q-icon name="perm_identity" size="md" class="q-mr-sm" />
-          <div class="text-h6 tex-bold">{{cookVideos[key].channelTitle }}</div>
+        <div class="row q-mt-md">
+          <div class="cookDetailPageVideoTitle">{{ cookVideos[key].videoTitle }}</div>
         </div>
-        <div class="row q-mt-lg">
-          <q-icon name="play_circle_outline" size="md" class="q-mr-sm" />
-          <div class="text-h6 tex-bold">{{ cookVideos[key].videoTitle }}</div>
+        <div class="row q-mt-sm">
+          <q-space></q-space>
+          <div style="font-size:16px;">{{cookVideos[key].channelTitle }}</div>
         </div>
-        <div class="StarWrapper">
+        <div class="StarWrapperVideoDetailPage">
           <star-rating
             :read-only="true"
             v-model="starPoint"
-            :star-size="21"
+            :star-size="30"
             :increment="0.1"
             :padding="12"
             active-color="yellow"
             text-class="custom-Text"
           ></star-rating>
         </div>
-        <div class="tagsWrapper">
-          <q-chip
-            size="sm"
-            v-for="(tag,tagName) in cookVideos[key].tagMap"
-            :key="tag"
-          >{{allTags[tagName].tagName}}</q-chip>
-        </div>
       </div>
-
-      <div class="cardDetailWrapper" v-if="cookVideos[key]">
-        <div class="row" @click.prevent="switchFav()">
+      <!-- ページの右側 -->
+      <div class="CookVideoWrapperRight" v-if="cookVideos[key]">
+        <div class="row" style="margin-top:60px;" @click.prevent="switchFav()">
           <q-icon
             name="fas fa-utensils"
-            size="1.9em"
+            size="2.1em"
             :class="cooked == true ? 'cookActive' : 'cookNonActive'"
           />
           <span class="favoriteNum">{{cookVideos[key].registerCount }}</span>
         </div>
-        <div class="price-buy-detail q-mt-lg">
-          <q-scroll-area style="height: 180px; max-width: 400px;">
-            <div class="text-body1 text-grey-7">{{ cookVideos[key].videoDescription }}</div>
+        <div class="tagsWrapperVideoDetailPage">
+          <q-chip
+            size="14px"
+            v-for="(tag,tagName) in cookVideos[key].tagMap"
+            :key="tag"
+          >{{allTags[tagName].tagName}}</q-chip>
+        </div>
+        <div class="q-mt-lg">
+          <q-scroll-area class="price-buy-detail">
+            <div>{{ cookVideos[key].videoDescription }}</div>
           </q-scroll-area>
         </div>
       </div>
@@ -105,6 +105,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 import { SessionStorage } from "quasar";
 import { firestoreDb } from "src/boot/firebase";
 import Vue from "vue";
+import { getParam } from "src/functions/getParam";
 export default {
   data() {
     return {
@@ -126,20 +127,9 @@ export default {
     ...mapState("videos", ["cookVideos"])
   },
   methods: {
-    // URLのパラメーターからChannelIdを取る関数
-    getParam(name, url) {
-      if (!url) url = window.location.href;
-      name = name.replace(/[\[\]]/g, "\\$&");
-      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return "";
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
-    },
     async getUserReviews() {
-      const videoId = this.getParam("key");
+      const videoId = getParam("key");
       let obj = this.getYoutuberReview(videoId);
-      console.log(obj);
       Object.keys(obj).forEach(documentId => {
         const uid = obj[documentId].uid;
         let payload = {
@@ -149,6 +139,8 @@ export default {
           photoURL: this.usersPublicInfo[uid].photoURL,
           createdAt: this.usersPublicInfo[uid].createdAt,
           LikeArray: obj[documentId].LikeArray,
+          star_number: this.usersPublicInfo[uid].favoriteVTRObj[documentId]
+            .star_number,
           docId: documentId
         };
         Vue.set(this.userReviews, uid, payload);
@@ -222,7 +214,7 @@ export default {
     // this.checkIfFavorite();
   },
   created() {
-    this.key = this.getParam("key");
+    this.key = getParam("key");
     if (this.cookVideos[this.key]) {
       this.starPoint = this.cookVideos[this.key].starPoint;
       // this.checkWritedReview();
@@ -246,14 +238,40 @@ export default {
   margin: 16px auto;
   justify-content: center;
 }
-.card-wrapper {
+.CookVideoWrapperLeft {
   min-width: 350px;
-  width: 40%;
+  width: 48%;
   margin-right: 48px;
+}
+.cookDetailPageVideoTitle {
+  font-size: 16px;
+  font-weight: bold;
+}
+.StarWrapperVideoDetailPage {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  background: rgb(147, 143, 143);
+}
+.tagsWrapperVideoDetailPage {
+  padding: 4px;
+  margin-top: 15px;
+}
+.CookVideoWrapperRight {
+  width: 46%;
 }
 .card-LiveVTR-wrapper {
   width: 90%;
 }
+.price-buy-detail {
+  width: 100%;
+  height: 300px;
+  font-size: 15px;
+  color: rgb(89, 87, 87);
+}
+/* .price-buy-detail {
+  height: 400px;
+} */
 /* 表示する動画or画像 */
 #ytplayer {
   min-width: 200px;
@@ -274,20 +292,20 @@ export default {
   padding-top: 40px;
   margin-left: 16px;
 }
-.cardDetailWrapper {
+/* .cardDetailWrapper {
   min-width: 340px;
   width: 40%;
   height: 340px;
   margin: 8px;
   padding: 8px;
   justify-content: center;
-}
+} */
 /* お気に入り星の数表示 */
 .favoriteNum {
-  font-size: 18px;
+  font-size: 21px;
   font-weight: bold;
   margin-left: 10px;
-  margin-top: 3px;
+  margin-top: 1px;
 }
 /* 右側のDetailのランの文字 */
 .infoWrapper {

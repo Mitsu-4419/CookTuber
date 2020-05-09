@@ -1,10 +1,9 @@
 <template>
   <q-card class="reviewCard">
     <router-link :to="{ name: 'mypage', query: { id: routerUserId } }" class="routerDec">
-      <!-- <router-link :to="'/mypage?key=' + review.uid" class="routerDec" v-bind:userId="routerUserId"> -->
       <q-card-section>
         <div class="row">
-          <q-avatar>
+          <q-avatar size="32px">
             <q-img :src="review.photoURL"></q-img>
           </q-avatar>
           <section class="userNameDetail">{{ review.nickName }}</section>
@@ -12,14 +11,23 @@
       </q-card-section>
       <div class="reviewDetail">{{ review.review }}</div>
       <q-card-section class="row">
+        <star-rating
+          :read-only="true"
+          v-model="starUserReview"
+          :star-size="21"
+          :increment="0.1"
+          :padding="1"
+          active-color="yellow"
+          text-class="custom-TextUserReview"
+        ></star-rating>
         <q-space></q-space>
         <q-icon
           name="fas fa-heart"
-          size="1.8em"
+          size="1.9em"
           :class="userLike == true ? 'likeActive' : 'likeNonActive'"
           @click.prevent="addDecreaseLike()"
         ></q-icon>
-        <section class="likeNumber">{{ LikeNumbers }}</section>
+        <section class="likeNumberReviewCard">{{ LikeNumbers }}</section>
       </q-card-section>
     </router-link>
   </q-card>
@@ -33,7 +41,8 @@ export default {
     return {
       routerUserId: "",
       userLike: "",
-      LikeNumbers: ""
+      LikeNumbers: "",
+      starUserReview: 0
     };
   },
   methods: {
@@ -80,6 +89,8 @@ export default {
     // }
     // this.routerUserId = this.review.uid;
     // this.checkIfUserLikeOrNot();
+    console.log(this.review);
+    this.starUserReview = this.review.star_number;
   }
 };
 </script>
@@ -101,7 +112,7 @@ export default {
 }
 
 .userNameDetail {
-  font-size: 18px;
+  font-size: 17px;
   margin-top: 5px;
   margin-left: 10px;
 }
@@ -110,20 +121,23 @@ export default {
   color: black;
 }
 .reviewDetail {
-  padding-left: 16px;
-  padding-right: 16px;
-  font-size: 16px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: 20px;
   overflow: scroll;
   height: 100px;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
-.likeNumber {
+.likeNumberReviewCard {
   margin-left: 10px;
-
-  font-size: 10px;
+  font-size: 13px;
+  margin-top: 5px;
   font-weight: bold;
   font-family: "Russo One", sans-serif;
+}
+.custom-TextUserReview {
+  margin-bottom: 6px;
 }
 .likeActive {
   color: red;
