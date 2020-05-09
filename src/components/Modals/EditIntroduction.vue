@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   props: ["userIntroduction"],
   data() {
@@ -47,7 +47,6 @@ export default {
     ...mapState("auth", ["userId"])
   },
   methods: {
-    ...mapActions("auth", ["update_displayIntroduction"]),
     ...mapActions("usersPublic", ["update_mypageIntroduction"]),
     submitIntroduction() {
       let payload = {
@@ -57,7 +56,6 @@ export default {
       if (this.editIntroduction.length > 35) {
         alert("既定の文字数を超えています。35字以下に設定し直してください。");
       } else {
-        this.update_displayIntroduction(payload);
         this.update_mypageIntroduction(payload);
         this.$router.push({
           name: "account"

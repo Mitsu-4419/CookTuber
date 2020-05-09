@@ -123,8 +123,8 @@ export default {
   computed: {
     ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapState("tags", ["allTags"]),
-    ...mapGetters("usersPublic", ["getYoutuberReview"]),
-    ...mapState("videos", ["cookVideos"])
+    ...mapState("videos", ["cookVideos"]),
+     ...mapGetters("usersPublic", ["getYoutuberReview"]),
   },
   methods: {
     async getUserReviews() {

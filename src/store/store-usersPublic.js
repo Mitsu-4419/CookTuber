@@ -114,6 +114,7 @@ const actions = {
         nickName: data.data().nickName,
         introduction: data.data().introduction,
         photoURL: data.data().photoURL,
+        photoName: data.data().photoName,
         favoriteCount: data.data().favoriteCount
       };
       const sp = await firestoreDb
