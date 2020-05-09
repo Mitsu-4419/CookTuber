@@ -1,7 +1,7 @@
 <template>
   <div class="cookVideoCard" v-if="cookVideoDetail">
     <router-link
-      :to="{ name: 'show', query: { key:cookVideoDetail.channelId  } }"
+      :to="{ name: 'video', query: { key:videoId  } }"
       style="text-decoration:none;color:black;"
     >
       <div class="cookVideoThumbnailWrapper">
