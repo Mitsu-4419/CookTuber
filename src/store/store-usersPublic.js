@@ -4,7 +4,6 @@ import Vue from "vue";
 const state = {
   usersPublicInfo: {}
 };
-console.log(state.videos);
 const mutations = {
   setYoutuber_FavoriteCount(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
@@ -115,6 +114,7 @@ const actions = {
         nickName: data.data().nickName,
         introduction: data.data().introduction,
         photoURL: data.data().photoURL,
+        photoName: data.data().photoName,
         favoriteCount: data.data().favoriteCount
       };
       const sp = await firestoreDb

@@ -30,7 +30,7 @@
 
 
 <script>
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 export default {
   props: ["userName"],
   data() {
@@ -42,7 +42,6 @@ export default {
     ...mapState("auth", ["userId"])
   },
   methods: {
-    ...mapActions("auth", ["update_displayName"]),
     ...mapActions("usersPublic", ["update_mypageName"]),
     submitName() {
       let payload = {
@@ -52,7 +51,6 @@ export default {
       if (this.editName.length > 15) {
         alert("既定の文字数を超えています。15字以下に設定し直してください。");
       } else {
-        this.update_displayName(payload);
         this.update_mypageName(payload);
         this.$router.push({
           name: "account"

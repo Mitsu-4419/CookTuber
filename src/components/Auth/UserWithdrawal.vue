@@ -30,7 +30,7 @@ export default {
     submitAction() {
       this.$router.push({
         name: "withdrawal",
-        query: { id: userId }
+        query: { id: this.userId }
       });
     }
   }

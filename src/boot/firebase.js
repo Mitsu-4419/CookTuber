@@ -12,7 +12,7 @@ var firebaseConfig = {
   authDomain: "cooktuber-e01f1.firebaseapp.com",
   databaseURL: "https://cooktuber-e01f1.firebaseio.com",
   projectId: "cooktuber-e01f1",
-  storageBucket: "cooktuber-e01f1.appspot.com",
+  storageBucket: "gs://cooktuber-e01f1.appspot.com",
   messagingSenderId: "599210527796",
   appId: "1:599210527796:web:9505d6256a70917d838e61",
   measurementId: "G-F3S0VKEBQ7"

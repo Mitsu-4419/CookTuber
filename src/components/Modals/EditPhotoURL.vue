@@ -1,5 +1,5 @@
 <template>
-  <q-card class="column" style="min-width:300px;">
+  <q-card class="column editPhotoWrapper" style="min-width:300px;">
     <q-card-section class="row items-center q-pb-none q-mb-md">
       <div class="displayLetter">アイコンを変更</div>
       <q-space />
@@ -7,7 +7,7 @@
     </q-card-section>
     <div class="q-pa-md userIcon">
       <q-avatar size="120px">
-        <img :src="usersPublicInfo[userId].photoURL" />
+        <img :src="this.usersPublicInfo[this.userId].photoURL" />
       </q-avatar>
     </div>
     <q-form id="file_upload" style="min-width:300px;" class="q-pa-md">
@@ -22,13 +22,11 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
-import * as firebase from "firebase/app";
 import { storageRef, storage } from "src/boot/firebase";
 export default {
   data() {
     return {
-      file: null,
-      userPhotoName: ""
+      file: null
     };
   },
   computed: {
@@ -36,25 +34,22 @@ export default {
     ...mapState("usersPublic", ["usersPublicInfo"])
   },
   methods: {
-    ...mapActions("auth", ["update_displayPhotoURL", "update_PhotoName"]),
     ...mapActions("usersPublic", ["update_mypagePhotoURL"]),
     upload: async function() {
       if (!this.file) {
         console.log("選択したファイルが存在しません。");
         return;
       }
+      // console.log(this.file);
       let uploadFileName = this.userId + this.file.name;
-      let storageRef = await firebase
-        .storage()
-        .ref()
-        .child("userIcon/" + uploadFileName);
-      await storageRef.put(this.file);
-      let url = await storageRef.getDownloadURL();
-      if (this.userPhotoName != "") {
-        await firebase
-          .storage()
-          .ref()
-          .child("userIcon/" + this.userPhotoName)
+      // console.log(uploadFileName);
+      let StorageRef = await storageRef.child("userIcon/" + uploadFileName);
+      await StorageRef.put(this.file);
+      let url = await StorageRef.getDownloadURL();
+      // console.log(this.usersPublicInfo[this.userId].photoName);
+      if (this.usersPublicInfo[this.userId].photoName != "") {
+        await storageRef
+          .child("userIcon/" + this.usersPublicInfo[this.userId].photoName)
           .delete();
       }
       let payload = await {
@@ -65,15 +60,11 @@ export default {
       if (url == null) {
         alert("無効なファイルです。再度ご確認ください");
       } else {
-        this.update_displayPhotoURL(payload);
         this.update_mypagePhotoURL(payload);
-        this.update_PhotoName(payload);
       }
     }
   },
-  created() {
-    this.userPhotoName = this.usersPublicInfo[this.userId].photoName;
-  }
+  mounted() {}
 };
 </script>
 
@@ -82,8 +73,10 @@ export default {
   font-size: 16px;
   font-weight: bold;
 }
-
 .userIcon {
   text-align: center;
+}
+.editPhotoWrapper {
+  border: 2px solid #edecf0;
 }
 </style>
