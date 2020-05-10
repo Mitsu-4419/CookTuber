@@ -34,31 +34,27 @@
             </div>
           </div>
           <div class="column reviewCardRight">
-            <div class="column">
-              <div class="reviewWrapper">{{reviewInfo.review}}</div>
-              <div class="row bottomsWrapper">
-                <div class="likeCountWrapper">
-                  <div>
-                    <q-icon
-                      name="fas fa-utensils"
-                      size="1.9em"
-                      :class="cooked == true ? 'cookActive' : 'cookNonActive'"
-                    />
-                    <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
-                    <!-- <span class="favoriteNumber" style="color:black">0</span> -->
-                  </div>
-                </div>
-                <div class="likeCountWrapper row">
-                  <q-icon
-                    name="fas fa-heart"
-                    size="1.9em"
-                    :class="userLike == true ? 'likeActive' : 'likeNonActive'"
-                  />
-                  <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
-                </div>
-                <div class="likeCountWrapper" v-show="userOrNot">
-                  <q-icon name="edit" size="1.9em" class="editIcon" @click="editReviewModal = true"></q-icon>
-                </div>
+            <div class="reviewWrapper">{{reviewInfo.review}}</div>
+            <div class="row bottomsWrapper">
+              <div class="likeCountWrapper">
+                <q-icon
+                  name="fas fa-utensils"
+                  size="1.6em"
+                  :class="cooked == true ? 'cookActive' : 'cookNonActive'"
+                />
+                <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
+                <!-- <span class="favoriteNumber" style="color:black">0</span> -->
+              </div>
+              <div class="likeCountWrapper row">
+                <q-icon
+                  name="fas fa-thumbs-up"
+                  size="1.6em"
+                  :class="userLike == true ? 'likeActive' : 'likeNonActive'"
+                />
+                <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
+              </div>
+              <div class="editButtontWrapper" v-show="userOrNot">
+                <q-icon name="edit" size="1.6em" class="editIcon" @click="editReviewModal = true"></q-icon>
               </div>
             </div>
           </div>
@@ -104,7 +100,7 @@ export default {
     this.starPoint = Number(this.reviewInfo.star_number);
   },
   components: {
-    editReviewInfoModal: require("components/EditCard/editReviewModal.vue")
+    editReviewInfoModal: require("components/EditReviewCard/editReviewModal.vue")
       .default
   }
 };
@@ -116,8 +112,9 @@ export default {
   color: black;
 }
 .videoReviewCard {
-  width: 100%;
-  max-width: 600px;
+  width: 476px;
+  height: 285px;
+  /* max-width: 600px; */
   margin-right: 5px;
   margin-bottom: 5px;
 }
@@ -127,7 +124,8 @@ export default {
   padding: 0;
 }
 .reviewCardRight {
-  width: 50%;
+  width: 230px;
+  height: 275px;
   /* background: blue; */
 }
 .MyPageThumbnail {
@@ -164,6 +162,8 @@ export default {
 }
 .videoChannelNameWrapper {
   padding: 3px;
+  height: 20px;
+  overflow: hidden;
 }
 .videoChannelName {
   font-size: 11px;
@@ -171,14 +171,17 @@ export default {
 }
 
 .bottomsWrapper {
-  display: flex;
+  /* display: flex; */
   margin-top: 12px;
   width: 80%;
   margin-right: auto;
   margin-left: auto;
 }
 .likeCountWrapper {
-  width: 30%;
+  width: 38%;
+}
+.editButtontWrapper {
+  margin-left: 6px;
 }
 .likeNumber {
   margin-left: 10px;
@@ -208,7 +211,7 @@ export default {
   padding: 8px;
   width: 95%;
   height: 230px;
-  font-size: 17px;
+  font-size: 14px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -228,9 +231,9 @@ export default {
   color: #5d5e61;
 }
 .likeActive {
-  color: #eb5050;
+  color: #545454;
 }
 .likeNonActive {
-  color: #edafaf;
+  color: #bfbfbf;
 }
 </style>

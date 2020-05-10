@@ -1,5 +1,4 @@
-import * as firebase from "firebase/app";
-import { firestoreDb, firebaseDb } from "src/boot/firebase";
+import { firestoreDb, firestorebase } from "src/boot/firebase";
 import Vue from "vue";
 import axios from "axios";
 
@@ -114,6 +113,57 @@ const actions = {
           starPoint: firestorebase.FieldValue.increment(
             Number(payload.star_number)
           )
+        });
+    }
+  },
+  async addNewYoutuberInfo({ commit, state }, payload) {
+    // チャンネルが登録されていない場合は新しくチャンネルを登録する
+    if (
+      !Object.keys(state.YoutubersChannel_info).includes(
+        payload.snippet.channelId
+      )
+    ) {
+      let Data = await axios.get(
+        "https://www.googleapis.com/youtube/v3/channels",
+        {
+          params: {
+            key: "AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s",
+            id: payload.snippet.channelId,
+            part: "statistics, snippet"
+          }
+        }
+      );
+      const url = Data.data.items[0].snippet.thumbnails.default.url;
+      const name = Data.data.items[0].snippet.title;
+      const description = Data.data.items[0].snippet.description;
+      const subscriberCount = Data.data.items[0].statistics.subscriberCount;
+      const register_date = Data.data.items[0].snippet.publishedAt.split(
+        "T"
+      )[0];
+      let info = {};
+      info[payload.snippet.channelId] = {
+        channelId: payload.snippet.channelId,
+        name: name,
+        description: description,
+        iconUrl: url,
+        subscriberCounts: subscriberCount,
+        register_date: register_date,
+        reviewCount: 0,
+        starPoint: 0
+      };
+      commit("addYoutuberInfoMutate", info);
+      firestoreDb
+        .collection("YouTubers_basic_info")
+        .doc(payload.snippet.channelId)
+        .set({
+          channelId: payload.snippet.channelId,
+          name: name,
+          description: description,
+          iconUrl: url,
+          subscriberCounts: subscriberCount,
+          register_date: register_date,
+          reviewCount: 0,
+          starPoint: 0
         });
     }
   }

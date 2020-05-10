@@ -87,9 +87,8 @@ export default {
     // if (this.review.LikeArray) {
     //   this.LikeNumbers = this.review.LikeArray.length;
     // }
-    // this.routerUserId = this.review.uid;
     // this.checkIfUserLikeOrNot();
-    console.log(this.review);
+    this.routerUserId = this.review.uid;
     this.starUserReview = this.review.star_number;
   }
 };

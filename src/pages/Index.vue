@@ -61,11 +61,15 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <!-- 料理を作ったのか、これからつくるかのModal -->
+    <q-dialog v-model="cookedOrWillCook" persistent>
+      <CookedOrWillCook @setMadeOrNot="SetMadeOrNot" />
+    </q-dialog>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import axios from "axios";
 export default {
   data() {
@@ -75,14 +79,21 @@ export default {
       reviewSubmit: false,
       doubleRegistAlert: false,
       genreAlert: false,
-      Snippet: ""
+      Snippet: "",
+      cookedOrWillCook: false,
+      SETMadeOrNot: false,
+      VideoId: ""
     };
   },
   computed: {
     ...mapState("auth", ["loggedIn", "userId"]),
-    ...mapState("usersPublic", ["usersPublicInfo"])
+    ...mapState("usersPublic", ["usersPublicInfo"]),
+    ...mapState("auth", ["userId"])
   },
   methods: {
+    ...mapActions("usersPublic", ["addFavoriteVTR"]),
+    ...mapActions("videos", ["addNewVideoData"]),
+    ...mapActions("youtubers", ["addNewYoutuberInfo"]),
     async showReviewMakeModal() {
       if (!this.loggedIn) {
         // ログインしていなかったらユーザー登録する様にDialogをだす
@@ -91,6 +102,7 @@ export default {
         // VideoId をURLから取り出す
         let splicedURL1 = this.registerURL.split("&")[0];
         let videoId = splicedURL1.split("v=")[1];
+        this.VideoId = videoId;
         // videoIdのsnippetを取ってきて、Categoryが明らかに違うものは弾くようにする。
         const res = await axios.get(
           "https://www.googleapis.com/youtube/v3/videos",
@@ -116,17 +128,55 @@ export default {
         }
         if (videoArray.includes(videoId)) {
           this.doubleRegistAlert = true;
-        } else if (!(snippet.categoryId == 24 || snippet.categoryId == 26)) {
+          // 動画のCategoryIdをチェックしている
+        } else if (
+          !(
+            snippet.categoryId == 24 ||
+            snippet.categoryId == 26 ||
+            snippet.categoryId == 22
+          )
+        ) {
           this.genreAlert = true;
         } else {
-          this.reviewSubmit = true;
+          // すでに作った動画か、これから作りたい動画かを選ぶ
+          this.cookedOrWillCook = true;
         }
+      }
+    },
+    SetMadeOrNot(value) {
+      this.SETMadeOrNot = value;
+      this.cookedOrWillCook = false;
+      if (value == true) {
+        this.reviewSubmit = true;
+      } else {
+        this.addFavoriteVTR({
+          uid: this.userId,
+          review: "",
+          favoriteVTRvideoID: this.VideoId,
+          selectedTags: [],
+          star_number: 0,
+          snippet: this.Snippet,
+          cooked: false
+        });
+        this.addNewVideoData({
+          uid: this.userId,
+          favoriteVTRvideoID: this.VideoId,
+          snippet: this.Snippet
+        });
+        this.addNewYoutuberInfo({
+          uid: this.userId,
+          channelId: this.Snippet.channelId,
+          favoriteVTRvideoID: this.VideoId,
+          snippet: this.Snippet
+        });
       }
     }
   },
   components: {
-    ToLoginAlert: require("components/Card/ToLoginAlert.vue").default,
-    registerReviewModal: require("components/modal/registerReviewModal.vue")
+    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
+    registerReviewModal: require("components/RegisterReviewModal/registerReviewModal.vue")
+      .default,
+    CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
       .default
   }
 };

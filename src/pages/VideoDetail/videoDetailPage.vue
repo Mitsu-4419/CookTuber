@@ -90,14 +90,6 @@
     <q-dialog v-model="alertToSignUp">
       <ToLoginAlert />
     </q-dialog>
-    <!-- レビュー投稿モーダル -->
-    <!-- <q-dialog v-model="writeReview">
-      <reviewSubmit
-        @closeReviewSubmit="closeReviewSubmi"
-        @addstar="addstar"
-        :channelInfo="YoutubersChannel_info[key]"
-      />
-    </q-dialog>-->
   </q-page>
 </template>
 <script>
@@ -124,7 +116,7 @@ export default {
     ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapState("tags", ["allTags"]),
     ...mapState("videos", ["cookVideos"]),
-     ...mapGetters("usersPublic", ["getYoutuberReview"]),
+    ...mapGetters("usersPublic", ["getYoutuberReview"])
   },
   methods: {
     async getUserReviews() {
@@ -205,8 +197,7 @@ export default {
     // }
   },
   components: {
-    ToLoginAlert: require("components/Card/ToLoginAlert.vue").default,
-    // reviewSubmit: require("components/ReviewCard/reviewSubmit.vue").default,
+    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
     userReviewCard: require("components/Card/userReviewCard.vue").default
   },
   mounted() {

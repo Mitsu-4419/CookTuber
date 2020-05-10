@@ -182,9 +182,10 @@ export default {
   },
   methods: {},
   components: {
-    editName: require("components/Modals/EditName.vue").default,
-    editPhotoURL: require("components/Modals/EditPhotoURL.vue").default,
-    editIntroduction: require("components/Modals/EditIntroduction.vue").default,
+    editName: require("components/EditUserInfo/EditName.vue").default,
+    editPhotoURL: require("components/EditUserInfo/EditPhotoURL.vue").default,
+    editIntroduction: require("components/EditUserInfo/EditIntroduction.vue")
+      .default,
     TermsOfService: require("components/Auth/TermsOfService.vue").default,
     PrivacyPolicy: require("components/Auth/PrivacyPolicy.vue").default,
     UserWithdrawal: require("components/Auth/UserWithdrawal.vue").default

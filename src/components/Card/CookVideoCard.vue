@@ -69,7 +69,7 @@ export default {
   overflow: hidden;
 }
 .cookVideoChannelWrapper {
-  margin-top: 8px;
+  margin-top: 3px;
 }
 .cookVideoChannel {
   font-size: 11px;
@@ -90,6 +90,13 @@ export default {
 @media screen and (min-width: 1025px) and (max-width: 1599px) {
   .cookVideoCard {
     width: 24%;
+    margin-right: 7px;
+    margin-bottom: 7px;
+  }
+}
+@media screen and (min-width: 700px) and (max-width: 1024px) {
+  .cookVideoCard {
+    width: 32%;
     margin-right: 7px;
     margin-bottom: 7px;
   }

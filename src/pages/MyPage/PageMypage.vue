@@ -11,12 +11,26 @@
           <div class="introduction">{{ usersPublicInfo[pageUserId].introduction }}</div>
         </div>
       </div>
-      <!-- 全てのYoutuber -->
-      <!-- 検索Wordがない場合 TabがAll　でかつSelectが登録者が多い-->
-      <div class="row cookVideoReview widthAdjust">
-        <transition-group appear enter-active-class="animated fadeInLeft" class>
+      <!-- つくったか　これからつくるのかのTAB -->
+      <q-tabs v-model="tab" inline-label>
+        <q-tab name="cooked" class="cookedTab" icon="fas fa-utensils" label="料理済み"></q-tab>
+        <q-tab name="NotCooked" class="cookedTab" icon="fas fa-carrot" label="後で作る" />
+      </q-tabs>
+      <div class="row cookVideoReview" v-if="tab=='cooked'">
+        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
           <MyPageCookVideoReviewCard
-            v-for="(reviewInfo, key) in getfavoriteObject(pageUserId)"
+            v-for="(reviewInfo, key) in getfavoriteCookedObject(pageUserId, tab)"
+            :key="key"
+            :docId="key"
+            :reviewInfo="reviewInfo"
+            :userOrNot="userOrNot"
+          />
+        </transition-group>
+      </div>
+      <div class="row cookVideoReview" v-else-if="tab=='NotCooked'">
+        <transition-group appear enter-active-class="animated fadeInLeft" class>
+          <MyPageNonCookVideoCard
+            v-for="(reviewInfo, key) in getfavoriteCookedObject(pageUserId, tab)"
             :key="key"
             :docId="key"
             :reviewInfo="reviewInfo"
@@ -39,17 +53,20 @@ export default {
       pageUserId: "",
       nickName: "",
       current: 1,
-      userOrNot: false
+      userOrNot: false,
+      tab: "cooked"
     };
   },
   computed: {
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
-    ...mapGetters("usersPublic", ["getfavoriteObject"])
+    ...mapGetters("usersPublic", ["getfavoriteCookedObject"])
   },
   methods: {},
   components: {
-    MyPageCookVideoReviewCard: require("components/VideoCard/MyPageCookVideoReviewCard.vue")
+    MyPageCookVideoReviewCard: require("components/MyPageVideoCard/MyPageCookVideoReviewCard.vue")
+      .default,
+    MyPageNonCookVideoCard: require("components/MyPageVideoCard/MyPageNonCookVideoCard.vue")
       .default
   },
   created() {},
@@ -65,8 +82,8 @@ export default {
 <style>
 .ctlLayout {
   margin-top: 32px;
-  margin-left: 24px;
-  margin-right: 24px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .myPageAvator {
   width: 100px;
@@ -105,6 +122,11 @@ export default {
 .cookVideoReview {
   width: 100%;
   margin-top: 30px;
+}
+/* TABのCSS */
+.cookedTab {
+  width: 200px;
+  color: rgb(82, 87, 135);
 }
 /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* 
 /* 備忘録：こちらでwrapperの大きさを指定。

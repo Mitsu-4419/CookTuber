@@ -146,8 +146,7 @@ export default {
     }
   },
   components: {
-    ToLoginAlert: require("components/Card/ToLoginAlert.vue").default,
-    reviewSubmit: require("components/ReviewCard/reviewSubmit.vue").default
+    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default
   },
   mounted() {
     // if (this.loggedIn) {
