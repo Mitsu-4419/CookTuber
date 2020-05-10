@@ -9,50 +9,44 @@
     <!-- ーーーーーーーーーーー -->
     <!-- ページ上部のプロフィール載せる欄 -->
     <!-- ーーーーーーーーーーー -->
-    <div class="row card-holder">
-      <div class="card-wrapper">
-        <!-- <q-video
-          v-if="liveDetailKeys.includes(key)"
-          id="ytplayer"
-          type="text/html"
-          :src="
-            'https://www.youtube.com/embed/' +
-              liveDetail[key].videoId +
-              '?autoplay=0&origin=http://example.com'
-          "
-          frameborder="0"
-        ></q-video>
-        <q-video
-          v-else-if="liveWaitDetailKeys.includes(key)"
-          id="ytplayer"
-          type="text/html"
-          :src="
-            'https://www.youtube.com/embed/' +
-              liveWaitDetail[key].videoId +
-              '?autoplay=0&origin=http://example.com'
-          "
-          frameborder="0"
-        ></q-video>-->
-        <div class="card-img">
-          <q-img :src="YoutubersChannel_info[key].iconUrl" basic></q-img>
+    <div class="row YoutuberDetailcard-holder">
+      <div class="YoutuberDetailcard-wrapperLEFT">
+        <div class="YoutuberDetailcard-imgWrapper">
+          <q-img class="YoutuberDetailcard-img" :src="YoutubersChannel_info[key].iconUrl"></q-img>
+        </div>
+        <div class="YoutuberDetail-reviewNumberWrapper">
+          <span style="font-size:15px;margin-top:4px;">レビュー投稿数</span>
+          <span
+            style="font-size:20px;font-weight:bold;margin-left:10px"
+          >{{YoutubersChannel_info[key].averageStar}}</span>
+        </div>
+        <div class="YoutuberDetail-starWrapper">
+          <star-rating
+            :read-only="true"
+            v-model="starYoutuberDetail"
+            :star-size="26"
+            :increment="0.1"
+            :padding="4"
+            active-color="yellow"
+            text-class="custom-Text"
+          ></star-rating>
         </div>
       </div>
-      <div class="cardDetailWrapper">
-        <div class="row" @click.prevent="switchFav()">
+      <div class="YoutuberDetailcard-wrapperRIGHT">
+        <!-- <div class="row" @click.prevent="switchFav()">
           <q-icon
             v-model="ratingModel"
             name="fas fa-star"
             size="1.8em"
             :class="ratingModel == 1 ? 'starActive' : 'starNonActive'"
-          />
-          <!-- <span class="favoriteNum">{{ getNumberArray[key] }}</span> -->
-        </div>
-        <div class="row q-mt-lg">
-          <q-icon name="videogame_asset" size="md" class="q-mr-sm" />
-          <div class="text-h5 tex-bold">{{ YoutubersChannel_info[key].name }}</div>
+        />-->
+        <!-- <span class="favoriteNum">{{ getNumberArray[key] }}</span> -->
+        <!-- </div> -->
+        <div class="row">
+          <div class="YoutuberDetail-name">{{ YoutubersChannel_info[key].name }}</div>
         </div>
         <div class="price-buy-detail q-mt-lg">
-          <q-scroll-area style="height: 180px; max-width: 400px;">
+          <q-scroll-area style="height: 200px; max-width: 400px;">
             <div class="text-body1 text-grey-7">{{ YoutubersChannel_info[key].description }}</div>
           </q-scroll-area>
         </div>
@@ -84,21 +78,19 @@
         </div>
       </div>
     </div>
-
-    <!-- ユーザーのレビューを載せる欄 -->
-    <div class="userReview_wrapper">
+    <div class="YoutubeDetail_popularVideowrapper">
       <div class="review_title_wrapper">
-        <span>ファンからのオススメ</span>
+        <span>人気の料理動画</span>
       </div>
       <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
-      <div class="row detailReviewCardWrapper">
+      <div class="row YoutuberDetailpopularVideoWrapper">
         <transition-group appear enter-active-class="animated fadeInLeft" class="row">
-          <userReviewCard
-            :review="review"
-            :id="key"
-            v-for="(review, key) in userReviews"
-            :key="key"
-          />
+          <CookVideoCard
+        v-for="(cookVideoDetail, id) in cookVideoYoutuberSort(key)"
+        :key="id"
+        :videoId="id"
+        :cookVideoDetail="cookVideoDetail"
+      />
         </transition-group>
       </div>
     </div>
@@ -106,14 +98,6 @@
     <!-- ユーザー登録をする様に促すDialog -->
     <q-dialog v-model="alertToSignUp">
       <ToLoginAlert />
-    </q-dialog>
-    <!-- レビュー投稿モーダル -->
-    <q-dialog v-model="writeReview">
-      <reviewSubmit
-        @closeReviewSubmit="closeReviewSubmi"
-        @addstar="addstar"
-        :channelInfo="YoutubersChannel_info[key]"
-      />
     </q-dialog>
   </q-page>
 </template>
@@ -125,7 +109,6 @@ import Vue from "vue";
 export default {
   data() {
     return {
-      userId: "",
       key: "",
       alertToSignUp: false,
       writeReview: false,
@@ -133,13 +116,15 @@ export default {
       ratingModel: 0,
       ratingColors: ["yellow-12"],
       userReviews: {},
-      documentId: ""
+      documentId: "",
+      starYoutuberDetail: 0
     };
   },
   computed: {
     ...mapState("youtubers", ["YoutubersChannel_info"]),
-    ...mapState("auth", ["loggedIn", "userInfo"]),
-    ...mapState("usersPublic", ["usersPublicInfo"])
+    ...mapState("auth", ["loggedIn", "userId"]),
+    ...mapState("usersPublic", ["usersPublicInfo"]),
+    ...mapGetters("videos", ["cookVideoYoutuberSort"])
     // ...mapGetters("usersPublic", ["getNumberArray", "getYoutuberReview"])
   },
   methods: {
@@ -228,9 +213,8 @@ export default {
     // }
   },
   components: {
-    ToLoginAlert: require("components/Card/ToLoginAlert.vue").default,
-    reviewSubmit: require("components/ReviewCard/reviewSubmit.vue").default,
-    userReviewCard: require("components/Card/userReviewCard.vue").default
+    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
+    CookVideoCard: require("components/Card/CookVideoCard.vue").default
   },
   mounted() {
     // this.getUserReviews();
@@ -238,8 +222,8 @@ export default {
   },
   created() {
     this.key = this.getParam("key");
-    this.userId = Object.values(this.userInfo)[0].id;
     // this.checkWritedReview();
+    this.starYoutuberDetail = this.YoutubersChannel_info[this.key].averageStar;
   }
 };
 </script>
@@ -256,44 +240,65 @@ export default {
   text-decoration: none;
 }
 /* 画面全体 */
-.card-holder {
-  margin: 16px auto;
+.YoutuberDetailcard-holder {
+  margin: 60px auto 25px auto;
   justify-content: center;
 }
-.card-wrapper {
+.YoutuberDetailcard-wrapperLEFT {
   min-width: 350px;
-  width: 40%;
-  margin-right: 48px;
-  padding-top: 40px;
+  width: 45%;
+  /* margin-right: 48px;
+  padding-top: 40px; */
+}
+.YoutuberDetail-starWrapper {
+  display: flex;
+  justify-content: center;
+  background-color: rgb(164, 163, 163);
+  width: 87%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
 }
 .card-LiveVTR-wrapper {
   width: 90%;
 }
 /* 表示する動画or画像 */
 
-.card-img {
+.YoutuberDetailcard-imgWrapper {
   max-width: 330px;
+  width: 98%;
   margin-left: auto;
   margin-right: auto;
+  padding-right: 30px;
+  display: flex;
+  justify-content: center;
 }
-.q-video {
-  margin-left: 16px;
-}
-.q-img {
+.YoutuberDetailcard-wrapperRIGHT {
   min-width: 340px;
-  width: 40%;
-  height: 340px;
-  padding-top: 40px;
-  margin-left: 16px;
-}
-.cardDetailWrapper {
-  min-width: 340px;
-  width: 40%;
+  width: 46%;
   height: 340px;
   margin: 8px;
   padding: 8px;
   justify-content: center;
 }
+.YoutuberDetailcard-img {
+  border-radius: 20px;
+  margin-top: 15px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.YoutuberDetail-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.YoutuberDetail-reviewNumberWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 /* お気に入り星の数表示 */
 .favoriteNum {
   font-size: 18px;
@@ -319,13 +324,13 @@ export default {
 .review_title_wrapper {
   font-size: 19px;
 }
-.userReview_wrapper {
+.YoutubeDetail_popularVideowrapper {
   width: 96%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 70px;
+  margin-top: 50px;
 }
-.detailReviewCardWrapper {
+.YoutuberDetailpopularVideoWrapper {
   width: 96%;
 }
 .starActive {

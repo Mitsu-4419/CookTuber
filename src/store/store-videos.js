@@ -88,7 +88,8 @@ const actions = {
         thumbnail: snippet.thumbnails.medium.url,
         registerCount: 1,
         starPoint: Number(payload.star_number),
-        tagMap: tagMap
+        tagMap: tagMap,
+        videoId: payload.favoriteVTRvideoID
       };
       commit("addVideoInfoMutate", PAYLOAD);
     } else {
@@ -142,6 +143,44 @@ const actions = {
         };
         commit("uploadVideoMutate", payloaded);
       }
+    }
+  },
+  // ====================================
+  // Videoを登録する時にレビューなしで登録する時のActions
+  // ====================================
+  async addNewVideoData({ commit }, payload) {
+    // すでにvideoが登録されていない時のみ登録する
+    if (!Object.keys(state.cookVideos).includes(payload.favoriteVTRvideoID)) {
+      const snippet = payload.snippet;
+      await firestoreDb
+        .collection("video_info")
+        .doc(payload.favoriteVTRvideoID)
+        .set({
+          channelId: snippet.channelId,
+          channelTitle: snippet.channelTitle,
+          videoTitle: snippet.title,
+          videoDescription: snippet.description,
+          thumbnail: snippet.thumbnails.medium.url,
+          //VideoReviewを登録したユーザーのカウント
+          registerCount: 0,
+          // 星の点数を加算していく
+          starPoint: 0,
+          tagMap: {},
+          videoId: payload.favoriteVTRvideoID
+        });
+      let PAYLOAD = {
+        id: payload.favoriteVTRvideoID,
+        channelId: snippet.channelId,
+        channelTitle: snippet.channelTitle,
+        videoTitle: snippet.title,
+        videoDescription: snippet.description,
+        thumbnail: snippet.thumbnails.medium.url,
+        registerCount: 1,
+        starPoint: Number(payload.star_number),
+        tagMap: {},
+        videoId: payload.favoriteVTRvideoID
+      };
+      commit("addVideoInfoMutate", PAYLOAD);
     }
   },
   // ======================================
@@ -258,6 +297,19 @@ const getters = {
       }
       return returnObject;
     }
+  },
+  // ==============================
+  // YoutuberDetailの人気VideoをGETする関数
+  // ===============================
+  cookVideoYoutuberSort: (state, getters) => youtuberId => {
+    let videoObj = getters.CookVideoStarOrder;
+    let returnObj = {};
+    Object.keys(videoObj).forEach(key => {
+      if (videoObj[key].channelId == youtuberId) {
+        returnObj[key] = videoObj[key];
+      }
+    });
+    return returnObj;
   }
 };
 

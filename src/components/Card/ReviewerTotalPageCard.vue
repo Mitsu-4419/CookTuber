@@ -4,7 +4,7 @@
     <!-- TopPage -->
     <!-- ------- -->
     <q-card class="my-ReviewrCard">
-      <router-link :to="{ name: 'show', query: { key:uid } }" class="myCardWrapper">
+      <router-link :to="{ name: 'mypage', query: { id: uid } }" class="myCardWrapper">
         <!-- <q-img v-if="rankInfo.rank == 1" class="rankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
         <q-img
           v-else-if="rankInfo.rank == 2"

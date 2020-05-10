@@ -61,6 +61,11 @@ const mutations = {
       "updatedAt",
       payload.obj.updatedAt
     );
+    Vue.set(
+      state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
+      "cooked",
+      true
+    );
   },
   delReviewInfoMutate(state, payload) {
     Vue.delete(
@@ -175,7 +180,8 @@ const actions = {
         LikeArray: [],
         star_number: payload.star_number,
         tagArray: payload.selectedTags,
-        videoId: payload.favoriteVTRvideoID
+        videoId: payload.favoriteVTRvideoID,
+        cooked: payload.cooked
       });
     // DocumentId を取ってきてStateに登録
     const sp = await firestoreDb
@@ -199,7 +205,8 @@ const actions = {
         videoId: payload.favoriteVTRvideoID,
         star_number: payload.star_number,
         tagArray: payload.selectedTags,
-        LikeArray: []
+        LikeArray: [],
+        cooked: payload.cooked
       }
     };
     commit("addReviewInfoMutate", Payload);
@@ -216,7 +223,8 @@ const actions = {
         updatedAt: firestorebase.FieldValue.serverTimestamp(),
         review: payload.review,
         star_number: payload.star_number,
-        tagArray: payload.selectedTags
+        tagArray: payload.selectedTags,
+        cooked: true
       }
     };
     commit("changeReviewInfoMutate", Payload);
@@ -229,7 +237,8 @@ const actions = {
         review: payload.review,
         star_number: payload.star_number,
         tagArray: payload.selectedTags,
-        updatedAt: firestorebase.FieldValue.serverTimestamp()
+        updatedAt: firestorebase.FieldValue.serverTimestamp(),
+        cooked: true
       });
   },
   // ーーーーーーーーーーーーーーーーーーーーーーーーーー
@@ -307,12 +316,28 @@ const actions = {
 
 const getters = {
   // ユーザーIDのお気に入りVideoReviewを取ってくる。
-  getfavoriteObject: state => userId => {
+  getfavoriteCookedObject: state => (userId, tab) => {
     const valueArray = state.usersPublicInfo;
-    let userFavoriteArray = valueArray[userId].favoriteVTRObj;
-    return userFavoriteArray;
+    let userFavoriteObj = valueArray[userId].favoriteVTRObj;
+    let returnObj = {};
+    if (tab == "cooked") {
+      console.log("hフォhdそあほ");
+      Object.keys(userFavoriteObj).forEach(key => {
+        if (userFavoriteObj[key].cooked == true) {
+          returnObj[key] = userFavoriteObj[key];
+        }
+      });
+      return returnObj;
+    } else if (tab == "NotCooked") {
+      console.log("hhoohodshfaohdio");
+      Object.keys(userFavoriteObj).forEach(key => {
+        if (userFavoriteObj[key].cooked == false) {
+          returnObj[key] = userFavoriteObj[key];
+        }
+      });
+      return returnObj;
+    }
   },
-
   // ユーザーのObjにユーザーのレビュー数、付いたいいねの総数を入れる処理
   setLikeNumReviewNum: state => {
     const userInfoTotal = state.usersPublicInfo;
@@ -323,7 +348,6 @@ const getters = {
       let obj = userInfoTotal[key].favoriteVTRObj;
       let LikeNum = 0;
       Object.keys(obj).forEach(id => {
-        console.log(obj[id]);
         LikeNum += Number(obj[id].LikeArray.length);
       });
       userInfoTotal[key]["reviewNum"] = reviewNum;
