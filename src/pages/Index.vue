@@ -26,7 +26,74 @@
           ></q-btn>
         </div>
       </div>
-      <div class="cookImageWrapper"></div>
+      <!-- --------------------------- -->
+      <!-- １段目の料理動画のところ -->
+      <!-- --------------------------- -->
+      <div class="cookImageWrapperTopPage">
+        <div class="cookImageWrapperTopPage-title row">
+          <q-icon name="far fa-play-circle" size="sm" style="margin-top:5px;"></q-icon>
+          <span class="cookImageWrapperTopPage-title-span">高評価の多い料理動画</span>
+          <q-space></q-space>
+          <div class="selectWrapper">
+            <q-select outlined v-model="sortGenre" :options="options" class="topPageSelectBox" />
+          </div>
+        </div>
+        <div class="cookImageTopPageWrapper row">
+          <CookVideoCardTopPage
+            v-for="(cookVideoDetail, key) in getTop5VideoAtTopPage"
+            :key="key"
+            :videoId="key"
+            :cookVideoDetail="cookVideoDetail"
+          />
+        </div>
+      </div>
+      <div class="MoreButton_wrapper">
+        <q-btn flat to="/video" class="moreButton" label="もっとみる"></q-btn>
+      </div>
+      <!-- --------------------------- -->
+      <!-- ２段目のYoutuberのところ -->
+      <!-- --------------------------- -->
+      <div class="cookImageWrapperTopPage">
+        <div class="cookImageWrapperTopPage-title row">
+          <q-icon name="fas fa-desktop" size="sm" style="margin-top:5px;"></q-icon>
+          <span class="cookImageWrapperTopPage-title-span">高評価の多い料理チャンネル</span>
+          <!-- <q-space></q-space>
+          <q-select outlined v-model="sortGenre" :options="options" class="topPageSelectBox" />-->
+        </div>
+        <div class="cookImageTopPageWrapper row">
+          <CardYoutuber
+            v-for="(channelInfo, key) in getTop5Youtuber"
+            :key="key"
+            :channelId="key"
+            :channelInfo="channelInfo"
+          />
+        </div>
+      </div>
+      <div class="MoreButton_wrapper">
+        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
+      </div>
+      <!-- --------------------------- -->
+      <!-- 3段目のReviewrのところ -->
+      <!-- --------------------------- -->
+      <div class="cookImageWrapperTopPage">
+        <div class="cookImageWrapperTopPage-title row">
+          <q-icon name="fas fa-user" size="sm" style="margin-top:5px;"></q-icon>
+          <span class="cookImageWrapperTopPage-title-span">高評価の多いReviewer</span>
+          <!-- <q-space></q-space>
+          <q-select outlined v-model="sortGenre" :options="options" class="topPageSelectBox" />-->
+        </div>
+        <div class="cookImageTopPageWrapper row">
+          <ReviewerTotalPageCard
+            :usersInfo="usersInfo"
+            :uid="key"
+            v-for="(usersInfo, key) in getTop5Reviewer"
+            :key="key"
+          />
+        </div>
+      </div>
+      <div class="MoreButton_wrapper">
+        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
+      </div>
     </q-page>
 
     <!-- ユーザー登録をする様に促すDialog -->
@@ -69,7 +136,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import axios from "axios";
 export default {
   data() {
@@ -82,13 +149,18 @@ export default {
       Snippet: "",
       cookedOrWillCook: false,
       SETMadeOrNot: false,
-      VideoId: ""
+      VideoId: "",
+      sortGenre: "ALL",
+      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"]
     };
   },
   computed: {
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
-    ...mapState("auth", ["userId"])
+    ...mapState("auth", ["userId"]),
+    ...mapGetters("videos", ["getTop5VideoAtTopPage"]),
+    ...mapGetters("youtubers", ["getTop5Youtuber"]),
+    ...mapGetters("usersPublic", ["getTop5Reviewer"])
   },
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTR"]),
@@ -172,21 +244,27 @@ export default {
       }
     }
   },
+  mounted() {},
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
     registerReviewModal: require("components/RegisterReviewModal/registerReviewModal.vue")
       .default,
     CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
+      .default,
+    CookVideoCardTopPage: require("components/Card/CookVideoCardTopPage.vue")
+      .default,
+    CardYoutuber: require("components/Card/CardYoutuber.vue").default,
+    ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
       .default
   }
 };
 </script>
 
-<style>
+<style scoped>
 .topPageImageWrapper {
   width: 100%;
-  height: 480px;
-  background: red;
+  height: 430px;
+  /* background: red; */
   background-image: url("../statics/topPage/topPage_dishImg.jpg");
   background-size: 90%;
   background-repeat: no-repeat;
@@ -207,5 +285,91 @@ export default {
   width: 150px;
   margin-right: auto;
   margin-left: auto;
+}
+/* ------------------- */
+/* 料理動画を載せるところ */
+/* ------------------- */
+/* ------------------- */
+.cookImageWrapperTopPage {
+  width: 100%;
+  min-height: 430px;
+  margin-top: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  border-block-start: 1px solid rgba(0, 0, 0, 0.12);
+}
+/* height: 300px; */
+
+.cookImageWrapperTopPage-title {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  background: rgb(250, 250, 181);
+  height: 60px;
+  padding: 10px;
+}
+.cookImageWrapperTopPage-title-span {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 15px;
+  margin-top: 3px;
+}
+.cookImageTopPageWrapper {
+  margin-top: 15px;
+}
+.topPageSelectBox {
+  width: 200px;
+}
+.selectWrapper {
+  height: 40px;
+}
+.q-field--auto-height .q-field__control {
+  height: 40px;
+  min-height: 40px;
+}
+.q-field--auto-height .q-field__control,
+.q-field--auto-height .q-field__native {
+  min-height: 40px;
+}
+.topPageSelectBox {
+  height: 40px;
+}
+/* --------------- */
+/* もっとみるボタン */
+/* --------------- */
+.MoreButton_wrapper {
+  text-align: center;
+  margin-top: 20px;
+}
+.moreButton {
+  height: 37px;
+  font-size: 14px;
+  font-weight: normal;
+  color: #161422;
+  background-color: rgba(68, 63, 95, 0.1);
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 0px 4px;
+  border-radius: 20px;
+}
+
+@media screen and (min-width: 1785px) {
+  .cookImageTopPageWrapper {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+  }
+}
+@media screen and (min-width: 1000px) and (max-width: 1784px) {
+  .cookImageTopPageWrapper {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+  }
 }
 </style>

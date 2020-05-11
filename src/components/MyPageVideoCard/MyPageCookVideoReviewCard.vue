@@ -120,6 +120,7 @@ export default {
 }
 .reviewCardLeft {
   width: 50%;
+  min-width: 230px;
   /* background: red; */
   padding: 0;
 }
@@ -210,7 +211,7 @@ export default {
 .reviewWrapper {
   padding: 8px;
   width: 95%;
-  height: 230px;
+  height: 219px;
   font-size: 14px;
   margin-right: auto;
   margin-left: auto;
@@ -235,5 +236,23 @@ export default {
 }
 .likeNonActive {
   color: #bfbfbf;
+}
+@media screen and (min-width: 768px) and (max-width: 1184px) {
+  .reviewCardRight {
+    width: 188px;
+    height: 275px；;
+  }
+  .videoReviewCard {
+    width: 434px;
+  }
+}
+@media screen and (min-width: 400px) and (max-width: 767px) {
+  .reviewCardRight {
+    width: 240px;
+    height: 275px；;
+  }
+  .videoReviewCard {
+    width: 500px;
+  }
 }
 </style>

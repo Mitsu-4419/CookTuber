@@ -371,13 +371,40 @@ const getters = {
         return 0;
       });
     }
+    // トップ２０だけ取り出す
     let sortedByMany = {};
-    for (let i = 0; i < valArray.length; i++) {
-      sortedByMany[valArray[i].id] = valArray[i];
+    if (valArray.length < 20) {
+      for (let i = 0; i < valArray.length; i++) {
+        sortedByMany[valArray[i].id] = valArray[i];
+      }
+    } else {
+      for (let i = 0; i < 20; i++) {
+        sortedByMany[valArray[i].id] = valArray[i];
+      }
     }
+
     return sortedByMany;
   },
-
+  // -------------------------------
+  // topPageでトップレビューワーを取ってくるところ
+  // -------------------------------
+  getTop5Reviewer: (state, getters) => {
+    let videoObj = getters.getSortedReviewer("参考になった数が多い順");
+    let keyArray = [];
+    for (let i = 0; i < 5; i++) {
+      keyArray.push(Object.keys(videoObj)[i]);
+    }
+    let returnObj = {};
+    for (let j in keyArray) {
+      let KEY = keyArray[j];
+      returnObj[KEY] = videoObj[KEY];
+      if (returnObj[KEY]) {
+        returnObj[KEY]["rankInfo"] = Number(j) + 1;
+      }
+    }
+    console.log(returnObj);
+    return returnObj;
+  },
   makeFavorite_VTRCount: state => {
     let valueArray = Object.values(state.usersPublicInfo);
     let favorite_VTRObject = {};

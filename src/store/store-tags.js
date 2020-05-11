@@ -130,7 +130,36 @@ const actions = {
   }
 };
 
-const getters = {};
+const getters = {
+  sortedTag: state => genre => {
+    const alltags = state.allTags;
+    if (genre == "genre") {
+      let returnObj = {};
+      Object.keys(alltags).forEach(key => {
+        if (alltags[key].genre == "genre") {
+          returnObj[key] = alltags[key];
+        }
+      });
+      return returnObj;
+    } else if (genre == "dish") {
+      let returnObj = {};
+      Object.keys(alltags).forEach(key => {
+        if (alltags[key].genre == "dish") {
+          returnObj[key] = alltags[key];
+        }
+      });
+      return returnObj;
+    } else if (genre == "material") {
+      let returnObj = {};
+      Object.keys(alltags).forEach(key => {
+        if (alltags[key].genre == "material") {
+          returnObj[key] = alltags[key];
+        }
+      });
+      return returnObj;
+    }
+  }
+};
 
 export default {
   namespaced: true,

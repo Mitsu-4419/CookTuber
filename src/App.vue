@@ -10,7 +10,7 @@ import Vue from "vue";
 export default {
   methods: {
     ...mapActions("auth", ["handleAuthStateChange"]),
-    ...mapActions("usersPublic", ["getUsersPublicProfile", "getVideos"]),
+    ...mapActions("usersPublic", ["getUsersPublicProfile"]),
     ...mapActions("tags", ["getTags"]),
     ...mapActions("videos", ["getAllCookingVideos"]),
     ...mapActions("youtubers", ["getYoutubers_info"])
@@ -19,9 +19,10 @@ export default {
     this.handleAuthStateChange();
     this.getUsersPublicProfile();
     this.getTags();
-    this.getVideos();
     this.getAllCookingVideos();
     this.getYoutubers_info();
   }
 };
 </script>
+
+<style></style>

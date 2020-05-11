@@ -3,21 +3,41 @@
     <div class="CookVideoTitleWrapper">
       <!-- ソートと検索のところSelect -->
       <div class="row q-mr-md">
-        <div class="videoTitleCookPage">
-          <q-icon name="restaurant" color="grey-5" size="lg" class="q-mr-md"></q-icon>
-          <span class="cookVideoTitle">料理動画一覧</span>
+        <div class="videoTitleCookPage row">
+          <q-icon name="restaurant" color="grey-5" size="lg" class="q-mr-md q-ml-sm"></q-icon>
+          <div class="cookVideoTitle">料理動画一覧</div>
         </div>
         <q-space></q-space>
       </div>
     </div>
-    <div class="cookVideoTagWrapper row">
-      <ChipComponent
-        v-for="tag in Object.keys(allTags)"
-        :key="tag"
-        :tagName="allTags[tag].tagName"
-        :id="tag"
-        @setActivatedTag="setTagArray"
-      />
+    <div class="cookVideoTagWrapper column">
+      <div class="row">
+        <ChipComponent
+          v-for="tag in Object.keys(sortedTag('genre'))"
+          :key="tag"
+          :tagName="allTags[tag].tagName"
+          :id="tag"
+          @setActivatedTag="setTagArray"
+        />
+      </div>
+      <div class="row">
+        <ChipComponent
+          v-for="tag in Object.keys(sortedTag('dish'))"
+          :key="tag"
+          :tagName="allTags[tag].tagName"
+          :id="tag"
+          @setActivatedTag="setTagArray"
+        />
+      </div>
+      <div class="row">
+        <ChipComponent
+          v-for="tag in Object.keys(sortedTag('material'))"
+          :key="tag"
+          :tagName="allTags[tag].tagName"
+          :id="tag"
+          @setActivatedTag="setTagArray"
+        />
+      </div>
     </div>
     <!-- ----------- -->
     <!-- tagが何も選ばれていない時 -->
@@ -56,7 +76,8 @@ export default {
   computed: {
     ...mapState("tags", ["allTags"]),
     ...mapGetters("videos", ["CookVideoStarOrder"]),
-    ...mapGetters("videos", ["sortByTagOfCookVideos"])
+    ...mapGetters("videos", ["sortByTagOfCookVideos"]),
+    ...mapGetters("tags", ["sortedTag"])
   },
   methods: {
     setTagArray(value) {
@@ -91,16 +112,20 @@ export default {
   margin-left: 5px;
 }
 .CookVideoTitleWrapper {
-  background: red;
+  /* background: red; */
   height: 50px;
 }
 .videoTitleCookPage {
-  font-size: 19px;
+  padding: 5px;
+}
+.cookVideoTitle {
+  font-size: 21px;
   font-weight: bold;
+  margin-top: 5px;
 }
 .cookVideoTagWrapper {
-  background: blue;
-  height: 100px;
+  /* background: blue; */
+  /* height: 116px; */
   padding: 10px;
 }
 .selectedTag {

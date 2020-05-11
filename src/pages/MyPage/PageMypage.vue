@@ -133,96 +133,41 @@ export default {
 Cardコンポーネントでカードの大きさを指定 */
 /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* /* 
 /* 画面のサイズが1808以上の時は横にCard5枚並べる */
-@media screen and (min-width: 1808px) {
-  .YOUTUBERCardWrapper {
-    width: 97%;
+@media screen and (min-width: 1691px) {
+  .cookVideoReview {
+    width: 1443px;
     margin-right: auto;
     margin-left: auto;
-    padding-left: 32px;
-    margin-top: 15px;
-    margin-bottom: 50px;
+    margin-top: 25px;
   }
 }
 /* 画面のサイズが1281以上1807以下の時は横にCard4枚並べる */
-@media screen and (min-width: 1281px) and (max-width: 1807px) {
-  .YOUTUBERCardWrapper {
-    width: 930px;
+@media screen and (min-width: 1185px) and (max-width: 1690px) {
+  .cookVideoReview {
+    width: 962px;
     margin-right: auto;
     margin-left: auto;
-    padding-left: 32px;
-    margin-top: 15px;
-    margin-bottom: 30px;
-  }
-  .q-pa-lg {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 24px;
-    padding-left: 24px;
-  }
-  .q-pagination {
-    width: 200px;
+    margin-top: 25px;
   }
 }
 /* 画面のサイズが1129以上1280以下の時は横にCard3枚並べる */
-@media screen and (min-width: 1129px) and (max-width: 1280px) {
-  .YOUTUBERCardWrapper {
-    width: 782px;
+@media screen and (min-width: 768px) and (max-width: 1184px) {
+  .cookVideoReview {
+    width: 878px;
     margin-right: auto;
     margin-left: auto;
-    padding-left: 32px;
-    margin-top: 15px;
-    margin-bottom: 50px;
-  }
-  .q-pa-lg {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 24px;
-    padding-left: 24px;
-  }
-  .q-pagination {
-    width: 200px;
+    margin-top: 25px;
   }
 }
-/* 画面のサイズが1000以上1128以下の時は横にCard3枚並べる */
-@media screen and (min-width: 1000px) and (max-width: 1128px) {
-  .YOUTUBERCardWrapper {
-    width: 783px;
+@media screen and (min-width: 400px) and (max-width: 767px) {
+  .cookVideoReview {
+    width: 505px;
     margin-right: auto;
     margin-left: auto;
-    padding-left: 32px;
-    margin-top: 15px;
-    margin-bottom: 50px;
-  }
-  .q-pa-lg {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 24px;
-    padding-left: 24px;
-  }
-  .q-pagination {
-    width: 200px;
+    margin-top: 25px;
   }
 }
-@media screen and (min-width: 700px) and (max-width: 999px) {
-  .YOUTUBERCardWrapper {
-    width: 97%;
-    margin-right: auto;
-    margin-left: auto;
-    padding-left: 32px;
-    margin-top: 15px;
-    margin-bottom: 50px;
-  }
-  .q-pa-lg {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 24px;
-    padding-left: 24px;
-  }
-  .q-pagination {
-    width: 200px;
-  }
-}
-@media screen and (min-width: 624px) and (max-width: 699px) {
+/* @media screen and (min-width: 624px) and (max-width: 599px) {
   .YOUTUBERCardWrapper {
     width: 97%;
     margin-right: auto;
@@ -254,7 +199,7 @@ Cardコンポーネントでカードの大きさを指定 */
   /* .widthAdjust {
     margin-left: 20px;
   } */
-  .myCardWrapper {
+/* .myCardWrapper {
     width: 50%;
   }
   .q-tabs__content {
@@ -348,5 +293,5 @@ Cardコンポーネントでカードの大きさを指定 */
   .channelName {
     margin: 0px;
   }
-}
+} */
 </style>

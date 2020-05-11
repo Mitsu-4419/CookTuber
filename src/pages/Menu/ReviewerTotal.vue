@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="column">
       <!-- ソートのSelect　登録者が多い順or登録者が少ない順 -->
-      <div class="row" style="margin-bottom:20px;margin-right:9%;">
+      <div class="row ReviewTotal-topContainer">
         <q-space></q-space>
         <q-select
           outlined
@@ -64,6 +64,97 @@ export default {
 </script>
 
 <style>
-.ReviewrCardWrapper {
+.ReviewTotal-topContainer {
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+/* 画面のサイズが1600以上の時は横にCard6枚並べる */
+@media screen and (min-width: 1780px) {
+  .ReviewrCardWrapper {
+    width: 1540px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+@media screen and (min-width: 1410px) and (max-width: 1779px) {
+  .ReviewrCardWrapper {
+    width: 1200px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+/* 画面のサイズが1200以上1499以下の時は横にCard4枚並べる */
+/* @media screen and (min-width: 1330px) and (max-width: 1564px) {
+  .ReviewrCardWrapper {
+    width: 1100px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+} */
+/* 画面のサイズが1200以上1499以下の時は横にCard3枚並べる */
+@media screen and (min-width: 1210px) and (max-width: 1409px) {
+  .ReviewrCardWrapper {
+    width: 1000px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+/* 画面のサイズが1200以上1499以下の時は横にCard3枚並べる */
+@media screen and (min-width: 1010px) and (max-width: 1209px) {
+  .ReviewrCardWrapper {
+    width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+@media screen and (min-width: 809px) and (max-width: 1009px) {
+  .ReviewrCardWrapper {
+    width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+/* @media screen and (min-width: 900px) and (max-width: 1024px) {
+  .ReviewrCardWrapper {
+    width: 880px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+} */
+@media screen and (min-width: 770px) and (max-width: 808px) {
+  .ReviewrCardWrapper {
+    width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+@media screen and (min-width: 620px) and (max-width: 769px) {
+  .ReviewrCardWrapper {
+    width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+
+/* ipnoheX,iphone6-8 */
+@media screen and (min-width: 360px) and (max-width: 619px) {
+  .ReviewrCardWrapper {
+    width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
 }
 </style>
