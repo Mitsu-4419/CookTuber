@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-footer elevated class="bg-grey-8 text-white footerLarge absolute-bottom">
+    <q-footer elevated class="bg-grey-8 text-white footerLarge fixed-bottom">
       <div class="row justify-center">
         <span class="footertitle">Cook Tuber</span>
         <span class="footertitle">©️2020 Block Aid Inc.</span>

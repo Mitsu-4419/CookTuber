@@ -1,23 +1,38 @@
 <template>
-  <div class="cookVideoCard" v-if="cookVideoDetail">
+  <div class="cookVideoCardTopPage" v-if="cookVideoDetail">
     <router-link
       :to="{ name: 'video', query: { key:videoId  } }"
       style="text-decoration:none;color:black;"
     >
-      <div class="cookVideoThumbnailWrapper">
+      <q-img
+        v-if="cookVideoDetail.rankInfo == 1"
+        class="rankIcon"
+        src="statics/rankIcon/crown_gold.png"
+      ></q-img>
+      <q-img
+        v-else-if="cookVideoDetail.rankInfo == 2"
+        class="rankIcon"
+        src="statics/rankIcon/crown_silver.png"
+      ></q-img>
+      <q-img
+        v-else-if="cookVideoDetail.rankInfo == 3"
+        class="rankIcon"
+        src="statics/rankIcon/crown_copper.png"
+      ></q-img>
+      <div class="cookVideoThumbnailWrapperTopPage">
         <q-img id="cookVideoThumbnail" :src="cookVideoDetail.thumbnail"></q-img>
       </div>
       <div class="videoWrapper">
         <div class="cookVideotitle">{{ cookVideoDetail.videoTitle }}</div>
-        <div class="row cookVideoChannelWrapper">
+        <div class="row cookVideoChannelWrapperTopPage">
           <q-space></q-space>
           <!-- <div class="cookVideoCshannel">{{cookVideoDetail.channelTitle}}</div> -->
           <star-rating
             :read-only="true"
             v-model="starAverageNumber"
-            :star-size="20"
+            :star-size="15"
             :increment="0.1"
-            :padding="7"
+            :padding="5"
             active-color="yellow"
             text-class="custom-Text"
           ></star-rating>
@@ -42,14 +57,25 @@ export default {
         Number(this.cookVideoDetail.registerCount);
     }
   }
-  //   components: {
-  //     LiveVideoCard: require("components/VideoCard/LiveVideoCard.vue").default
-  //   }
 };
 </script>
 
 <style>
-.cookVideoThumbnailWrapper {
+.rankIcon {
+  width: 45px;
+  height: 45px;
+  margin-left: 3px;
+  margin-bottom: -10px;
+  z-index: 10;
+  position: absolute;
+}
+.cookVideoCardTopPage {
+  width: 24%;
+  max-width: 250px;
+  margin-right: 7px;
+  margin-bottom: 7px;
+}
+.cookVideoThumbnailWrapperTopPage {
   width: 100%;
   display: flex;
   justify-self: center;
@@ -68,8 +94,8 @@ export default {
   height: 38px;
   overflow: hidden;
 }
-.cookVideoChannelWrapper {
-  margin-top: 3px;
+.cookVideoChannelWrapperTopPage {
+  margin-top: 1px;
 }
 .cookVideoChannel {
   font-size: 11px;
@@ -80,32 +106,25 @@ export default {
   margin-bottom: 9px;
 }
 
-@media screen and (min-width: 1600px) {
-  .cookVideoCard {
+/* @media screen and (min-width: 1600px) {
+  .cookVideoCardTopPage {
     width: 19%;
     margin-right: 7px;
     margin-bottom: 7px;
   }
 }
 @media screen and (min-width: 1025px) and (max-width: 1599px) {
-  .cookVideoCard {
+  .cookVideoCardTopPage {
     width: 24%;
     margin-right: 7px;
     margin-bottom: 7px;
   }
 }
 @media screen and (min-width: 700px) and (max-width: 1024px) {
-  .cookVideoCard {
+  .cookVideoCardTopPage {
     width: 32%;
     margin-right: 7px;
     margin-bottom: 7px;
-  }
-}
-@media screen and (min-width: 500px) and (max-width: 699px) {
-  .cookVideoCard {
-    width: 48%;
-    margin-right: 7px;
-    margin-bottom: 7px;
-  }
-}
+  } */
+/* } */
 </style>

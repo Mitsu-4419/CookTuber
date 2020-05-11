@@ -310,6 +310,26 @@ const getters = {
       }
     });
     return returnObj;
+  },
+  // ==============================
+  // TopPggeでビデオを表示する関数
+  // ===============================
+  getTop5VideoAtTopPage: (state, getters) => {
+    let videoObj = getters.CookVideoStarOrder;
+    let keyArray = [];
+    for (let i = 0; i < 5; i++) {
+      keyArray.push(Object.keys(videoObj)[i]);
+    }
+    let returnObj = {};
+    for (let j in keyArray) {
+      let KEY = keyArray[j];
+      returnObj[KEY] = videoObj[KEY];
+      if (returnObj[KEY]) {
+        returnObj[KEY]["rankInfo"] = Number(j) + 1;
+      }
+    }
+    console.log(returnObj);
+    return returnObj;
   }
 };
 

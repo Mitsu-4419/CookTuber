@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="column">
       <!-- ソートのSelect　登録者が多い順or登録者が少ない順 -->
-      <div class="row" style="margin-bottom:20px;margin-right:9%;">
+      <div class="row PageYoutubers-topContainer">
         <q-space></q-space>
         <q-select
           outlined
@@ -69,4 +69,128 @@ export default {
 </script>
 
 <style>
+.PageYoutubers-topContainer {
+  width: 87%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+/* 画面のサイズが1600以上の時は横にCard6枚並べる */
+@media screen and (min-width: 1780px) {
+  .YouTuberCardWrapper {
+    width: 1490px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+@media screen and (min-width: 1485px) and (max-width: 1779px) {
+  .YouTuberCardWrapper {
+    width: 1270px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+/* 画面のサイズが1200以上1499以下の時は横にCard4枚並べる */
+@media screen and (min-width: 1266px) and (max-width: 1484px) {
+  .YouTuberCardWrapper {
+    width: 1050px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+/* 画面のサイズが1200以上1499以下の時は横にCard3枚並べる */
+@media screen and (min-width: 1053px) and (max-width: 1265px) {
+  .YouTuberCardWrapper {
+    width: 840px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+/* 画面のサイズが1200以上1499以下の時は横にCard3枚並べる */
+@media screen and (min-width: 847px) and (max-width: 1052px) {
+  .YouTuberCardWrapper {
+    width: 630px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+@media screen and (min-width: 769px) and (max-width: 846px) {
+  .YouTuberCardWrapper {
+    width: 420px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+@media screen and (min-width: 680px) and (max-width: 768px) {
+  .YouTuberCardWrapper {
+    width: 630px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+@media screen and (min-width: 500px) and (max-width: 679px) {
+  .YouTuberCardWrapper {
+    width: 440px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+}
+
+/* ipnoheX,iphone6-8 */
+@media screen and (min-width: 360px) and (max-width: 499px) {
+  .GenreTabsMobile {
+    margin-top: 20px;
+    width: 310px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+  }
+  .genreTabs {
+    display: none;
+  }
+
+  .my-card.q-card {
+    width: 168px;
+    margin-left: 8px;
+    height: 264px;
+  }
+  .card_description {
+    height: 50px;
+  }
+  .YouTuberCardWrapper {
+    width: 352px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+  }
+  .genreTabs {
+    margin-top: 20px;
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .youtuberSortTab {
+    font-size: 10px;
+    padding: 13px;
+  }
+  .allLiveWaitTabs {
+    width: 280px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .gameImgMobile {
+    width: 20px;
+    height: 12px;
+  }
+}
 </style>

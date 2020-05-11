@@ -211,6 +211,24 @@ const getters = {
       sortedYoutubers[array[i].id] = array[i];
     }
     return sortedYoutubers;
+  },
+  // トップページでトップ５の高評価Youtuberの表示
+  getTop5Youtuber: (state, getters) => {
+    let videoObj = getters.getSortedYoutubers("高評価が多い順");
+    let keyArray = [];
+    for (let i = 0; i < 5; i++) {
+      keyArray.push(Object.keys(videoObj)[i]);
+    }
+    let returnObj = {};
+    for (let j in keyArray) {
+      let KEY = keyArray[j];
+      returnObj[KEY] = videoObj[KEY];
+      if (returnObj[KEY]) {
+        returnObj[KEY]["rankInfo"] = Number(j) + 1;
+      }
+    }
+    console.log(returnObj);
+    return returnObj;
   }
 };
 
