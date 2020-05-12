@@ -424,6 +424,30 @@ const getters = {
       }
     });
     return resultObj;
+  },
+  // ==============================
+  // 検索でユーザーを表示する関数
+  // ===============================
+  //別ファイルのstateは第三引数で取得可能
+  //https://vuex.vuejs.org/ja/guide/modules.html
+  searchAllReviewer: (state, getters, rootState) => {
+    let userInfo = state.usersPublicInfo;
+    let returnObject = {};
+    // console.log(rootState.youtubers.search);
+    // console.log(userInfo);
+    if (rootState.youtubers.search.length > 2) {
+      Object.keys(userInfo).forEach(key => {
+        if (
+          userInfo[key].nickName
+            .toLowerCase()
+            .includes(rootState.youtubers.search.toLowerCase())
+        ) {
+          returnObject[key] = userInfo[key];
+        }
+      });
+    }
+    // console.log(returnObject);
+    return returnObject;
   }
   // videolIdごとにレビュー情報を取ってきている
   // getYoutuberReview: (state, getters) => channelId => {

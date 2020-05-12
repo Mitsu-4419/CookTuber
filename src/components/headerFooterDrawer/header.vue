@@ -19,7 +19,7 @@
             <q-input
               rounded
               outlined
-              placeholder="料理チャンネル名を検索"
+              placeholder="料理名・YouTuber・ユーザーを検索"
               class="searchBar"
               v-model="searchField"
               bottom-slots
