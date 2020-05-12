@@ -95,6 +95,11 @@ export default {
   margin-right: auto;
   border-block-start: 1px solid rgba(0, 0, 0, 0.12);
 }
+.liveNowTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 8px;
+}
 /* 画面のサイズが1600以上の時は横にCard6枚並べる */
 @media screen and (min-width: 1780px) {
   .YouTuberCardWrapper {
