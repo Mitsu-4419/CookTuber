@@ -166,6 +166,10 @@ const actions = {
           starPoint: 0
         });
     }
+  },
+  //検索バーから文字列を渡す
+  setSearch({ commit }, value) {
+    commit("setSearch", value);
   }
 };
 
@@ -229,6 +233,26 @@ const getters = {
     }
     console.log(returnObj);
     return returnObj;
+  },
+  // Searchに言語があった時に引っかかったYoutuberをObjectとして返すゲッター
+  searchAllYoutubers: state => {
+    let YoutuberInfo = state.YoutubersChannel_info;
+    let returnObject = {};
+    if (state.search.length > 2) {
+      Object.keys(YoutuberInfo).forEach(key => {
+        if (
+          YoutuberInfo[key].name
+            .toLowerCase()
+            .includes(state.search.toLowerCase()) ||
+          YoutuberInfo[key].description
+            .toLowerCase()
+            .includes(state.search.toLowerCase())
+        ) {
+          returnObject[key] = YoutuberInfo[key];
+        }
+      });
+    }
+    return returnObject;
   }
 };
 

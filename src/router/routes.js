@@ -71,6 +71,12 @@ const routes = [
         path: "/video",
         component: () => import("pages/VideoDetail/videoDetailPage.vue"),
         name: "video"
+      },
+      {
+        path: "/search",
+        component: () => import("pages/Search/searchResult.vue"),
+        name: "search",
+        props: true
       }
     ]
   }
