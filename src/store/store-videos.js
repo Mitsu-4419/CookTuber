@@ -330,6 +330,36 @@ const getters = {
     }
     console.log(returnObj);
     return returnObj;
+  },
+  // ==============================
+  // 検索でビデオを表示する関数
+  // ===============================
+  //別ファイルのstateは第三引数で取得可能
+  //https://vuex.vuejs.org/ja/guide/modules.html
+  searchAllVideo: (state, getters, rootState) => {
+    let VideoInfo = state.cookVideos;
+    let returnObject = {};
+    // console.log(rootState.youtubers.search);
+    // console.log(VideoInfo);
+    if (rootState.youtubers.search.length > 2) {
+      Object.keys(VideoInfo).forEach(key => {
+        if (
+          VideoInfo[key].videoTitle
+            .toLowerCase()
+            .includes(rootState.youtubers.search.toLowerCase()) ||
+          VideoInfo[key].videoDescription
+            .toLowerCase()
+            .includes(rootState.youtubers.search.toLowerCase()) ||
+          VideoInfo[key].channelTitle
+            .toLowerCase()
+            .includes(rootState.youtubers.search.toLowerCase())
+        ) {
+          returnObject[key] = VideoInfo[key];
+        }
+      });
+    }
+    // console.log(returnObject);
+    return returnObject;
   }
 };
 
