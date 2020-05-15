@@ -27,8 +27,8 @@
           />
         </transition-group>
       </div>
-      <div class="row cookVideoReview" v-else-if="tab=='NotCooked'">
-        <transition-group appear enter-active-class="animated fadeInLeft" class>
+      <div class="cookVideoReview" v-else-if="tab=='NotCooked'">
+        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
           <MyPageNonCookVideoCard
             v-for="(reviewInfo, key) in getfavoriteCookedObject(pageUserId, tab)"
             :key="key"
@@ -74,6 +74,11 @@ export default {
     this.pageUserId = getParam("id");
     if (this.userId == this.pageUserId) {
       this.userOrNot = true;
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.pageUserId = getParam("id");
     }
   }
 };

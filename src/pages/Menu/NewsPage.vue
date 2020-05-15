@@ -1,5 +1,5 @@
 <template>
-  <div>パクリツイッタラー！！M！！！！！！</div>
+  <div></div>
 </template>
 
 

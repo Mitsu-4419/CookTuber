@@ -157,6 +157,14 @@ const getters = {
         }
       });
       return returnObj;
+    } else if (genre == "time") {
+      let returnObj = {};
+      Object.keys(alltags).forEach(key => {
+        if (alltags[key].genre == "time") {
+          returnObj[key] = alltags[key];
+        }
+      });
+      return returnObj;
     }
   }
 };

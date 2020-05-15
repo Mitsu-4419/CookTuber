@@ -83,14 +83,18 @@
         <span>人気の料理動画</span>
       </div>
       <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
-      <div class="row YoutuberDetailpopularVideoWrapper">
-        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
+      <div class="YoutuberDetailpopularVideoWrapper">
+        <transition-group
+          appear
+          enter-active-class="animated fadeInLeft"
+          class="row YoutuberDetailpopularVideoWrapper"
+        >
           <CookVideoCard
-        v-for="(cookVideoDetail, id) in cookVideoYoutuberSort(key)"
-        :key="id"
-        :videoId="id"
-        :cookVideoDetail="cookVideoDetail"
-      />
+            v-for="(cookVideoDetail, id) in cookVideoYoutuberSort(key)"
+            :key="id"
+            :videoId="id"
+            :cookVideoDetail="cookVideoDetail"
+          />
         </transition-group>
       </div>
     </div>
@@ -332,6 +336,8 @@ export default {
 }
 .YoutuberDetailpopularVideoWrapper {
   width: 96%;
+  margin-right: auto;
+  margin-left: auto;
 }
 .starActive {
   color: yellow;

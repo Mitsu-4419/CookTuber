@@ -22,7 +22,7 @@
         ></star-rating>
         <q-space></q-space>
         <q-icon
-          name="fas fa-heart"
+          name="fas fa-thumbs-up"
           size="1.9em"
           :class="userLike == true ? 'likeActive' : 'likeNonActive'"
           @click.prevent="addDecreaseLike()"
@@ -40,56 +40,55 @@ export default {
   data() {
     return {
       routerUserId: "",
-      userLike: "",
-      LikeNumbers: "",
+      userLike: false,
+      LikeNumbers: 0,
       starUserReview: 0
     };
   },
   methods: {
-    ...mapActions("usersPublic", ["increaseLike", "decreaseLike"])
-    // checkIfUserLikeOrNot() {
-    //   let loginUid = Object.keys(this.userInfo)[0];
-    //   if (this.review.LikeArray && this.review.LikeArray.includes(loginUid)) {
-    //     this.userLike = true;
-    //   } else {
-    //     this.userLike = false;
-    //   }
-    // },
+    ...mapActions("usersPublic", ["increaseLike", "decreaseLike"]),
+    checkIfUserLikeOrNot() {
+      let loginUid = this.userId;
+      if (this.review.LikeArray && this.review.LikeArray.includes(loginUid)) {
+        this.userLike = true;
+      } else {
+        this.userLike = false;
+      }
+    },
     // // いいねの数の増減をする
-    // addDecreaseLike() {
-    //   // ここのUidはレビューを書いた人のId
-    //   if (this.userLike == true) {
-    //     let payload = {
-    //       docId: this.review.docId,
-    //       reviewerUID: this.id,
-    //       loginUID: Object.keys(this.userInfo)[0]
-    //     };
-    //     this.userLike = false;
-    //     this.LikeNumbers--;
-
-    //     this.decreaseLike(payload);
-    //   } else if (this.userLike == false) {
-    //     let payload = {
-    //       docId: this.review.docId,
-    //       reviewerUID: this.id,
-    //       loginUID: Object.keys(this.userInfo)[0]
-    //     };
-    //     this.userLike = true;
-    //     this.LikeNumbers++;
-    //     this.increaseLike(payload);
-    //   }
-    // }
+    addDecreaseLike() {
+      // ここのUidはレビューを書いた人のId
+      if (this.userLike == true) {
+        let payload = {
+          docId: this.review.docId,
+          reviewerUID: this.id,
+          loginUID: this.userId
+        };
+        this.userLike = false;
+        this.LikeNumbers--;
+        this.decreaseLike(payload);
+      } else if (this.userLike == false) {
+        let payload = {
+          docId: this.review.docId,
+          reviewerUID: this.id,
+          loginUID: this.userId
+        };
+        this.userLike = true;
+        this.LikeNumbers++;
+        this.increaseLike(payload);
+      }
+    }
   },
   computed: {
-    ...mapState("auth", ["userInfo"])
+    ...mapState("auth", ["userId"])
   },
   created() {
-    // if (this.review.LikeArray) {
-    //   this.LikeNumbers = this.review.LikeArray.length;
-    // }
-    // this.checkIfUserLikeOrNot();
+    if (this.review.LikeArray) {
+      this.LikeNumbers = this.review.LikeArray.length;
+    }
     this.routerUserId = this.review.uid;
     this.starUserReview = this.review.star_number;
+    this.checkIfUserLikeOrNot();
   }
 };
 </script>
@@ -122,7 +121,7 @@ export default {
 .reviewDetail {
   padding-left: 12px;
   padding-right: 12px;
-  font-size: 20px;
+  font-size: 17px;
   overflow: scroll;
   height: 100px;
   white-space: pre-wrap;
@@ -139,10 +138,10 @@ export default {
   margin-bottom: 6px;
 }
 .likeActive {
-  color: red;
+  color: rgb(55, 114, 216);
 }
 .likeNonActive {
-  color: pink;
+  color: rgb(210, 210, 210);
 }
 @media screen and (min-width: 1490px) {
   .reviewCard {

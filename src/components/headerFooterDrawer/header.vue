@@ -7,9 +7,9 @@
             <q-avatar>
               <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" />
             </q-avatar>
-            <!-- <q-toolbar-title>
+            <q-toolbar-title>
               <span class="headerTitle">Cook Tuber</span>
-            </q-toolbar-title>-->
+            </q-toolbar-title>
           </q-btn>
           <!-- 検索バー -->
           <router-link
@@ -78,6 +78,8 @@
                       name: 'mypage',
                       query: { id: userId }
                     }"
+                  exact
+                  replace
                 >
                   <q-item clickable v-close-popup class="text-black">
                     <q-item-section>
@@ -147,21 +149,21 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss'>
 /* ヘッダー */
 .headerTitle {
   color: #3c3c3c;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 20px;
 }
 .headerTop {
   position: initial;
   height: 70px;
-  background: #edecf0;
+  background: #f7f3e8;
 }
 .headerTitleIcon {
   margin-left: 10px;
-  width: 200px;
+  width: 210px;
 }
 .menuIcon {
   color: #767194;
@@ -177,14 +179,15 @@ export default {
 .searchBar {
   padding: 0;
   margin-right: 10px;
-  margin-left: 20px;
+  margin-left: 30px;
   width: 300px;
   margin-top: 7px;
   margin-bottom: 12px;
+  .q-field__control {
+    height: 40px;
+  }
 }
-.q-field__control {
-  height: 40px;
-}
+
 .deleteicon {
   margin-bottom: 14px;
 }
