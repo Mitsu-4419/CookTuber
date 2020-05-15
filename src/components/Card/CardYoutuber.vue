@@ -5,17 +5,21 @@
     <!-- ------- -->
     <q-card class="my-cardYoutuber" v-if="channelInfo">
       <router-link :to="{ name: 'show', query: { key: channelInfo.id } }" class="myCardWrapper">
-        <!-- <q-img v-if="rankInfo.rank == 1" class="rankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
         <q-img
-          v-else-if="rankInfo.rank == 2"
-          class="rankIcon"
+          v-if="channelInfo.rankInfo == 1"
+          class="YoutuberrankIcon"
+          src="statics/rankIcon/crown_gold.png"
+        ></q-img>
+        <q-img
+          v-else-if="channelInfo.rankInfo == 2"
+          class="YoutuberrankIcon"
           src="statics/rankIcon/crown_silver.png"
         ></q-img>
         <q-img
-          v-else-if="rankInfo.rank == 3"
-          class="rankIcon"
+          v-else-if="channelInfo.rankInfo == 3"
+          class="YoutuberrankIcon"
           src="statics/rankIcon/crown_copper.png"
-        ></q-img>-->
+        ></q-img>
         <div class="iconWrapper">
           <q-avatar size="160px">
             <img :src="channelInfo.iconUrl" alt />
@@ -171,6 +175,14 @@ export default {
 </script>
 
 <style>
+.YoutuberrankIcon {
+  width: 45px;
+  height: 45px;
+  margin-left: -100px;
+  margin-top: -45px;
+  z-index: 10;
+  position: absolute;
+}
 .my-cardYoutuber {
   width: 195px;
   height: 290px;
@@ -183,6 +195,7 @@ export default {
   transition: all 0.3s;
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25);
   text-align: center;
+  position: relative;
 }
 .my-card:hover {
   -webkit-transform: translateY(-5px);

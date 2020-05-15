@@ -370,7 +370,6 @@ const getters = {
     let userFavoriteObj = valueArray[userId].favoriteVTRObj;
     let returnObj = {};
     if (tab == "cooked") {
-      console.log("hフォhdそあほ");
       Object.keys(userFavoriteObj).forEach(key => {
         if (userFavoriteObj[key].cooked == true) {
           returnObj[key] = userFavoriteObj[key];
@@ -378,7 +377,6 @@ const getters = {
       });
       return returnObj;
     } else if (tab == "NotCooked") {
-      console.log("hhoohodshfaohdio");
       Object.keys(userFavoriteObj).forEach(key => {
         if (userFavoriteObj[key].cooked == false) {
           returnObj[key] = userFavoriteObj[key];
@@ -425,13 +423,20 @@ const getters = {
     if (valArray.length < 20) {
       for (let i = 0; i < valArray.length; i++) {
         sortedByMany[valArray[i].id] = valArray[i];
+        let KEY = valArray[i].id;
+        if (sortedByMany[KEY]) {
+          sortedByMany[KEY]["rankInfo"] = Number(i) + 1;
+        }
       }
     } else {
       for (let i = 0; i < 20; i++) {
         sortedByMany[valArray[i].id] = valArray[i];
+        let KEY = valArray[i].id;
+        if (sortedByMany[KEY]) {
+          sortedByMany[KEY]["rankInfo"] = Number(i) + 1;
+        }
       }
     }
-
     return sortedByMany;
   },
   // -------------------------------
