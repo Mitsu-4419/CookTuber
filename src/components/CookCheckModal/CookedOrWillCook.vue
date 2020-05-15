@@ -1,5 +1,9 @@
 <template>
-  <q-card>
+  <q-card class="CookedWillNotCard">
+    <!-- <div class="row">
+      <q-space></q-space>
+      <q-icon name="close" v-close-popup size="22px" style="margin-left:5px;"></q-icon>
+    </div>-->
     <q-card-section class="row items-center" style="font-size:18px;font-weight:bold">
       <span class="q-ml-sm">作った料理ですか？それとも後で作りたい料理ですか？</span>
     </q-card-section>
@@ -12,6 +16,13 @@
         <q-img class="ContainerImg" src="statics/dish/vegetables.png"></q-img>
         <q-btn class="btnRight" label="後でつくる" v-close-popup @click="$emit('setMadeOrNot',false)" />
       </div>
+    </div>
+    <div
+      class="row"
+      style="width:90%;margin-right:auto;margin-left:auto;margin-top:10px;margin-bottom:10px"
+    >
+      <q-space></q-space>
+      <q-btn label="close" flat v-close-popup></q-btn>
     </div>
   </q-card>
 </template>

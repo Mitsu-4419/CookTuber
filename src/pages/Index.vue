@@ -117,7 +117,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn flat to="/youtubers" class="moreButton moreButton-bottom" label="もっとみる"></q-btn>
       </div>
     </q-page>
 
@@ -401,6 +401,10 @@ export default {
   cursor: pointer;
   padding: 0px 4px;
   border-radius: 20px;
+}
+
+.moreButton-bottom {
+  margin-bottom: 50px;
 }
 
 @media screen and (min-width: 1785px) {

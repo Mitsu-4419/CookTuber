@@ -228,9 +228,14 @@ const getters = {
     const videos = state.cookVideos;
     // channelIdと星を１対１に対応したObjの配列をつく
     Object.keys(videos).forEach(key => {
-      let averageStar =
-        Number(videos[key].starPoint) / Number(videos[key].registerCount);
-      videos[key]["AverageStar"] = averageStar;
+      if (videos[key].registerCount > 0) {
+        let averageStar =
+          Number(videos[key].starPoint) / Number(videos[key].registerCount);
+        videos[key]["AverageStar"] = averageStar;
+      } else {
+        console.log(key);
+        delete videos[key];
+      }
     });
     let array = Object.values(videos);
     array.sort(function(a, b) {
@@ -252,9 +257,14 @@ const getters = {
     const Videos = state.cookVideos;
     // channelIdと星を１対１に対応したObjの配列をつく
     Object.keys(Videos).forEach(key => {
-      let averageStar =
-        Number(Videos[key].starPoint) / Number(Videos[key].registerCount);
-      Videos[key]["AverageStar"] = averageStar;
+      if (Videos[key].registerCount > 0) {
+        let averageStar =
+          Number(Videos[key].starPoint) / Number(Videos[key].registerCount);
+        Videos[key]["AverageStar"] = averageStar;
+      } else {
+        console.log(key);
+        delete Videos[key];
+      }
     });
     let array = Object.values(Videos);
     array.sort(function(a, b) {

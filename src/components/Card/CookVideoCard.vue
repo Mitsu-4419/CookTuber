@@ -70,6 +70,9 @@ export default {
 }
 .cookVideoChannelWrapper {
   margin-top: 3px;
+  background: rgb(199, 198, 198);
+  height: 30px;
+  padding-bottom: 5px;
 }
 .cookVideoChannel {
   font-size: 11px;
@@ -79,7 +82,10 @@ export default {
   font-size: 15px;
   margin-bottom: 9px;
 }
-
+.vue-star-rating {
+  margin-top: -1.5px;
+  margin-right: 3px;
+}
 @media screen and (min-width: 1600px) {
   .cookVideoCard {
     width: 19%;
