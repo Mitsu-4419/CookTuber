@@ -74,26 +74,26 @@ const mutations = {
     );
   },
   increaseLikeMutate(state, payload) {
+    console.log(payload.docId);
     if (
-      state.usersPublicInfo[payload.reviewerUID].favoriteYoutuberObj[
-        payload.docId
-      ].LikeArray
+      state.usersPublicInfo[payload.reviewerUID].favoriteVTRObj[payload.docId]
+        .LikeArray
     ) {
-      state.usersPublicInfo[payload.reviewerUID].favoriteYoutuberObj[
+      state.usersPublicInfo[payload.reviewerUID].favoriteVTRObj[
         payload.docId
       ].LikeArray.push(payload.loginUID);
     } else {
-      state.usersPublicInfo[payload.reviewerUID].favoriteYoutuberObj[
+      state.usersPublicInfo[payload.reviewerUID].favoriteVTRObj[
         payload.docId
       ] = { LikeArray: [payload.loginUID] };
     }
   },
   decreaseLikeMutate(state, payload) {
-    state.usersPublicInfo[payload.reviewerUID].favoriteYoutuberObj[
+    state.usersPublicInfo[payload.reviewerUID].favoriteVTRObj[
       payload.docId
     ].LikeArray.some(function(v, i) {
       if (v == payload.loginUID)
-        state.usersPublicInfo[payload.reviewerUID].favoriteYoutuberObj[
+        state.usersPublicInfo[payload.reviewerUID].favoriteVTRObj[
           payload.docId
         ].LikeArray.splice(i, 1);
     });
@@ -288,17 +288,18 @@ const actions = {
       .doc(payload.docId)
       .delete();
   },
-  // いいね数を増やす
+  // -----------------------------
+  // レビューのいいねの増減の処理
+  // -----------------------------
   increaseLike({ commit }, payload) {
     commit("increaseLikeMutate", payload);
-
     firestoreDb
       .collection("userPublicInfo")
       .doc(payload.reviewerUID)
-      .collection("favorite_Youtuber")
+      .collection("favorite_VTR")
       .doc(payload.docId)
       .update({
-        LikeArray: firebase.firestore.FieldValue.arrayUnion(payload.loginUID)
+        LikeArray: firestorebase.FieldValue.arrayUnion(payload.loginUID)
       });
   },
   decreaseLike({ commit }, payload) {
@@ -306,11 +307,59 @@ const actions = {
     firestoreDb
       .collection("userPublicInfo")
       .doc(payload.reviewerUID)
-      .collection("favorite_Youtuber")
+      .collection("favorite_VTR")
       .doc(payload.docId)
       .update({
-        LikeArray: firebase.firestore.FieldValue.arrayRemove(payload.loginUID)
+        LikeArray: firestorebase.FieldValue.arrayRemove(payload.loginUID)
       });
+  },
+  // -----------------------------
+  // カードなどからレビューの投稿
+  // -----------------------------
+  async addFavoriteVTRFromCard({ commit, state }, payload) {
+    console.log("hagehga");
+    await firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.uid)
+      .collection("favorite_VTR")
+      .add({
+        createdAt: firestorebase.FieldValue.serverTimestamp(),
+        updatedAt: firestorebase.FieldValue.serverTimestamp(),
+        review: payload.review,
+        uid: payload.uid,
+        channelId: payload.channelId,
+        LikeArray: [],
+        star_number: payload.star_number,
+        tagArray: payload.selectedTags,
+        videoId: payload.favoriteVTRvideoID,
+        cooked: payload.cooked
+      });
+    const sp = await firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.uid)
+      .collection("favorite_VTR")
+      .get();
+    let getKey;
+    sp.forEach(doc => {
+      if (doc.data().videoId == payload.favoriteVTRvideoID) {
+        getKey = doc.id;
+      }
+    });
+    let Payload = {
+      docId: getKey,
+      uid: payload.uid,
+      obj: {
+        createdAt: firestorebase.FieldValue.serverTimestamp(),
+        review: payload.review,
+        uid: payload.uid,
+        videoId: payload.favoriteVTRvideoID,
+        star_number: payload.star_number,
+        tagArray: payload.selectedTags,
+        LikeArray: [],
+        cooked: payload.cooked
+      }
+    };
+    commit("addReviewInfoMutate", Payload);
   }
 };
 
@@ -402,7 +451,6 @@ const getters = {
         returnObj[KEY]["rankInfo"] = Number(j) + 1;
       }
     }
-    console.log(returnObj);
     return returnObj;
   },
   makeFavorite_VTRCount: state => {

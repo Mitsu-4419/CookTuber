@@ -3,7 +3,7 @@
     <!-- ------- -->
     <!-- TopPage -->
     <!-- ------- -->
-    <q-card class="my-cardYoutuber">
+    <q-card class="my-cardYoutuber" v-if="channelInfo">
       <router-link :to="{ name: 'show', query: { key: channelInfo.id } }" class="myCardWrapper">
         <!-- <q-img v-if="rankInfo.rank == 1" class="rankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
         <q-img
@@ -157,9 +157,15 @@ export default {
     // this.starModel = this.chkFavoriteTubers();
     // this.checkWritedReview();
     // this.checkIfFavorite();
-    this.starYoutuberGot = Number(
-      this.channelInfo.starPoint / this.channelInfo.reviewCount
-    );
+    if (this.channelInfo) {
+      if (this.channelInfo.reviewCount > 0) {
+        this.starYoutuberGot = Number(
+          this.channelInfo.starPoint / this.channelInfo.reviewCount
+        );
+      } else {
+        this.starYoutuberGot = 0;
+      }
+    }
   }
 };
 </script>

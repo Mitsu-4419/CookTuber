@@ -65,15 +65,17 @@ export default {
   width: 45px;
   height: 45px;
   margin-left: 3px;
-  margin-bottom: -10px;
+  margin-top: -45px;
   z-index: 10;
   position: absolute;
 }
 .cookVideoCardTopPage {
   width: 24%;
-  max-width: 250px;
+  max-width: 280px;
+  min-width: 200px;
   margin-right: 7px;
   margin-bottom: 7px;
+  position: relative;
 }
 .cookVideoThumbnailWrapperTopPage {
   width: 100%;

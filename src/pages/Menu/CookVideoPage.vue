@@ -10,39 +10,49 @@
         <q-space></q-space>
       </div>
     </div>
-    <div class="cookVideoTagWrapper column">
-      <div class="row">
-        <ChipComponent
-          v-for="tag in Object.keys(sortedTag('genre'))"
-          :key="tag"
-          :tagName="allTags[tag].tagName"
-          :id="tag"
-          @setActivatedTag="setTagArray"
-        />
+    <div class="row">
+      <div class="cookVideoTagWrapper column">
+        <div class="row">
+          <ChipComponent
+            v-for="tag in Object.keys(sortedTag('genre'))"
+            :key="tag"
+            :tagName="allTags[tag].tagName"
+            :id="tag"
+            @setActivatedTag="setTagArray"
+          />
+        </div>
+        <div class="row">
+          <ChipComponent
+            v-for="tag in Object.keys(sortedTag('dish'))"
+            :key="tag"
+            :tagName="allTags[tag].tagName"
+            :id="tag"
+            @setActivatedTag="setTagArray"
+          />
+        </div>
+        <div class="row">
+          <ChipComponent
+            v-for="tag in Object.keys(sortedTag('material'))"
+            :key="tag"
+            :tagName="allTags[tag].tagName"
+            :id="tag"
+            @setActivatedTag="setTagArray"
+          />
+        </div>
       </div>
-      <div class="row">
-        <ChipComponent
-          v-for="tag in Object.keys(sortedTag('dish'))"
-          :key="tag"
-          :tagName="allTags[tag].tagName"
-          :id="tag"
-          @setActivatedTag="setTagArray"
-        />
-      </div>
-      <div class="row">
-        <ChipComponent
-          v-for="tag in Object.keys(sortedTag('material'))"
-          :key="tag"
-          :tagName="allTags[tag].tagName"
-          :id="tag"
-          @setActivatedTag="setTagArray"
-        />
+      <div class="cookVideoButtonWrapper column">
+        <q-btn
+          label="詳細検索"
+          color="light-green-14"
+          style="font-weight:bold;margin-top:auto;margin-bottom:auto;"
+          @click="chooseTag=true"
+        ></q-btn>
       </div>
     </div>
     <!-- ----------- -->
     <!-- tagが何も選ばれていない時 -->
     <!-- ----------- -->
-    <div class="row CookVideoTotalWrapper" v-if="tagArray.length == 0">
+    <div class="row CookVideoTotalWrapper" v-if="Object.keys(cookVideoTagSort).length==0">
       <CookVideoCard
         v-for="(cookVideoDetail, key) in CookVideoStarOrder"
         :key="key"
@@ -61,6 +71,16 @@
         :cookVideoDetail="cookVideoDetail"
       />
     </div>
+    <!-- 料理のTagを選ぶModal -->
+    <q-dialog v-model="chooseTag" persistent>
+      <ChooseTagModal
+        @setCookVideo="SetCookVideo"
+        @closeModal="chooseTag = false"
+        :TAGArray="tagArray"
+        @setTagArray="SETTagArray"
+        tag="videoPage"
+      />
+    </q-dialog>
   </q-page>
 </template>
 
@@ -70,7 +90,8 @@ export default {
   data() {
     return {
       tagArray: [],
-      cookVideoTagSort: {}
+      cookVideoTagSort: {},
+      chooseTag: false
     };
   },
   computed: {
@@ -92,11 +113,23 @@ export default {
         let payload = this.tagArray;
         this.cookVideoTagSort = this.sortByTagOfCookVideos(payload);
       }
+    },
+    SetCookVideo(value) {
+      this.cookVideoTagSort = value;
+    },
+    SETTagArray(payload) {
+      if (payload.length > 0) {
+        for (let j in payload) {
+          this.tagArray.push(payload[j]);
+        }
+      }
     }
   },
   components: {
     CookVideoCard: require("components/Card/CookVideoCard.vue").default,
-    ChipComponent: require("components/Chip/ChipComponent.vue").default
+    ChipComponent: require("components/Chip/ChipComponent.vue").default,
+    ChooseTagModal: require("components/ChooseTagModal/ChooseTagModal.vue")
+      .default
   },
   created() {
     // Object.keys(this.allTags).forEach(key => {
@@ -127,6 +160,12 @@ export default {
   /* background: blue; */
   /* height: 116px; */
   padding: 10px;
+  width: 80%;
+}
+.cookVideoButtonWrapper {
+  width: 10%;
+  display: flex;
+  align-items: center;
 }
 .selectedTag {
   color: yellow;

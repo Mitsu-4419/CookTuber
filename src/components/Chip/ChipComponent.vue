@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  props: ["tagName", "id"],
+  props: ["tagName", "id", "TAGArray"],
   data() {
     return {
       active: false
@@ -43,6 +43,11 @@ export default {
         this.active = true;
       }
       this.$emit("setActivatedTag", this.id);
+    }
+  },
+  created() {
+    if (this.TAGArray && this.TAGArray.includes(this.id)) {
+      this.active = true;
     }
   }
 };

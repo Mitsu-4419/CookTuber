@@ -298,6 +298,24 @@ const getters = {
       return returnObject;
     }
   },
+  sortByTagOfCookVideosTop5: (state, getters) => payload => {
+    let videoObj = getters.sortByTagOfCookVideos(payload);
+    let keyArray = [];
+    for (let i = 0; i < 5; i++) {
+      keyArray.push(Object.keys(videoObj)[i]);
+    }
+    let returnObj = {};
+    for (let j in keyArray) {
+      let KEY = keyArray[j];
+      console.log(keyArray[j]);
+      returnObj[KEY] = videoObj[KEY];
+      console.log(j);
+      if (returnObj[KEY]) {
+        returnObj[KEY]["rankInfo"] = Number(j) + 1;
+      }
+    }
+    return returnObj;
+  },
   // ==============================
   // YoutuberDetailの人気VideoをGETする関数
   // ===============================
@@ -328,7 +346,6 @@ const getters = {
         returnObj[KEY]["rankInfo"] = Number(j) + 1;
       }
     }
-    console.log(returnObj);
     return returnObj;
   },
   // ==============================

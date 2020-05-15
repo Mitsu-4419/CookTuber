@@ -42,7 +42,7 @@
       </div>
       <!-- ページの右側 -->
       <div class="CookVideoWrapperRight" v-if="cookVideos[key]">
-        <div class="row" style="margin-top:60px;" @click.prevent="switchFav()">
+        <div class="row" style="margin-top:60px;" @click.prevent="ShowReviewMakeModal()">
           <q-icon
             name="fas fa-utensils"
             size="2.1em"
@@ -90,6 +90,14 @@
     <q-dialog v-model="alertToSignUp">
       <ToLoginAlert />
     </q-dialog>
+    <!-- 料理を作ったのか、これからつくるかのModal -->
+    <q-dialog v-model="cookedOrWillCook" persistent>
+      <CookedOrWillCook @setMadeOrNot="SetMadeOrNot" />
+    </q-dialog>
+    <!-- レビューをかく促すDialog -->
+    <q-dialog v-model="reviewSubmit">
+      <registerReviewFromCard :videoId="key" :channelId="cookVideos[key].channelId" />
+    </q-dialog>
   </q-page>
 </template>
 <script>
@@ -105,6 +113,8 @@ export default {
       alertToSignUp: false,
       writeReview: false,
       confirmReview: false,
+      cookedOrWillCook: false,
+      reviewSubmit: false,
       cooked: false,
       starPoint: 0,
       userReviews: {},
@@ -116,26 +126,30 @@ export default {
     ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapState("tags", ["allTags"]),
     ...mapState("videos", ["cookVideos"]),
-    ...mapGetters("usersPublic", ["getYoutuberReview"])
+    ...mapGetters("usersPublic", ["getYoutuberReview"]),
+    ...mapState("auth", ["userId", "loggedIn"])
   },
   methods: {
+    ...mapActions("usersPublic", ["addFavoriteVTRFromCard"]),
     async getUserReviews() {
       const videoId = getParam("key");
       let obj = this.getYoutuberReview(videoId);
       Object.keys(obj).forEach(documentId => {
-        const uid = obj[documentId].uid;
-        let payload = {
-          uid: uid,
-          review: obj[documentId].review,
-          nickName: this.usersPublicInfo[uid].nickName,
-          photoURL: this.usersPublicInfo[uid].photoURL,
-          createdAt: this.usersPublicInfo[uid].createdAt,
-          LikeArray: obj[documentId].LikeArray,
-          star_number: this.usersPublicInfo[uid].favoriteVTRObj[documentId]
-            .star_number,
-          docId: documentId
-        };
-        Vue.set(this.userReviews, uid, payload);
+        if (obj[documentId].cooked == true) {
+          const uid = obj[documentId].uid;
+          let payload = {
+            uid: uid,
+            review: obj[documentId].review,
+            nickName: this.usersPublicInfo[uid].nickName,
+            photoURL: this.usersPublicInfo[uid].photoURL,
+            createdAt: this.usersPublicInfo[uid].createdAt,
+            LikeArray: obj[documentId].LikeArray,
+            star_number: this.usersPublicInfo[uid].favoriteVTRObj[documentId]
+              .star_number,
+            docId: documentId
+          };
+          Vue.set(this.userReviews, uid, payload);
+        }
       });
     },
     switchFav() {
@@ -146,6 +160,33 @@ export default {
         // this.writeReview = true;
       } else if (this.loggedIn == true && this.ratingModel == true) {
         console.log("nothing");
+      }
+    },
+    ShowReviewMakeModal() {
+      console.log("hoge");
+      if (!this.loggedIn) {
+        // ログインしていなかったらユーザー登録する様にDialogをだす
+        this.alertToSignUp = true;
+      } else {
+        this.cookedOrWillCook = true;
+      }
+    },
+    // レビューを書くのか、ただブックマークするのかのチェック
+    SetMadeOrNot(value) {
+      this.SETMadeOrNot = value;
+      this.cookedOrWillCook = false;
+      if (value == true) {
+        this.reviewSubmit = true;
+      } else {
+        this.addFavoriteVTRFromCard({
+          uid: this.userId,
+          review: "",
+          favoriteVTRvideoID: this.key,
+          selectedTags: [],
+          star_number: 0,
+          channelId: this.cookVideos[this.key].channelId,
+          cooked: false
+        });
       }
     }
     // setYoutuberKey(value) {
@@ -198,7 +239,11 @@ export default {
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
-    userReviewCard: require("components/Card/userReviewCard.vue").default
+    userReviewCard: require("components/Card/userReviewCard.vue").default,
+    CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
+      .default,
+    registerReviewFromCard: require("components/RegisterReviewModal/registerReviewFromCard.vue")
+      .default
   },
   mounted() {
     this.getUserReviews();
@@ -310,7 +355,7 @@ export default {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 90px;
+  margin-top: 70px;
 }
 .detailReviewCardWrapper {
   width: 96%;
@@ -339,7 +384,7 @@ export default {
     margin-top: 70px;
   }
   .userReview_wrapper {
-    width: 90%;
+    width: 95%;
   }
   /* .q-card {
     width: 360px;

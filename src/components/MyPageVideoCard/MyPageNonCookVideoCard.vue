@@ -73,7 +73,7 @@ export default {
   color: black;
 }
 .videoNonCookedReviewCard {
-  width: 46%;
+  width: 300px;
   max-width: 600px;
   margin-right: 5px;
   margin-bottom: 5px;
@@ -130,9 +130,9 @@ export default {
   margin-top: 2px;
 }
 .cookActive {
-  color: #babdc2;
+  color: #fe3e4b9e;
 }
 .cookNonActive {
-  color: #5d5e61;
+  color: #8f909395;
 }
 </style>

@@ -34,16 +34,37 @@
           <q-icon name="far fa-play-circle" size="sm" style="margin-top:5px;"></q-icon>
           <span class="cookImageWrapperTopPage-title-span">高評価の多い料理動画</span>
           <q-space></q-space>
-          <div class="selectWrapper">
+          <!-- <div class="selectWrapper">
             <q-select outlined v-model="sortGenre" :options="options" class="topPageSelectBox" />
+          </div>-->
+          <div class="tagSelectButton">
+            <q-btn
+              label="Tagで検索"
+              color="light-green-14"
+              style="font-weight:bold"
+              @click="chooseTag=true"
+            ></q-btn>
           </div>
         </div>
-        <div class="cookImageTopPageWrapper row">
+        <!-- ----------- -->
+        <!-- tagが何も選ばれていない時 -->
+        <!-- ----------- -->
+        <div class="cookImageTopPageWrapper row" v-if="Object.keys(cookVideoTagSort).length==0">
           <CookVideoCardTopPage
             v-for="(cookVideoDetail, key) in getTop5VideoAtTopPage"
             :key="key"
             :videoId="key"
             :cookVideoDetail="cookVideoDetail"
+            @setCookVideo="SetCookVideo"
+          />
+        </div>
+        <div class="cookImageTopPageWrapper row" v-else>
+          <CookVideoCardTopPage
+            v-for="(cookVideoDetail, key) in cookVideoTagSort"
+            :key="key"
+            :videoId="key"
+            :cookVideoDetail="cookVideoDetail"
+            @setCookVideo="SetCookVideo"
           />
         </div>
       </div>
@@ -60,13 +81,15 @@
           <!-- <q-space></q-space>
           <q-select outlined v-model="sortGenre" :options="options" class="topPageSelectBox" />-->
         </div>
-        <div class="cookImageTopPageWrapper row">
-          <CardYoutuber
-            v-for="(channelInfo, key) in getTop5Youtuber"
-            :key="key"
-            :channelId="key"
-            :channelInfo="channelInfo"
-          />
+        <div class="cookImageTopPageWrapper">
+          <div class="topPageYoutuberWrapper row">
+            <CardYoutuber
+              v-for="(channelInfo, key) in getTop5Youtuber"
+              :key="key"
+              :channelId="key"
+              :channelInfo="channelInfo"
+            />
+          </div>
         </div>
       </div>
       <div class="MoreButton_wrapper">
@@ -83,12 +106,14 @@
           <q-select outlined v-model="sortGenre" :options="options" class="topPageSelectBox" />-->
         </div>
         <div class="cookImageTopPageWrapper row">
-          <ReviewerTotalPageCard
-            :usersInfo="usersInfo"
-            :uid="key"
-            v-for="(usersInfo, key) in getTop5Reviewer"
-            :key="key"
-          />
+          <div class="topPageYoutuberWrapper row">
+            <ReviewerTotalPageCard
+              :usersInfo="usersInfo"
+              :uid="key"
+              v-for="(usersInfo, key) in getTop5Reviewer"
+              :key="key"
+            />
+          </div>
         </div>
       </div>
       <div class="MoreButton_wrapper">
@@ -132,6 +157,16 @@
     <q-dialog v-model="cookedOrWillCook" persistent>
       <CookedOrWillCook @setMadeOrNot="SetMadeOrNot" />
     </q-dialog>
+    <!-- 料理のTagを選ぶModal -->
+    <q-dialog v-model="chooseTag" persistent>
+      <ChooseTagModal
+        @setCookVideo="SetCookVideo"
+        @closeModal="chooseTag = false"
+        :TAGArray="TAGArray"
+        @setTagArray="SETTagArray"
+        tag="topPage"
+      />
+    </q-dialog>
   </div>
 </template>
 
@@ -141,6 +176,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      chooseTag: false,
       registerURL: "",
       alertToSignUp: false,
       reviewSubmit: false,
@@ -150,8 +186,8 @@ export default {
       cookedOrWillCook: false,
       SETMadeOrNot: false,
       VideoId: "",
-      sortGenre: "ALL",
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"]
+      cookVideoTagSort: {},
+      TAGArray: []
     };
   },
   computed: {
@@ -242,6 +278,16 @@ export default {
           snippet: this.Snippet
         });
       }
+    },
+    SetCookVideo(value) {
+      this.cookVideoTagSort = value;
+    },
+    SETTagArray(payload) {
+      if (payload.length > 0) {
+        for (let j in payload) {
+          this.TAGArray.push(payload[j]);
+        }
+      }
     }
   },
   mounted() {},
@@ -255,6 +301,8 @@ export default {
       .default,
     CardYoutuber: require("components/Card/CardYoutuber.vue").default,
     ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
+      .default,
+    ChooseTagModal: require("components/ChooseTagModal/ChooseTagModal.vue")
       .default
   }
 };
@@ -305,7 +353,8 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
-  background: rgb(250, 250, 181);
+  background: rgb(252, 252, 201);
+  border-radius: 20px;
   height: 60px;
   padding: 10px;
 }
@@ -356,20 +405,81 @@ export default {
 
 @media screen and (min-width: 1785px) {
   .cookImageTopPageWrapper {
-    width: 90%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
-    display: flex;
-    justify-content: center;
+  }
+  .cookImageTopPageWrapper {
+    width: 1435px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
-@media screen and (min-width: 1000px) and (max-width: 1784px) {
+@media screen and (min-width: 1474px) and (max-width: 1784px) {
+  .cookImageTopPageWrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+  }
+  .cookImageTopPageWrapper {
+    width: 1168px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media screen and (min-width: 1114px) and (max-width: 1473px) {
+  .cookImageTopPageWrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+  }
   .cookImageTopPageWrapper {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
+  }
+}
+@media screen and (min-width: 800px) and (max-width: 1113px) {
+  .cookImageTopPageWrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 50px;
+  }
+  .cookImageTopPageWrapper {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cookVideoCardTopPage {
+    width: 32%;
+    margin-right: 7px;
+    margin-bottom: 7px;
+    position: relative;
+  }
+}
+@media screen and (min-width: 1344px) {
+  .topPageYoutuberWrapper {
+    width: 1051px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media screen and (min-width: 1114px) and (max-width: 1343px) {
+  .topPageYoutuberWrapper {
+    width: 840px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media screen and (min-width: 845px) and (max-width: 1113px) {
+  .topPageYoutuberWrapper {
+    width: 630px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 </style>

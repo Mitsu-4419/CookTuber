@@ -107,7 +107,7 @@ const actions = {
       commit("updateYoutuberInfoMutate", payload);
       firestoreDb
         .collection("YouTubers_basic_info")
-        .doc(payload.snippet.channelId)
+        .doc(payload.channelId)
         .update({
           reviewCount: firestorebase.FieldValue.increment(1),
           starPoint: firestorebase.FieldValue.increment(
@@ -115,6 +115,19 @@ const actions = {
           )
         });
     }
+  },
+  // Youtuberの情報の更新をVideoCardから行う。
+  addYoutuberInfoFromCard({ commit }, payload) {
+    commit("updateYoutuberInfoMutate", payload);
+    firestoreDb
+      .collection("YouTubers_basic_info")
+      .doc(payload.channelId)
+      .update({
+        reviewCount: firestorebase.FieldValue.increment(1),
+        starPoint: firestorebase.FieldValue.increment(
+          Number(payload.star_number)
+        )
+      });
   },
   async addNewYoutuberInfo({ commit, state }, payload) {
     // チャンネルが登録されていない場合は新しくチャンネルを登録する
@@ -177,9 +190,13 @@ const getters = {
   setAverageStar: state => {
     let youtubers = state.YoutubersChannel_info;
     Object.keys(youtubers).forEach(key => {
-      let averageStar =
-        Number(youtubers[key].starPoint) / Number(youtubers[key].reviewCount);
-      youtubers[key]["averageStar"] = averageStar;
+      if (Number(youtubers[key].reviewCount) > 0) {
+        let averageStar =
+          Number(youtubers[key].starPoint) / Number(youtubers[key].reviewCount);
+        youtubers[key]["averageStar"] = averageStar;
+      } else {
+        youtubers[key]["averageStar"] = 0;
+      }
     });
     return youtubers;
   },
@@ -231,7 +248,6 @@ const getters = {
         returnObj[KEY]["rankInfo"] = Number(j) + 1;
       }
     }
-    console.log(returnObj);
     return returnObj;
   },
   // Searchに言語があった時に引っかかったYoutuberをObjectとして返すゲッター

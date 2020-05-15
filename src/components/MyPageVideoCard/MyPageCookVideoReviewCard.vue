@@ -41,8 +41,9 @@
                   name="fas fa-utensils"
                   size="1.6em"
                   :class="cooked == true ? 'cookActive' : 'cookNonActive'"
+                  @click.prevent="ShowReviewMakeModal()"
                 />
-                <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
+                <span class="favoriteLikeNumber">{{cookVideos[reviewInfo.videoId].registerCount}}</span>
                 <!-- <span class="favoriteNumber" style="color:black">0</span> -->
               </div>
               <div class="likeCountWrapper row">
@@ -50,11 +51,17 @@
                   name="fas fa-thumbs-up"
                   size="1.6em"
                   :class="userLike == true ? 'likeActive' : 'likeNonActive'"
+                  @click.prevent="addDecreaseLike()"
                 />
                 <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
               </div>
               <div class="editButtontWrapper" v-show="userOrNot">
-                <q-icon name="edit" size="1.6em" class="editIcon" @click="editReviewModal = true"></q-icon>
+                <q-icon
+                  name="edit"
+                  size="1.6em"
+                  class="editIcon"
+                  @click.prevent="editReviewModal = true"
+                ></q-icon>
               </div>
             </div>
           </div>
@@ -73,6 +80,18 @@
         :docId="docId"
       />
     </q-dialog>
+    <!-- 料理を作ったのか、これからつくるかのModal -->
+    <q-dialog v-model="cookedOrWillCook" persistent>
+      <CookedOrWillCook @setMadeOrNot="SetMadeOrNot" />
+    </q-dialog>
+    <!-- レビューをかく促すDialog -->
+    <q-dialog v-model="reviewSubmit">
+      <registerReviewFromCard :videoId="reviewInfo.videoId" :channelId="reviewInfo.channelId" />
+    </q-dialog>
+    <!-- ユーザー登録をする様に促すDialog -->
+    <q-dialog v-model="alertToSignUp">
+      <ToLoginAlert />
+    </q-dialog>
   </div>
 </template>
 
@@ -86,21 +105,110 @@ export default {
       starPoint: 0,
       userLike: false,
       cooked: false,
-      editReviewModal: false
+      editReviewModal: false,
+      cookedOrWillCook: false,
+      SETMadeOrNot: false,
+      reviewSubmit: false,
+      alertToSignUp: false
     };
   },
   computed: {
     ...mapState("videos", ["cookVideos"]),
-    ...mapState("tags", ["allTags"])
+    ...mapState("tags", ["allTags"]),
+    ...mapState("auth", ["userId", "loggedIn"])
   },
-  actions: {
-    ...mapActions("usersPublic", ["changeReviewInfo"])
+  methods: {
+    ...mapActions("usersPublic", [
+      "changeReviewInfo",
+      "increaseLike",
+      "decreaseLike",
+      "addFavoriteVTRFromCard"
+    ]),
+    ...mapActions("videos", ["addNewVideoData"]),
+    ...mapActions("youtubers", ["addNewYoutuberInfo"]),
+    // ユーザーがすでにいいねしているかどうかのチェック
+    checkIfUserLikeOrNot() {
+      let loginUid = this.userId;
+      if (
+        this.reviewInfo.LikeArray &&
+        this.reviewInfo.LikeArray.includes(loginUid)
+      ) {
+        this.userLike = true;
+      } else {
+        this.userLike = false;
+      }
+    },
+    // // いいねの数の増減をする
+    addDecreaseLike() {
+      // ここのUidはレビューを書いた人のId
+      if (this.userLike == true) {
+        let payload = {
+          docId: this.docId,
+          reviewerUID: this.reviewInfo.uid,
+          loginUID: this.userId
+        };
+        this.userLike = false;
+        this.LikeNumbers--;
+        this.decreaseLike(payload);
+      } else if (this.userLike == false) {
+        let payload = {
+          docId: this.docId,
+          reviewerUID: this.reviewInfo.uid,
+          loginUID: this.userId
+        };
+        this.userLike = true;
+        this.LikeNumbers++;
+        this.increaseLike(payload);
+      }
+    },
+    // ユーザーがすでにレビューを書いているかどうかのチェック
+    checkIfUserWroteReviewOrNot() {
+      if (this.reviewInfo.uid == this.userId) {
+        this.cooked = true;
+      } else {
+        this.cooked = false;
+      }
+    },
+    ShowReviewMakeModal() {
+      if (!this.loggedIn) {
+        // ログインしていなかったらユーザー登録する様にDialogをだす
+        this.alertToSignUp = true;
+      } else {
+        this.cookedOrWillCook = true;
+      }
+    },
+    // レビューを書くのか、ただブックマークするのかのチェック
+    SetMadeOrNot(value) {
+      this.SETMadeOrNot = value;
+      this.cookedOrWillCook = false;
+      if (value == true) {
+        this.reviewSubmit = true;
+      } else {
+        this.addFavoriteVTRFromCard({
+          uid: this.userId,
+          review: "",
+          favoriteVTRvideoID: this.reviewInfo.videoId,
+          selectedTags: [],
+          star_number: 0,
+          channelId: this.reviewInfo.channelId,
+          cooked: false,
+          docId: this.docId
+        });
+      }
+    }
   },
   created() {
     this.starPoint = Number(this.reviewInfo.star_number);
+    this.checkIfUserLikeOrNot();
+    this.checkIfUserWroteReviewOrNot();
   },
   components: {
+    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
     editReviewInfoModal: require("components/EditReviewCard/editReviewModal.vue")
+      .default,
+    CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
+      .default,
+    registerReviewFromCard: require("components/RegisterReviewModal/registerReviewFromCard.vue")
       .default
   }
 };
@@ -226,16 +334,16 @@ export default {
   margin-top: 2px;
 }
 .cookActive {
-  color: #babdc2;
+  color: #fe3e4b9e;
 }
 .cookNonActive {
   color: #5d5e61;
 }
 .likeActive {
-  color: #545454;
+  color: rgb(55, 114, 216);
 }
 .likeNonActive {
-  color: #bfbfbf;
+  color: rgb(210, 210, 210);
 }
 @media screen and (min-width: 768px) and (max-width: 1184px) {
   .reviewCardRight {
