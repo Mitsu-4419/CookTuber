@@ -53,6 +53,7 @@ const actions = {
         id: doc.id,
         obj: doc.data()
       };
+      // console.log(payload);
       commit("setAllCookingVideosMutation", payload);
     });
   },
@@ -284,7 +285,6 @@ const getters = {
           Vue.delete(videos, key);
         }
       });
-      console.log(videos);
       let array = Object.values(videos);
       array.sort(function(a, b) {
         if (Number(a.score) < Number(b.score)) return 1;
@@ -307,9 +307,7 @@ const getters = {
     let returnObj = {};
     for (let j in keyArray) {
       let KEY = keyArray[j];
-      console.log(keyArray[j]);
       returnObj[KEY] = videoObj[KEY];
-      console.log(j);
       if (returnObj[KEY]) {
         returnObj[KEY]["rankInfo"] = Number(j) + 1;
       }
