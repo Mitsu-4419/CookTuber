@@ -23,17 +23,21 @@
         <q-img id="cookVideoThumbnail" :src="cookVideoDetail.thumbnail"></q-img>
       </div>
       <div class="videoWrapper">
-        <div class="cookVideotitle">{{ cookVideoDetail.videoTitle }}</div>
+        <div class="cookVideoTopPageTitle">{{ cookVideoDetail.videoTitle }}</div>
+        <div class="cookVideoTopPageChannelTitle row">
+          <q-space></q-space>
+          {{cookVideoDetail.channelTitle}}
+        </div>
         <div class="row cookVideoChannelWrapperTopPage">
           <q-space></q-space>
           <!-- <div class="cookVideoCshannel">{{cookVideoDetail.channelTitle}}</div> -->
           <star-rating
             :read-only="true"
             v-model="starAverageNumber"
-            :star-size="15"
+            :star-size="16"
             :increment="0.1"
-            :padding="5"
-            active-color="yellow"
+            :padding="4"
+            active-color="#ffd400"
             text-class="custom-Text"
           ></star-rating>
         </div>
@@ -91,10 +95,15 @@ export default {
 .videoWrapper {
   padding: 8px;
 }
-.cookVideotitle {
-  font-size: 12px;
+.cookVideoTopPageTitle {
+  font-size: 14px;
   height: 38px;
   overflow: hidden;
+}
+.cookVideoTopPageChannelTitle {
+  font-size: 12px;
+  margin-top: 5px;
+  height: 28px;
 }
 .cookVideoChannelWrapperTopPage {
   margin-top: 1px;

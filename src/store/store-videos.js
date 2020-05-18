@@ -309,6 +309,7 @@ const getters = {
     }
   },
   sortByTagOfCookVideosTop5: (state, getters) => payload => {
+    console.log(payload);
     let videoObj = getters.sortByTagOfCookVideos(payload);
     let keyArray = [];
     for (let i = 0; i < 5; i++) {
@@ -324,6 +325,7 @@ const getters = {
         returnObj[KEY]["rankInfo"] = Number(j) + 1;
       }
     }
+    console.log(returnObj);
     return returnObj;
   },
   // ==============================
