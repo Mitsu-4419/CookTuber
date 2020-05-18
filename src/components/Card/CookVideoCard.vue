@@ -16,10 +16,10 @@
           <star-rating
             :read-only="true"
             v-model="starAverageNumber"
-            :star-size="14"
+            :star-size="20"
             :increment="0.1"
             :padding="7"
-            active-color="yellow"
+            active-color="#ffd400"
             text-class="custom-Text"
           ></star-rating>
         </div>
@@ -72,111 +72,223 @@ export default {
   border-radius: 50%;
   margin-right: 12px;
 }
-.videoTitle {
-  font-size: 14px;
-  color: #030303;
-  font-weight: 500;
-  font-family: Roboto, Arial, sans-serif;
-  max-width: 190px;
-  text-overflow: ellipsis; /* 幅を超えた部分を...にする */
-  overflow: hidden;
-}
-.videoChannel {
-  font-size: 14px;
-  color: #606060;
-  font-family: Roboto, Arial, sans-serif;
-  max-width: 190px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-@media screen and (min-width: 1600px) {
+
+@media screen and (min-width: 1736px) {
+  /* card内の動画の設定 */
   .cookVideoCard {
-    width: 19%;
-    margin-right: 7px;
-    margin-bottom: 7px;
+    width: 270px;
+    padding-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  #ytplayer {
+    width: 258.282px;
+    height: 145.278px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .videoTitle {
+    font-size: 14px;
+    color: #030303;
+    font-weight: 500;
+    font-family: Roboto, Arial, sans-serif;
+    max-width: 190px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .videoChannel {
+    font-size: 14px;
+    color: #606060;
+    font-family: Roboto, Arial, sans-serif;
+    max-width: 190px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
-@media screen and (min-width: 1025px) and (max-width: 1599px) {
+/* ビデオを横に４つ並べる範囲 */
+@media screen and (min-width: 1410px) and (max-width: 1735px) {
+  /* card内の動画の設定 */
   .cookVideoCard {
     width: 24%;
-    margin-right: 7px;
-    margin-bottom: 7px;
+    padding-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  .videoTitle {
+    font-size: 14px;
+    color: #030303;
+    font-weight: 500;
+    font-family: Roboto, Arial, sans-serif;
+    max-width: 260px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .videoChannel {
+    font-size: 14px;
+    color: #606060;
+    font-family: Roboto, Arial, sans-serif;
+    max-width: 240px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
-@media screen and (min-width: 1025px) and (max-width: 1265px) {
+@media screen and (min-width: 1025px) and (max-width: 1409px) {
+  /* card内の動画の設定 */
   .cookVideoCard {
-    width: 24%;
-    margin-right: 7px;
-    margin-bottom: 7px;
+    width: 32%;
+    padding-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
+  .videoTitle {
+    font-size: 14px;
+    color: #030303;
+    font-weight: 500;
+    font-family: Roboto, Arial, sans-serif;
+    max-width: 260px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .videoChannel {
+    font-size: 14px;
+    color: #606060;
+    font-family: Roboto, Arial, sans-serif;
+    max-width: 240px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+@media screen and (min-width: 1025px) and (max-width: 1129px) {
   .videoChannel,
   .videoTitle {
-    max-width: 160px;
+    max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
 @media screen and (min-width: 900px) and (max-width: 1024px) {
-  .cookVideoCard {
-    width: 32%;
-    margin-right: 7px;
-    margin-bottom: 7px;
-  }
   .videoChannel,
   .videoTitle {
-    max-width: 165px;
+    max-width: 280px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /* card内の動画の設定 */
+  .cookVideoCard {
+    width: 48%;
+    padding-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
   }
 }
 @media screen and (min-width: 750px) and (max-width: 899px) {
-  .cookVideoCard {
-    width: 32%;
-    margin-right: 7px;
-    margin-bottom: 7px;
-  }
   .videoChannel,
   .videoTitle {
-    max-width: 150px;
+    max-width: 220px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /* card内の動画の設定 */
+  .cookVideoCard {
+    width: 48%;
+    padding-top: 10px;
+    margin-top: 10px;
+    margin-right: 3px;
+    margin-left: 3px;
+    margin-bottom: 10px;
+  }
+  #ytplayer {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 @media screen and (min-width: 600px) and (max-width: 749px) {
-  .cookVideoCard {
-    width: 48%;
-    margin-right: 7px;
-    margin-bottom: 7px;
-  }
   .videoChannel,
   .videoTitle {
-    max-width: 230px;
+    max-width: 210px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /* card内の動画の設定 */
+  .cookVideoCard {
+    width: 48%;
+    padding-top: 10px;
+    margin-top: 10px;
+    margin-right: 3px;
+    margin-left: 3px;
+    margin-bottom: 10px;
+  }
+  #ytplayer {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 @media screen and (min-width: 500px) and (max-width: 599px) {
-  .cookVideoCard {
-    width: 48%;
-    margin-right: 7px;
-    margin-bottom: 7px;
-  }
   .videoChannel,
   .videoTitle {
-    max-width: 160px;
+    max-width: 165px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
-}
-/* スマホレイアウト */
-@media screen and (min-width: 350px) and (max-width: 499px) {
+  /* card内の動画の設定 */
   .cookVideoCard {
+    width: 48%;
+    padding-top: 10px;
+    margin-top: 10px;
+    margin-right: 3px;
+    margin-left: 3px;
+    margin-bottom: 10px;
+  }
+  #ytplayer {
     width: 100%;
-    margin-right: 7px;
-    margin-bottom: 7px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  .videoTitle {
-    max-width: 320px;
-  }
-  .videoChannel {
-    max-width: 300px;
+  /* 星の大きさ */
+  .vue-star-rating-star {
+    width: 18px;
   }
 }
-/* 画像の大きさを微調整（400以下は不要） */
-@media screen and (min-width: 400px) and (max-width: 499px) {
+/* スマホの設定 */
+@media screen and (min-width: 350px) and (max-width: 499px) {
+  .videoChannel,
+  .videoTitle {
+    font-size: 8px;
+    max-width: 110px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /* card内の動画の設定 */
+  .cookVideoCard {
+    width: 48%;
+    padding-top: 8px;
+    margin-top: 8px;
+    margin-right: 3px;
+    margin-left: 3px;
+    margin-bottom: 8px;
+  }
   #ytplayer {
-    width: 385px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* 星の大きさ */
+  .vue-star-rating-star {
+    width: 10px;
   }
 }
 </style>
