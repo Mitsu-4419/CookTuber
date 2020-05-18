@@ -65,6 +65,7 @@ export default {
   margin-top: 12px;
   padding-right: 8px;
 }
+
 .youTuberIcon {
   display: block;
   width: 36px;
@@ -75,6 +76,25 @@ export default {
 
 @media screen and (min-width: 1736px) {
   /* card内の動画の設定 */
+.cookVideoChannelWrapper {
+  margin-top: 3px;
+  background: rgb(199, 198, 198);
+  height: 30px;
+  padding-bottom: 5px;
+}
+.cookVideoChannel {
+  font-size: 11px;
+}
+.custom-Text {
+  color: black;
+  font-size: 15px;
+  margin-bottom: 9px;
+}
+.vue-star-rating {
+  margin-top: -1.5px;
+  margin-right: 3px;
+}
+@media screen and (min-width: 1600px) {
   .cookVideoCard {
     width: 270px;
     padding-top: 10px;

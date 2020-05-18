@@ -8,6 +8,12 @@
           <div class="cookVideoTitle">料理動画一覧</div>
         </div>
         <q-space></q-space>
+        <q-btn
+          label="詳細検索"
+          color="light-green-14"
+          style="margin-right:5%; font-weight:bold"
+          @click="chooseTag=true"
+        ></q-btn>
       </div>
     </div>
     <div class="row">
@@ -19,6 +25,7 @@
             :tagName="allTags[tag].tagName"
             :id="tag"
             @setActivatedTag="setTagArray"
+            flag="allVideoPage"
           />
         </div>
         <div class="row">
@@ -28,6 +35,7 @@
             :tagName="allTags[tag].tagName"
             :id="tag"
             @setActivatedTag="setTagArray"
+            flag="allVideoPage"
           />
         </div>
         <div class="row">
@@ -37,17 +45,11 @@
             :tagName="allTags[tag].tagName"
             :id="tag"
             @setActivatedTag="setTagArray"
+            flag="allVideoPage"
           />
         </div>
       </div>
-      <div class="cookVideoButtonWrapper column">
-        <q-btn
-          label="詳細検索"
-          color="light-green-14"
-          style="font-weight:bold;margin-top:auto;margin-bottom:auto;"
-          @click="chooseTag=true"
-        ></q-btn>
-      </div>
+      <!-- <div class="cookVideoButtonWrapper column"></div> -->
     </div>
     <!-- ----------- -->
     <!-- tagが何も選ばれていない時 -->
@@ -147,6 +149,7 @@ export default {
 .CookVideoTitleWrapper {
   /* background: red; */
   height: 50px;
+  margin-top: 20px;
 }
 .videoTitleCookPage {
   padding: 5px;
@@ -160,7 +163,6 @@ export default {
   /* background: blue; */
   /* height: 116px; */
   padding: 10px;
-  width: 80%;
 }
 .cookVideoButtonWrapper {
   width: 10%;

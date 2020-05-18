@@ -230,7 +230,11 @@ const getters = {
     let sortedYoutubers = {};
     for (let i = 0; i < array.length; i++) {
       sortedYoutubers[array[i].id] = array[i];
+      if (sortedYoutubers[array[i].id]) {
+        sortedYoutubers[array[i].id]["rankInfo"] = Number(i) + 1;
+      }
     }
+    console.log(sortedYoutubers);
     return sortedYoutubers;
   },
   // トップページでトップ５の高評価Youtuberの表示

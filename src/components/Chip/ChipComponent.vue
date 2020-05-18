@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  props: ["tagName", "id", "TAGArray"],
+  props: ["tagName", "id", "TAGArray", "flag"],
   data() {
     return {
       active: false

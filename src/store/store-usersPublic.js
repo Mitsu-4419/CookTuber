@@ -370,7 +370,6 @@ const getters = {
     let userFavoriteObj = valueArray[userId].favoriteVTRObj;
     let returnObj = {};
     if (tab == "cooked") {
-      console.log("hフォhdそあほ");
       Object.keys(userFavoriteObj).forEach(key => {
         if (userFavoriteObj[key].cooked == true) {
           returnObj[key] = userFavoriteObj[key];
@@ -378,7 +377,6 @@ const getters = {
       });
       return returnObj;
     } else if (tab == "NotCooked") {
-      console.log("hhoohodshfaohdio");
       Object.keys(userFavoriteObj).forEach(key => {
         if (userFavoriteObj[key].cooked == false) {
           returnObj[key] = userFavoriteObj[key];
@@ -425,33 +423,63 @@ const getters = {
     if (valArray.length < 20) {
       for (let i = 0; i < valArray.length; i++) {
         sortedByMany[valArray[i].id] = valArray[i];
+        let KEY = valArray[i].id;
+        if (sortedByMany[KEY]) {
+          sortedByMany[KEY]["rankInfo"] = Number(i) + 1;
+        }
       }
     } else {
       for (let i = 0; i < 20; i++) {
         sortedByMany[valArray[i].id] = valArray[i];
+        let KEY = valArray[i].id;
+        if (sortedByMany[KEY]) {
+          sortedByMany[KEY]["rankInfo"] = Number(i) + 1;
+        }
       }
     }
-
     return sortedByMany;
   },
   // -------------------------------
   // topPageでトップレビューワーを取ってくるところ
   // -------------------------------
   getTop5Reviewer: (state, getters) => {
-    let videoObj = getters.getSortedReviewer("参考になった数が多い順");
-    let keyArray = [];
-    for (let i = 0; i < 5; i++) {
-      keyArray.push(Object.keys(videoObj)[i]);
-    }
-    let returnObj = {};
-    for (let j in keyArray) {
-      let KEY = keyArray[j];
-      returnObj[KEY] = videoObj[KEY];
-      if (returnObj[KEY]) {
-        returnObj[KEY]["rankInfo"] = Number(j) + 1;
+    const userInfoTotal = state.usersPublicInfo;
+    Object.keys(userInfoTotal).forEach(key => {
+      let reviewNum = Number(
+        Object.keys(userInfoTotal[key].favoriteVTRObj).length
+      );
+      let obj = userInfoTotal[key].favoriteVTRObj;
+      let LikeNum = 0;
+      Object.keys(obj).forEach(id => {
+        LikeNum += Number(obj[id].LikeArray.length);
+      });
+      userInfoTotal[key]["reviewNum"] = reviewNum;
+      userInfoTotal[key]["LikeNumber"] = LikeNum;
+    });
+    const valArray = Object.values(userInfoTotal);
+    valArray.sort(function(a, b) {
+      if (Number(a.LikeNumber) < Number(b.LikeNumber)) return 1;
+      if (Number(a.LikeNumber) > Number(b.LikeNumber)) return -1;
+      return 0;
+    });
+    let sortedByMany = {};
+    if (valArray.length < 5) {
+      for (let i = 0; i < valArray.length; i++) {
+        sortedByMany[valArray[i].id] = valArray[i];
+      }
+    } else {
+      for (let i = 0; i < 5; i++) {
+        sortedByMany[valArray[i].id] = valArray[i];
       }
     }
-    return returnObj;
+    if (Object.keys(sortedByMany).length == 5) {
+      let array = Object.keys(sortedByMany);
+      for (let j in array) {
+        sortedByMany[array[j]]["rankInfo"] = Number(j) + 1;
+      }
+      console.log(sortedByMany);
+      return sortedByMany;
+    }
   },
   makeFavorite_VTRCount: state => {
     let valueArray = Object.values(state.usersPublicInfo);
