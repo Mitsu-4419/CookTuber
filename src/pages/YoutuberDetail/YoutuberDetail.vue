@@ -348,7 +348,7 @@ export default {
   margin-left: 10px;
 }
 
-@media screen and (min-width: 1445px) {
+/* @media screen and (min-width: 1445px) {
   #ytplayer {
     width: 496px;
     height: 306px;
@@ -364,7 +364,7 @@ export default {
     margin-left: auto;
     margin-right: auto;
   }
-}
+} */
 
 @media screen and (min-width: 770px) and (max-width: 820px) {
   .q-layout-padding {
@@ -432,9 +432,9 @@ export default {
     margin: 0px;
     padding-top: 0px;
   }
-  #ytplayer {
+  /* #ytplayer {
     max-width: 100%;
-  }
+  } */
   .q-video {
     width: 100%;
     margin: 0px;

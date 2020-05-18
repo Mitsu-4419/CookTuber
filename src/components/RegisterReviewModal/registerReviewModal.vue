@@ -94,6 +94,7 @@ export default {
       // VideoId をURLから取り出す
       let splicedURL1 = this.registerURL.split("&")[0];
       let videoId = splicedURL1.split("v=")[1];
+      // console.log(this.snippet);
       this.addFavoriteVTR({
         uid: this.userId,
         review: this.text,
@@ -101,7 +102,7 @@ export default {
         selectedTags: tagArray,
         star_number: this.ratingModel,
         snippet: this.snippet,
-        cooked:true
+        cooked: true
       });
       // Video情報を更新する
       this.addVideoData({
@@ -118,7 +119,7 @@ export default {
         favoriteVTRvideoID: videoId,
         selectedTags: tagArray,
         star_number: this.ratingModel,
-        snippet: this.snippet
+        snippet: this.snippet,
       });
       // tagがつけられていたらState、Dbを更新する
       if (this.modelMultiple.length > 0) {
