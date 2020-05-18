@@ -50,29 +50,7 @@
               }}
             </span>
           </div>
-          <!-- <div class="YoutuberStarWrapper">
-            <star-rating
-              :read-only="true"
-              v-model="starYoutuberGot"
-              :star-size="20"
-              :increment="0.1"
-              :padding="4"
-              active-color="yellow"
-              text-class="custom-Text"
-            ></star-rating>
-          </div>-->
         </q-card-section>
-        <!-- <div class="row">
-          <div class="row favoriteCountWrapper" @click.prevent="switchFav()">
-            <q-icon
-              v-model="ratingModel"
-              name="fas fa-star"
-              size="1.8em"
-              :class="ratingModel == 1 ? 'starActive' : 'starNonActive'"
-        />-->
-        <!-- <span class="favoriteNumber">{{ rankInfo.count }}</span> -->
-        <!-- </div> -->
-        <!-- </div> -->
       </router-link>
     </q-card>
   </div>
@@ -91,64 +69,13 @@ export default {
     setYoutuberKey(value) {
       SessionStorage.set("YoutuberKey", value);
     }
-    // switchFav() {
-    //   if (this.loggedIn == false) {
-    //     // ログインしていなかったらユーザー登録する様にDialogをだす
-    //     this.alertToSignUp = true;
-    //   } else if (this.loggedIn == true && this.ratingModel == 0) {
-    //     this.writeReview = true;
-    //   } else if (this.loggedIn == true && this.ratingModel == 1) {
-    //     console.log("nothing");
-    //   }
-    // },
-    // ユーザーがお気に入り登録しているかどうかの判断
-    // ユーザーがログインしていなかったら全てratingModelを１にする
-    // checkIfFavorite() {
-    //   if (this.loggedIn == false) {
-    //     this.ratingModel = 1;
-    //   } else if (this.loggedIn == true) {
-    //     let object = Object.values(this.userInfo)[0].favoriteYoutuberObj;
-    //     let array = [];
-    //     for (let j = 0; j < Object.values(object).length; j++) {
-    //       array.push(Object.values(object)[j].channelId);
-    //     }
-    //     if (array.includes(this.id)) {
-    //       this.ratingModel = 1;
-    //     } else {
-    //       this.ratingModel = 0;
-    //     }
-    //   } else {
-    //     console.log("何らかのエラーが発生しています。");
-    //   }
-    // },
-    // そのYoutuberに対してログインユーザーが書き込んだレビューを取ってくる
-    // checkWritedReview() {
-    //   let getReview = this.getYoutuberReview(this.channelInfo.id);
-    //   let userReview;
-    //   if (this.loggedIn) {
-    //     Object.keys(getReview).forEach(key => {
-    //       if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
-    //         userReview = getReview[key].review;
-    //         // DocumentId をStateに入れる
-    //         this.documentId = key;
-    //       }
-    //     });
-    //     this.writedReview = userReview;
-    //     // this.ratingModel = 0;
-    //   }
-    // },
-    // closeReviewSubmi() {
-    //   (this.writeReview = false), (this.ratingModel = 0);
-    // },
-    // addstar() {
-    //   this.ratingModal = 1;
-    // }
   },
   components: {},
   mounted() {
     // if (this.loggedIn) {
     //   this.userId = Object.values(this.userInfo)[0].id;
     // }
+    console.log(this.usersInfo.rankInfo);
   },
   created() {
     // this.starModel = this.chkFavoriteTubers();

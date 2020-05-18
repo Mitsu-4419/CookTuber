@@ -25,6 +25,7 @@
             :tagName="allTags[tag].tagName"
             :id="tag"
             @setActivatedTag="setTagArray"
+            flag="allVideoPage"
           />
         </div>
         <div class="row">
@@ -34,6 +35,7 @@
             :tagName="allTags[tag].tagName"
             :id="tag"
             @setActivatedTag="setTagArray"
+            flag="allVideoPage"
           />
         </div>
         <div class="row">
@@ -43,6 +45,7 @@
             :tagName="allTags[tag].tagName"
             :id="tag"
             @setActivatedTag="setTagArray"
+            flag="allVideoPage"
           />
         </div>
       </div>

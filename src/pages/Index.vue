@@ -37,13 +37,55 @@
           <!-- <div class="selectWrapper">
             <q-select outlined v-model="sortGenre" :options="options" class="topPageSelectBox" />
           </div>-->
-          <div class="tagSelectButton">
+          <!-- <div class="tagSelectButton">
             <q-btn
               label="Tagで検索"
               color="light-green-14"
               style="font-weight:bold"
               @click="chooseTag=true"
             ></q-btn>
+          </div>-->
+        </div>
+        <div class="TopPageTagWrapper">
+          <div class="TopPagechooseTagModal-TagWrapper row">
+            <ChipComponent
+              v-for="tag in Object.keys(sortedTag('genre'))"
+              :key="tag"
+              :tagName="allTags[tag].tagName"
+              :id="tag"
+              @setActivatedTag="setTagArray"
+              flag="topPage"
+            />
+          </div>
+          <div class="TopPagechooseTagModal-TagWrapper row">
+            <ChipComponent
+              v-for="tag in Object.keys(sortedTag('dish'))"
+              :key="tag"
+              :tagName="allTags[tag].tagName"
+              :id="tag"
+              @setActivatedTag="setTagArray"
+              flag="topPage"
+            />
+          </div>
+          <div class="TopPagechooseTagModal-TagWrapper row">
+            <ChipComponent
+              v-for="tag in Object.keys(sortedTag('material'))"
+              :key="tag"
+              :tagName="allTags[tag].tagName"
+              :id="tag"
+              @setActivatedTag="setTagArray"
+              flag="topPage"
+            />
+          </div>
+          <div class="TopPagechooseTagModal-TagWrapper row">
+            <ChipComponent
+              v-for="tag in Object.keys(sortedTag('time'))"
+              :key="tag"
+              :tagName="allTags[tag].tagName"
+              :id="tag"
+              @setActivatedTag="setTagArray"
+              flag="topPage"
+            />
           </div>
         </div>
         <!-- ----------- -->
@@ -158,7 +200,7 @@
       <CookedOrWillCook @setMadeOrNot="SetMadeOrNot" />
     </q-dialog>
     <!-- 料理のTagを選ぶModal -->
-    <q-dialog v-model="chooseTag" persistent>
+    <!-- <q-dialog v-model="chooseTag" persistent>
       <ChooseTagModal
         @setCookVideo="SetCookVideo"
         @closeModal="chooseTag = false"
@@ -166,7 +208,7 @@
         @setTagArray="SETTagArray"
         tag="topPage"
       />
-    </q-dialog>
+    </q-dialog>-->
   </div>
 </template>
 
@@ -187,16 +229,21 @@ export default {
       SETMadeOrNot: false,
       VideoId: "",
       cookVideoTagSort: {},
-      TAGArray: []
+      tagArray: []
     };
   },
   computed: {
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapState("auth", ["userId"]),
-    ...mapGetters("videos", ["getTop5VideoAtTopPage"]),
+    ...mapGetters("videos", [
+      "getTop5VideoAtTopPage",
+      "sortByTagOfCookVideosTop5"
+    ]),
     ...mapGetters("youtubers", ["getTop5Youtuber"]),
-    ...mapGetters("usersPublic", ["getTop5Reviewer"])
+    ...mapGetters("usersPublic", ["getTop5Reviewer"]),
+    ...mapGetters("tags", ["sortedTag"]),
+    ...mapState("tags", ["allTags"])
   },
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTR"]),
@@ -288,6 +335,19 @@ export default {
           this.TAGArray.push(payload[j]);
         }
       }
+    },
+    setTagArray(value) {
+      // すでに配列内にある場合はその要素を外す
+      if (this.tagArray.includes(value)) {
+        let idx = this.tagArray.indexOf(value);
+        this.tagArray.splice(idx, 1);
+        let payload = this.tagArray;
+        this.cookVideoTagSort = this.sortByTagOfCookVideosTop5(payload);
+      } else {
+        this.tagArray.push(value);
+        let payload = this.tagArray;
+        this.cookVideoTagSort = this.sortByTagOfCookVideosTop5(payload);
+      }
     }
   },
   mounted() {},
@@ -303,7 +363,8 @@ export default {
     ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
       .default,
     ChooseTagModal: require("components/ChooseTagModal/ChooseTagModal.vue")
-      .default
+      .default,
+    ChipComponent: require("components/Chip/ChipComponent.vue").default
   }
 };
 </script>
@@ -333,6 +394,14 @@ export default {
   width: 150px;
   margin-right: auto;
   margin-left: auto;
+}
+.TopPageTagWrapper {
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 30px;
+}
+.TopPagechooseTagModal-TagWrapper {
 }
 /* ------------------- */
 /* 料理動画を載せるところ */
@@ -364,9 +433,9 @@ export default {
   margin-left: 15px;
   margin-top: 3px;
 }
-.cookImageTopPageWrapper {
+/* .cookImageTopPageWrapper {
   margin-top: 15px;
-}
+} */
 .topPageSelectBox {
   width: 200px;
 }
@@ -412,7 +481,7 @@ export default {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
+    margin-top: 62px;
   }
   .cookImageTopPageWrapper {
     width: 1435px;
@@ -446,7 +515,7 @@ export default {
     margin-right: auto;
   }
 }
-@media screen and (min-width: 800px) and (max-width: 1113px) {
+@media screen and (min-width: 880px) and (max-width: 1113px) {
   .cookImageTopPageWrapper {
     width: 100%;
     margin-left: auto;
@@ -460,6 +529,45 @@ export default {
   }
   .cookVideoCardTopPage {
     width: 32%;
+    margin-right: 7px;
+    margin-bottom: 7px;
+    position: relative;
+  }
+}
+@media screen and (min-width: 769px) and (max-width: 879px) {
+  .cookImageTopPageWrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+  }
+  .cookImageTopPageWrapper {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cookVideoCardTopPage {
+    width: 48%;
+    margin-right: 7px;
+    margin-bottom: 7px;
+    position: relative;
+  }
+}
+@media screen and (min-width: 500px) and (max-width: 768px) {
+  .cookImageTopPageWrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    max-width: 1000px;
+  }
+  .cookImageTopPageWrapper {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cookVideoCardTopPage {
+    width: 48%;
     margin-right: 7px;
     margin-bottom: 7px;
     position: relative;
