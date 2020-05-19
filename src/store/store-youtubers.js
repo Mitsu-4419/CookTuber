@@ -54,6 +54,9 @@ const actions = {
       commit("setYoutuber_Info", payload);
     });
   },
+  // ---------------------------------------
+  // トップページの登録画面から登録する際に使う関数
+  // ---------------------------------------
   async addYoutuberInfo({ commit, state }, payload) {
     // チャンネルが登録されていない場合は新しくチャンネルを登録する
     if (
@@ -78,8 +81,7 @@ const actions = {
       const register_date = Data.data.items[0].snippet.publishedAt.split(
         "T"
       )[0];
-      let info = {};
-      info[payload.snippet.channelId] = {
+      let info = {
         channelId: payload.snippet.channelId,
         name: name,
         description: description,
@@ -104,6 +106,7 @@ const actions = {
           starPoint: payload.star_number
         });
     } else {
+      // すでにYoutuberが登録してあった場合、登録数と、星の数を加算する
       commit("updateYoutuberInfoMutate", payload);
       firestoreDb
         .collection("YouTubers_basic_info")
@@ -153,8 +156,7 @@ const actions = {
       const register_date = Data.data.items[0].snippet.publishedAt.split(
         "T"
       )[0];
-      let info = {};
-      info[payload.snippet.channelId] = {
+      let info = {
         channelId: payload.snippet.channelId,
         name: name,
         description: description,
@@ -234,7 +236,6 @@ const getters = {
         sortedYoutubers[array[i].id]["rankInfo"] = Number(i) + 1;
       }
     }
-    console.log(sortedYoutubers);
     return sortedYoutubers;
   },
   // トップページでトップ５の高評価Youtuberの表示

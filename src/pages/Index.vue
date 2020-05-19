@@ -49,7 +49,7 @@
         <div class="TopPageTagWrapper">
           <div class="TopPagechooseTagModal-TagWrapper row">
             <ChipComponent
-              v-for="tag in Object.keys(sortedTag('genre'))"
+              v-for="tag in Object.keys(sortedTag('countryLarge'))"
               :key="tag"
               :tagName="allTags[tag].tagName"
               :id="tag"
@@ -59,7 +59,7 @@
           </div>
           <div class="TopPagechooseTagModal-TagWrapper row">
             <ChipComponent
-              v-for="tag in Object.keys(sortedTag('dish'))"
+              v-for="tag in Object.keys(sortedTag('materialLarge'))"
               :key="tag"
               :tagName="allTags[tag].tagName"
               :id="tag"
@@ -69,7 +69,7 @@
           </div>
           <div class="TopPagechooseTagModal-TagWrapper row">
             <ChipComponent
-              v-for="tag in Object.keys(sortedTag('material'))"
+              v-for="tag in Object.keys(sortedTag('specialGenre'))"
               :key="tag"
               :tagName="allTags[tag].tagName"
               :id="tag"
@@ -200,7 +200,7 @@
       <CookedOrWillCook @setMadeOrNot="SetMadeOrNot" />
     </q-dialog>
     <!-- 料理のTagを選ぶModal -->
-    <!-- <q-dialog v-model="chooseTag" persistent>
+    <q-dialog v-model="chooseTag" persistent>
       <ChooseTagModal
         @setCookVideo="SetCookVideo"
         @closeModal="chooseTag = false"
@@ -208,7 +208,7 @@
         @setTagArray="SETTagArray"
         tag="topPage"
       />
-    </q-dialog>-->
+    </q-dialog>
   </div>
 </template>
 
@@ -229,7 +229,8 @@ export default {
       SETMadeOrNot: false,
       VideoId: "",
       cookVideoTagSort: {},
-      tagArray: []
+      tagArray: [],
+      TAGArray: []
     };
   },
   computed: {

@@ -46,6 +46,9 @@ const mutations = {
 };
 
 const actions = {
+  // ーーーーーーーーーーー
+  // Video情報を入れる処理
+  // ーーーーーーーーーーー
   async getAllCookingVideos({ commit }) {
     const sp = await firestoreDb.collection("video_info").get();
     sp.forEach(doc => {
@@ -57,6 +60,9 @@ const actions = {
       commit("setAllCookingVideosMutation", payload);
     });
   },
+  // ーーーーーーーーーーー
+  // Video情報を追加する
+  // ーーーーーーーーーーー
   async addVideoData({ commit }, payload) {
     let tagMap = {};
     for (let k = 0; k < payload.selectedTags.length; k++) {
@@ -228,17 +234,16 @@ const getters = {
   CookVideoStarOrder: state => {
     const videos = state.cookVideos;
     // channelIdと星を１対１に対応したObjの配列をつく
+    let newVideos = {};
     Object.keys(videos).forEach(key => {
       if (videos[key].registerCount > 0) {
         let averageStar =
           Number(videos[key].starPoint) / Number(videos[key].registerCount);
         videos[key]["AverageStar"] = averageStar;
-      } else {
-        console.log(key);
-        delete videos[key];
+        newVideos[key] = videos[key];
       }
     });
-    let array = Object.values(videos);
+    let array = Object.values(newVideos);
     array.sort(function(a, b) {
       if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
       if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
@@ -246,7 +251,7 @@ const getters = {
     });
     let returnObject = {};
     for (let i in array) {
-      returnObject[array[i].videoId] = videos[array[i].videoId];
+      returnObject[array[i].videoId] = newVideos[array[i].videoId];
     }
     return returnObject;
   },
@@ -257,17 +262,16 @@ const getters = {
   sortByTagOfCookVideos: state => payload => {
     const Videos = state.cookVideos;
     // channelIdと星を１対１に対応したObjの配列をつく
+    let newVideoObj = {};
     Object.keys(Videos).forEach(key => {
       if (Videos[key].registerCount > 0) {
         let averageStar =
           Number(Videos[key].starPoint) / Number(Videos[key].registerCount);
         Videos[key]["AverageStar"] = averageStar;
-      } else {
-        console.log(key);
-        delete Videos[key];
+        newVideoObj[key] = Videos[key];
       }
     });
-    let array = Object.values(Videos);
+    let array = Object.values(newVideoObj);
     array.sort(function(a, b) {
       if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
       if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
@@ -275,12 +279,13 @@ const getters = {
     });
     let returnObject = {};
     for (let i in array) {
-      returnObject[array[i].videoId] = Videos[array[i].videoId];
+      returnObject[array[i].videoId] = newVideoObj[array[i].videoId];
     }
     let videos = returnObject;
     if (payload.length == 0) {
       return videos;
     } else {
+      let resultObject = {};
       Object.keys(videos).forEach(key => {
         if (arrayIncludedOrNot(payload, Object.keys(videos[key].tagMap))) {
           // いくつか選ばれたタグのスコアを加算していくためにScoreという項目をつくる
@@ -291,21 +296,20 @@ const getters = {
               videos[key]["score"] += Number(videos[key]["tagMap"][payload[j]]);
             }
           }
-        } else {
-          Vue.delete(videos, key);
+          resultObject[key] = videos[key];
         }
       });
-      let array = Object.values(videos);
+      let array = Object.values(resultObject);
       array.sort(function(a, b) {
         if (Number(a.score) < Number(b.score)) return 1;
         if (Number(a.score) > Number(b.score)) return -1;
         return 0;
       });
-      let returnObject = {};
+      let ReturnObject = {};
       for (let i in array) {
-        returnObject[array[i].videoId] = videos[array[i].videoId];
+        ReturnObject[array[i].videoId] = resultObject[array[i].videoId];
       }
-      return returnObject;
+      return ReturnObject;
     }
   },
   sortByTagOfCookVideosTop5: (state, getters) => payload => {

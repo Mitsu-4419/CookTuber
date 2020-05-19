@@ -2,44 +2,45 @@
   <div>
     <q-card class="videoReviewCard q-pa-sm">
       <router-link :to="{ name: 'video', query: { key: reviewInfo.videoId} }" class="myCardWrapper">
-        <div class="row" v-if="cookVideos[reviewInfo.videoId]">
-          <div class="column reviewCardLeft">
-            <q-img class="MyPageThumbnail" :src="cookVideos[reviewInfo.videoId].thumbnail"></q-img>
-            <div class="videoTitleWrapperWrapper">
-              <div class="videoTitleWrapper">
-                <span class="videoTitle">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
-              </div>
-              <div class="row videoChannelNameWrapper">
-                <q-space />
-                <span class="videoChannelName">{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
-              </div>
-              <div class="StarWrapper">
-                <star-rating
-                  :read-only="true"
-                  v-model="starPoint"
-                  :star-size="21"
-                  :increment="0.1"
-                  :padding="12"
-                  active-color="yellow"
-                  text-class="custom-Text"
-                ></star-rating>
-              </div>
-              <div class="tagsWrapper">
-                <q-chip
-                  size="sm"
-                  v-for="tag in reviewInfo.tagArray"
-                  :key="tag"
-                >{{allTags[tag].tagName}}</q-chip>
-              </div>
-            </div>
+        <div class="row" style="width:100%;height:180px;" v-if="cookVideos[reviewInfo.videoId]">
+          <div class="MyPageThumbnailWrapper">
+            <q-img
+              class="MyPageThumbnail"
+              :src="cookVideos[reviewInfo.videoId].thumbnail"
+              :ratio="16/9"
+            ></q-img>
           </div>
-          <div class="column reviewCardRight">
-            <div class="reviewWrapper">{{reviewInfo.review}}</div>
+          <div class="videoTitleWrapperWrapperMypageCooked column">
+            <div class="videoTitleWrapper">
+              <span class="videoTitle-mypage">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
+            </div>
+            <div class="row videoChannelNameWrapper">
+              <q-space />
+              <span class="videoChannelName-Mypage">{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
+            </div>
+            <div class="StarWrapperMypage">
+              <star-rating
+                :read-only="true"
+                v-model="starPoint"
+                :star-size="21"
+                :increment="0.1"
+                :padding="8"
+                active-color="#ffd400"
+                text-class="custom-Text"
+              ></star-rating>
+            </div>
+            <div class="tagsWrapperMyPageCooked">
+              <q-chip
+                size="sm"
+                v-for="tag in reviewInfo.tagArray"
+                :key="tag"
+              >{{allTags[tag].tagName}}</q-chip>
+            </div>
             <div class="row bottomsWrapper">
               <div class="likeCountWrapper">
                 <q-icon
                   name="fas fa-utensils"
-                  size="1.6em"
+                  size="1.3em"
                   :class="cooked == true ? 'cookActive' : 'cookNonActive'"
                   @click.prevent="ShowReviewMakeModal()"
                 />
@@ -49,7 +50,7 @@
               <div class="likeCountWrapper row">
                 <q-icon
                   name="fas fa-thumbs-up"
-                  size="1.6em"
+                  size="1.3em"
                   :class="userLike == true ? 'likeActive' : 'likeNonActive'"
                   @click.prevent="addDecreaseLike()"
                 />
@@ -58,12 +59,20 @@
               <div class="editButtontWrapper" v-show="userOrNot">
                 <q-icon
                   name="edit"
-                  size="1.6em"
+                  size="1.3em"
                   class="editIcon"
                   @click.prevent="editReviewModal = true"
                 ></q-icon>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="reviewWrapperMyPage">
+          <div class="reviewMyPageCooked">{{reviewInfo.review}}</div>
+          <div class="row">
+            <q-space></q-space>
+            <span class="timeDiplayCookedCard">{{timeBehind}}</span>
           </div>
         </div>
       </router-link>
@@ -98,6 +107,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
+import { getdiffTimeNonCook } from "src/functions/getdiffTimeNonCook";
 export default {
   props: ["docId", "reviewInfo", "userOrNot"],
   data() {
@@ -109,7 +119,8 @@ export default {
       cookedOrWillCook: false,
       SETMadeOrNot: false,
       reviewSubmit: false,
-      alertToSignUp: false
+      alertToSignUp: false,
+      timeBehind: ""
     };
   },
   computed: {
@@ -194,6 +205,17 @@ export default {
           cooked: false,
           docId: this.docId
         });
+        // this.addNewVideoData({
+        //   uid: this.userId,
+        //   favoriteVTRvideoID: this.reviewInfo.videoId,
+        //   snippet: this.Snippet
+        // });
+        // this.addNewYoutuberInfo({
+        //   uid: this.userId,
+        //   channelId: this.Snippet.channelId,
+        //   favoriteVTRvideoID: this.VideoId,
+        //   snippet: this.Snippet
+        // });
       }
     }
   },
@@ -201,6 +223,7 @@ export default {
     this.starPoint = Number(this.reviewInfo.star_number);
     this.checkIfUserLikeOrNot();
     this.checkIfUserWroteReviewOrNot();
+    this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
@@ -226,37 +249,32 @@ export default {
   margin-right: 5px;
   margin-bottom: 5px;
 }
-.reviewCardLeft {
+.MyPageThumbnailWrapper {
   width: 50%;
-  min-width: 230px;
-  /* background: red; */
-  padding: 0;
-}
-.reviewCardRight {
-  width: 230px;
-  height: 275px;
-  /* background: blue; */
-}
-.MyPageThumbnail {
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-}
-.StarWrapper {
-  width: 95%;
+  height: 100%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
+  align-items: center;
+}
+.MyPageThumbnail {
+  background-size: contain;
+}
+.StarWrapperMypage {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  display: flex;
   justify-content: center;
-  background: rgb(201, 203, 197);
 }
 .custom-Text {
   color: black;
   font-size: 16px;
   margin-bottom: 9px;
 }
-.videoTitleWrapperWrapper {
-  width: 90%;
+.videoTitleWrapperWrapperMypageCooked {
+  width: 48%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -265,7 +283,7 @@ export default {
   height: 40px;
   overflow: hidden;
 }
-.videoTitle {
+.videoTitle-mypage {
   font-size: 12.5px;
   font-weight: bold;
 }
@@ -274,14 +292,16 @@ export default {
   height: 20px;
   overflow: hidden;
 }
-.videoChannelName {
+.videoChannelName-Mypage {
   font-size: 11px;
   font-weight: bold;
+  margin-top: 4px;
+  color: rgb(121, 118, 118);
 }
 
 .bottomsWrapper {
   /* display: flex; */
-  margin-top: 12px;
+  margin-top: 8px;
   width: 80%;
   margin-right: auto;
   margin-left: auto;
@@ -316,25 +336,32 @@ export default {
   justify-content: center;
   height: 50px;
 }
-.reviewWrapper {
-  padding: 8px;
+.reviewWrapperMyPage {
+  padding: 5px;
   width: 95%;
-  height: 219px;
+  height: 85px;
   font-size: 14px;
   margin-right: auto;
   margin-left: auto;
+  background: rgb(242, 241, 241);
 }
-.tagsWrapper {
-  padding: 3px;
+.reviewMyPageCooked {
+  height: 55px;
+  width: 100%;
+}
+.tagsWrapperMyPageCooked {
+  padding-left: 3px;
+  padding-right: 3px;
 }
 .favoriteLikeNumber {
   font-family: "Russo One", sans-serif;
   font-weight: bold;
   margin-left: 5px;
   margin-top: 2px;
+  font-size: 11px;
 }
 .cookActive {
-  color: #fe3e4b9e;
+  color: #e54cfcc8;
 }
 .cookNonActive {
   color: #5d5e61;
@@ -344,6 +371,10 @@ export default {
 }
 .likeNonActive {
   color: rgb(210, 210, 210);
+}
+.timeDiplayCookedCard {
+  font-size: 12px;
+  color: #5d5e61;
 }
 @media screen and (min-width: 768px) and (max-width: 1184px) {
   .reviewCardRight {

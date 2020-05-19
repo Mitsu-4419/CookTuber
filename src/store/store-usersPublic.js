@@ -382,6 +382,7 @@ const getters = {
           returnObj[key] = userFavoriteObj[key];
         }
       });
+      console.log(returnObj);
       return returnObj;
     }
   },

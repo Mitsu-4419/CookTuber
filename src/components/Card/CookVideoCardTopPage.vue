@@ -22,7 +22,7 @@
       <div class="cookVideoThumbnailWrapperTopPage">
         <q-img id="cookVideoThumbnail" :src="cookVideoDetail.thumbnail"></q-img>
       </div>
-      <div class="videoWrapper">
+      <div class="TopPageVideoWrapper">
         <div class="cookVideoTopPageTitle">{{ cookVideoDetail.videoTitle }}</div>
         <div class="cookVideoTopPageChannelTitle row">
           <q-space></q-space>
@@ -92,7 +92,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-.videoWrapper {
+.TopPageVideoWrapper {
   padding: 8px;
 }
 .cookVideoTopPageTitle {

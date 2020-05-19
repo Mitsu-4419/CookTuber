@@ -1,22 +1,23 @@
 <template>
   <div>
     <q-card class="videoNonCookedReviewCard q-pa-sm">
-      <router-link :to="{ name: 'video', query: { key: reviewInfo.videoId} }" class="myCardWrapper">
-        <div class="row" v-if="cookVideos[reviewInfo.videoId]">
+      <router-link :to="{ name: 'video', query: { key: videoKey} }" class="myCardWrapper">
+        <div class="row">
           <div class="column NonCookedCard">
-            <q-img class="MyPageThumbnail" :src="cookVideos[reviewInfo.videoId].thumbnail"></q-img>
+            <q-img class="MyPageThumbnail" :src="cookVideos[videoKey].thumbnail"></q-img>
             <div class="videoTitleWrapperWrapper">
               <div class="videoTitleWrapper">
-                <span class="videoTitle">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
+                <span class="videoTitle">{{cookVideos[videoKey].videoTitle}}</span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
-                <span class="videoChannelName">{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
+                <span class="videoChannelName">{{cookVideos[videoKey].channelTitle}}</span>
               </div>
             </div>
           </div>
         </div>
         <div class="row" v-show="userOrNot">
+          <span class="timeDisplayNonCook">{{timeBehind}}</span>
           <q-space></q-space>
           <q-icon name="edit" size="1.9em" class="editIcon" @click.prevent="EditReviewModal = true"></q-icon>
         </div>
@@ -40,6 +41,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
+import { getdiffTimeNonCook } from "src/functions/getdiffTimeNonCook";
 export default {
   props: ["docId", "reviewInfo", "userOrNot"],
   data() {
@@ -47,7 +49,9 @@ export default {
       starPoint: 0,
       userLike: false,
       cooked: false,
-      EditReviewModal: false
+      EditReviewModal: false,
+      videoKey: "",
+      timeBehind: ""
     };
   },
   computed: {
@@ -59,6 +63,8 @@ export default {
   },
   created() {
     this.starPoint = Number(this.reviewInfo.star_number);
+    this.videoKey = this.reviewInfo.videoId;
+    this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
   },
   components: {
     editReviewInfoModal: require("components/EditReviewCard/editReviewModal.vue")
@@ -134,5 +140,9 @@ export default {
 }
 .cookNonActive {
   color: #8f909395;
+}
+.timeDisplayNonCook {
+  color: rgb(109, 108, 108);
+  margin-left: 10px;
 }
 </style>

@@ -5,11 +5,10 @@
       style="text-decoration:none;color:black;"
     >
       <q-img id="ytplayer" :src="cookVideoDetail.thumbnail"></q-img>
-      <div class="videoDetail">
-        <img
-          class="youTuberIcon livePerson"
-          :src="YoutubersChannel_info[cookVideoDetail.channelId].iconUrl"
-        />
+      <div class="videoDetail" v-if="YoutubersChannel_info[cookVideoDetail.channelId]">
+        <q-avatar size="md" style="margin-right:10px">
+          <img :src="YoutubersChannel_info[cookVideoDetail.channelId].iconUrl" />
+        </q-avatar>
         <div class="videoWrapper">
           <div class="videoTitle">{{ cookVideoDetail.videoTitle}}</div>
           <div class="videoChannel">{{ cookVideoDetail.channelTitle }}</div>
@@ -65,7 +64,9 @@ export default {
   margin-top: 12px;
   padding-right: 8px;
 }
-
+.videoTitle {
+  height: 45px;
+}
 .youTuberIcon {
   display: block;
   width: 36px;
@@ -97,14 +98,14 @@ export default {
 }
 @media screen and (min-width: 1600px) {
   .cookVideoCard {
-    width: 270px;
+    width: 24%;
     padding-top: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
   }
   #ytplayer {
-    width: 258.282px;
-    height: 145.278px;
+    width: 100%;
+    /* height: 145.278px; */
     margin-left: auto;
     margin-right: auto;
   }
@@ -114,12 +115,10 @@ export default {
     font-weight: 500;
     font-family: Roboto, Arial, sans-serif;
     max-width: 190px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
   .videoChannel {
-    font-size: 14px;
+    font-size: 12px;
     color: #606060;
     font-family: Roboto, Arial, sans-serif;
     max-width: 190px;
@@ -143,12 +142,10 @@ export default {
     font-weight: 500;
     font-family: Roboto, Arial, sans-serif;
     max-width: 260px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
   .videoChannel {
-    font-size: 14px;
+    font-size: 12px;
     color: #606060;
     font-family: Roboto, Arial, sans-serif;
     max-width: 240px;
@@ -171,17 +168,13 @@ export default {
     font-weight: 500;
     font-family: Roboto, Arial, sans-serif;
     max-width: 260px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
   .videoChannel {
-    font-size: 14px;
+    font-size: 12px;
     color: #606060;
     font-family: Roboto, Arial, sans-serif;
     max-width: 240px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
 }
@@ -189,8 +182,6 @@ export default {
   .videoChannel,
   .videoTitle {
     max-width: 200px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
 }
@@ -198,8 +189,6 @@ export default {
   .videoChannel,
   .videoTitle {
     max-width: 280px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
   /* card内の動画の設定 */
@@ -214,8 +203,6 @@ export default {
   .videoChannel,
   .videoTitle {
     max-width: 220px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
   }
   /* card内の動画の設定 */
@@ -237,8 +224,8 @@ export default {
   .videoChannel,
   .videoTitle {
     max-width: 210px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /* text-overflow: ellipsis;
+    white-space: nowrap; */
     overflow: hidden;
   }
   /* card内の動画の設定 */
@@ -260,8 +247,8 @@ export default {
   .videoChannel,
   .videoTitle {
     max-width: 165px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    /* text-overflow: ellipsis;
+    white-space: nowrap; */
     overflow: hidden;
   }
   /* card内の動画の設定 */

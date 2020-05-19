@@ -1,15 +1,21 @@
 // Array a がArray　b　に完全に含まれているかどうかの判定
+// A,Bは配列出なくてはいけない
 
 export function arrayIncludedOrNot(A, B) {
-  let TOrF = [];
-  for (let a in A) {
-    if (!B.includes(A[a])) {
-      TOrF.push("hoge");
-    }
-  }
-  if (TOrF.length > 0) {
+  // Tagが付いていないVideoを弾く
+  if (Object.keys(B).length == 0) {
     return false;
-  } else if (TOrF.length == 0) {
-    return true;
+  } else {
+    let TOrF = [];
+    for (let a in A) {
+      if (!B.includes(A[a])) {
+        TOrF.push("hoge");
+      }
+    }
+    if (TOrF.length > 0) {
+      return false;
+    } else if (TOrF.length == 0) {
+      return true;
+    }
   }
 }
