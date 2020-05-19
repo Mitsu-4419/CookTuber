@@ -35,7 +35,6 @@
             </q-badge>-->
             <q-select
               filled
-              v-model="modelMultiple"
               multiple
               :options="options"
               use-chips
@@ -119,7 +118,7 @@ export default {
         favoriteVTRvideoID: videoId,
         selectedTags: tagArray,
         star_number: this.ratingModel,
-        snippet: this.snippet,
+        snippet: this.snippet
       });
       // tagがつけられていたらState、Dbを更新する
       if (this.modelMultiple.length > 0) {

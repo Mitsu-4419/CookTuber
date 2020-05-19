@@ -27,7 +27,7 @@
           />
         </transition-group>
       </div>
-      <div class="cookVideoReview" v-else-if="tab=='NotCooked'">
+      <div class="NonCookVideoReview" v-else-if="tab=='NotCooked'">
         <transition-group appear enter-active-class="animated fadeInLeft" class="row">
           <MyPageNonCookVideoCard
             v-for="(reviewInfo, key) in getfavoriteCookedObject(pageUserId, tab)"
@@ -75,6 +75,7 @@ export default {
     if (this.userId == this.pageUserId) {
       this.userOrNot = true;
     }
+    console.log(this.getfavoriteCookedObject(this.pageUserId, this.tab));
   },
   watch: {
     $route(to, from) {
@@ -172,131 +173,36 @@ Cardコンポーネントでカードの大きさを指定 */
     margin-top: 25px;
   }
 }
-/* @media screen and (min-width: 624px) and (max-width: 599px) {
-  .YOUTUBERCardWrapper {
-    width: 97%;
+@media screen and (min-width: 1764px) {
+  .NonCookVideoReview {
+    width: 1525px;
     margin-right: auto;
     margin-left: auto;
-    padding-left: 32px;
-    margin-top: 15px;
-    margin-bottom: 50px;
-  }
-  .q-pa-lg {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 24px;
-    padding-left: 24px;
-  }
-  .q-pagination {
-    width: 200px;
+    margin-top: 25px;
   }
 }
-@media screen and (min-width: 500px) and (max-width: 623px) {
-  .YOUTUBERCardWrapper {
-    width: 100%;
+@media screen and (min-width: 1452px) and (max-width: 1763px) {
+  .NonCookVideoReview {
+    width: 1220px;
     margin-right: auto;
     margin-left: auto;
-    margin-top: 15px;
-    padding-left: 8px;
-    padding-bottom: 8px;
-    margin-bottom: 50px;
-  }
-  /* .widthAdjust {
-    margin-left: 20px;
-  } */
-/* .myCardWrapper {
-    width: 50%;
-  }
-  .q-tabs__content {
-    width: 170px;
-  }
-
-  .clearText {
-    display: none;
-  }
-  .q-field {
-    padding-top: 8px;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-  }
-  .q-pa-lg {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 24px;
-    padding-left: 24px;
-  }
-  .q-pagination {
-    width: 200px;
-  }
-  .modifyButton {
-    display: none;
+    margin-top: 25px;
   }
 }
-@media screen and (min-width: 360px) and (max-width: 499px) {
-  .column {
-    overflow: hidden;
-  }
-  .ctlLayout {
-    margin-top: 20px;
-    margin-left: 3px;
-    margin-right: 3px;
-  }
-  .myPageAvator {
-    width: 50px;
-    height: 50px;
-  }
-  .userName {
-    font-size: 20px;
-    padding-top: 0px;
-  }
-  .introduction {
-    font-size: 15px;
-    padding-top: 0px;
-  }
-  .profileWrapper {
-    width: 89%;
+@media screen and (min-width: 1145px) and (max-width: 1452px) {
+  .NonCookVideoReview {
+    width: 915px;
     margin-right: auto;
     margin-left: auto;
-    margin-bottom: 13px;
+    margin-top: 25px;
   }
-  .YOUTUBERCardWrapper {
-    width: 100%;
+}
+@media screen and (min-width: 828px) and (max-width: 1144px) {
+  .NonCookVideoReview {
+    width: 610px;
     margin-right: auto;
     margin-left: auto;
-    margin-top: 15px;
-    margin-bottom: 30px;
+    margin-top: 25px;
   }
-  .myCardWrapper {
-    width: 50%;
-  }
-  .q-tabs__content {
-    width: 90px;
-    padding: 0px;
-  }
-  .q-tab {
-    width: 70px;
-    padding: 0px;
-    font-size: 12px;
-  }
-  .q-field {
-    padding-top: 4px;
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-  }
-  .q-pa-lg {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-right: 24px;
-    padding-left: 24px;
-  }
-  .q-mt-md {
-    margin-top: 0px;
-  }
-  .q-pagination {
-    width: 200px;
-  }
-  .channelName {
-    margin: 0px;
-  }
-} */
+}
 </style>

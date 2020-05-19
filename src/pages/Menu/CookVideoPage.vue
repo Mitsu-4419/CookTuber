@@ -20,7 +20,7 @@
       <div class="cookVideoTagWrapper column">
         <div class="row">
           <ChipComponent
-            v-for="tag in Object.keys(sortedTag('genre'))"
+            v-for="tag in Object.keys(sortedTag('countryLarge'))"
             :key="tag"
             :tagName="allTags[tag].tagName"
             :id="tag"
@@ -30,7 +30,7 @@
         </div>
         <div class="row">
           <ChipComponent
-            v-for="tag in Object.keys(sortedTag('dish'))"
+            v-for="tag in Object.keys(sortedTag('materialLarge'))"
             :key="tag"
             :tagName="allTags[tag].tagName"
             :id="tag"
@@ -40,7 +40,17 @@
         </div>
         <div class="row">
           <ChipComponent
-            v-for="tag in Object.keys(sortedTag('material'))"
+            v-for="tag in Object.keys(sortedTag('specialGenre'))"
+            :key="tag"
+            :tagName="allTags[tag].tagName"
+            :id="tag"
+            @setActivatedTag="setTagArray"
+            flag="allVideoPage"
+          />
+        </div>
+        <div class="row">
+          <ChipComponent
+            v-for="tag in Object.keys(sortedTag('time'))"
             :key="tag"
             :tagName="allTags[tag].tagName"
             :id="tag"
@@ -54,7 +64,7 @@
     <!-- ----------- -->
     <!-- tagが何も選ばれていない時 -->
     <!-- ----------- -->
-    <div class="row CookVideoTotalWrapper" v-if="Object.keys(cookVideoTagSort).length==0">
+    <div class="row CookVideoTotalWrapper" v-if="tagArray.length==0">
       <CookVideoCard
         v-for="(cookVideoDetail, key) in CookVideoStarOrder"
         :key="key"
@@ -98,8 +108,7 @@ export default {
   },
   computed: {
     ...mapState("tags", ["allTags"]),
-    ...mapGetters("videos", ["CookVideoStarOrder"]),
-    ...mapGetters("videos", ["sortByTagOfCookVideos"]),
+    ...mapGetters("videos", ["CookVideoStarOrder", "sortByTagOfCookVideos"]),
     ...mapGetters("tags", ["sortedTag"])
   },
   methods: {

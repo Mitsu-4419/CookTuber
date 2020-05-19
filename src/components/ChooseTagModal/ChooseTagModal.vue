@@ -2,10 +2,10 @@
   <q-card class="chooseTagModal">
     <q-card-section>
       <span class="chooseTagModal-title">料理の種類</span>
-      <q-separator style="width:98%;margin-left:auto;margin-right:auto;height:3px;margin-top:3px;"></q-separator>
+      <!-- <q-separator style="width:98%;margin-left:auto;margin-right:auto;height:3px;margin-top:3px;"></q-separator> -->
       <div class="chooseTagModal-TagWrapper row">
         <ChipComponent
-          v-for="tag in Object.keys(sortedTag('genre'))"
+          v-for="tag in Object.keys(sortedTag('countryLarge'))"
           :key="tag"
           :tagName="allTags[tag].tagName"
           :id="tag"
@@ -13,13 +13,14 @@
           :TAGArray="TAGArray"
         />
       </div>
-    </q-card-section>
-    <q-card-section>
-      <span class="chooseTagModal-title">料理名</span>
-      <q-separator style="width:98%;margin-left:auto;margin-right:auto;height:3px;margin-top:3px;"></q-separator>
+      <!-- </q-card-section>
+      <q-card-section>-->
+      <!-- <span class="chooseTagModal-title">材料</span>
+      <q-separator style="width:98%;margin-left:auto;margin-right:auto;height:3px;margin-top:3px;"></q-separator>-->
+      <span class="chooseTagModal-title">肉</span>
       <div class="chooseTagModal-TagWrapper row">
         <ChipComponent
-          v-for="tag in Object.keys(sortedTag('dish'))"
+          v-for="tag in Object.keys(sortedTag('meatSmall'))"
           :key="tag"
           :tagName="allTags[tag].tagName"
           :id="tag"
@@ -27,13 +28,10 @@
           :TAGArray="TAGArray"
         />
       </div>
-    </q-card-section>
-    <q-card-section>
-      <span class="chooseTagModal-title">材料</span>
-      <q-separator style="width:98%;margin-left:auto;margin-right:auto;height:3px;margin-top:3px;"></q-separator>
+      <span class="chooseTagModal-title">魚</span>
       <div class="chooseTagModal-TagWrapper row">
         <ChipComponent
-          v-for="tag in Object.keys(sortedTag('material'))"
+          v-for="tag in Object.keys(sortedTag('fishSmall'))"
           :key="tag"
           :tagName="allTags[tag].tagName"
           :id="tag"
@@ -41,10 +39,43 @@
           :TAGArray="TAGArray"
         />
       </div>
-    </q-card-section>
-    <q-card-section>
+      <span class="chooseTagModal-title">ご飯もの</span>
+      <div class="chooseTagModal-TagWrapper row">
+        <ChipComponent
+          v-for="tag in Object.keys(sortedTag('riceSmall'))"
+          :key="tag"
+          :tagName="allTags[tag].tagName"
+          :id="tag"
+          @setActivatedTag="setTagArray"
+          :TAGArray="TAGArray"
+        />
+      </div>
+      <span class="chooseTagModal-title">やさい</span>
+      <div class="chooseTagModal-TagWrapper row">
+        <ChipComponent
+          v-for="tag in Object.keys(sortedTag('vegetableSmall'))"
+          :key="tag"
+          :tagName="allTags[tag].tagName"
+          :id="tag"
+          @setActivatedTag="setTagArray"
+          :TAGArray="TAGArray"
+        />
+      </div>
+      <span class="chooseTagModal-title">めん類</span>
+      <div class="chooseTagModal-TagWrapper row">
+        <ChipComponent
+          v-for="tag in Object.keys(sortedTag('noodleSmall'))"
+          :key="tag"
+          :tagName="allTags[tag].tagName"
+          :id="tag"
+          @setActivatedTag="setTagArray"
+          :TAGArray="TAGArray"
+        />
+      </div>
+      <!-- </q-card-section>
+      <q-card-section>-->
       <span class="chooseTagModal-title">所用時間</span>
-      <q-separator style="width:98%;margin-left:auto;margin-right:auto;height:3px;margin-top:3px;"></q-separator>
+      <!-- <q-separator style="width:98%;margin-left:auto;margin-right:auto;height:3px;margin-top:3px;"></q-separator> -->
       <div class="chooseTagModal-TagWrapper row">
         <ChipComponent
           v-for="tag in Object.keys(sortedTag('time'))"
