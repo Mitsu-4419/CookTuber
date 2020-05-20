@@ -12,6 +12,7 @@
             outlined
             v-model="registerURL"
             label="好きな料理Youtube動画のURLを貼ってください"
+            label-color="black"
             :rules="[
               val =>
                 val.includes('https://www.youtube.com/watch?v=') ||

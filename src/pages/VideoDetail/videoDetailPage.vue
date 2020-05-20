@@ -66,7 +66,7 @@
     </div>
 
     <!-- ユーザーのレビューを載せる欄 -->
-    <div class="userReview_wrapper">
+    <!-- <div class="userReview_wrapper">
       <div class="review_title_wrapper">
         <span>ファンからのオススメ</span>
       </div>
@@ -84,6 +84,24 @@
           <div class="msgLayout">{{msg}}</div>
         </q-scroll-area>
       </div>
+    </div>-->
+    <!-- --------------------- -->
+    <!-- ページの下段のところ -->
+    <!-- --------------------- -->
+    <!-- ユーザーのレビューを載せる欄 -->
+    <div class="userReview_wrapper">
+      <div class="review_title_wrapper">
+        <span>ファンからのオススメ</span>
+      </div>
+      <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
+      <router-link
+        :to="{ name: 'mypage', query: { id: key } }"
+        v-for="(review, key) in userReviews"
+        :key="key"
+        class="routerDec"
+      >
+        <userReviewList :id="key" :review="review" />
+      </router-link>
     </div>
 
     <!-- ユーザー登録をする様に促すDialog -->
@@ -118,8 +136,7 @@ export default {
       cooked: false,
       starPoint: 0,
       userReviews: {},
-      documentId: "",
-      msg: ""
+      documentId: ""
     };
   },
   computed: {
@@ -239,7 +256,8 @@ export default {
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
-    userReviewCard: require("components/Card/userReviewCard.vue").default,
+    // userReviewCard: require("components/Card/userReviewCard.vue").default,
+    userReviewList: require("components/Lists/userReviewList.vue").default,
     CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
       .default,
     registerReviewFromCard: require("components/RegisterReviewModal/registerReviewFromCard.vue")
@@ -355,7 +373,7 @@ export default {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 70px;
+  margin-top: 90px;
 }
 .detailReviewCardWrapper {
   width: 96%;
@@ -363,18 +381,15 @@ export default {
   /* overflow-x: auto;
   white-space: nowrap; */
 }
-/* .userReviewCardWrapper {
-  overflow: scroll;
-} */
 .cookActive {
   color: #babdc2;
 }
 .cookNonActive {
   color: #5d5e61;
 }
-/* レビューない時のメッセージのレイアウト */
-.msgLayout {
-  margin-top: 8px;
+.routerDec {
+  text-decoration: none;
+  color: black;
 }
 @media screen and (min-width: 821px) {
   #ytplayer {
@@ -384,7 +399,7 @@ export default {
     margin-top: 70px;
   }
   .userReview_wrapper {
-    width: 95%;
+    width: 90%;
   }
   /* .q-card {
     width: 360px;
@@ -459,14 +474,6 @@ export default {
   .userReview_wrapper {
     width: 600px;
   }
-  /* .q-card {
-    width: 100%;
-    height: 256px;
-  } */
-  /* レビューない時のメッセージのレイアウト */
-  .msgLayout {
-    margin-left: 8px;
-  }
 }
 @media screen and (min-width: 500px) and (max-width: 599px) {
   .card-wrapper {
@@ -494,10 +501,6 @@ export default {
     height: 234px;
     margin-right: 16px;
   } */
-  /* レビューない時のメッセージのレイアウト */
-  .msgLayout {
-    margin-left: 8px;
-  }
 }
 @media screen and (min-width: 400px) and (max-width: 499px) {
   .card-wrapper {
@@ -554,11 +557,6 @@ export default {
     height: 224px;
     margin-left: 16px;
   } */
-  /* レビューない時のメッセージのレイアウト */
-  .msgLayout {
-    margin-bottom: 24px;
-    margin-left: 8px;
-  }
 }
 @media screen and (min-width: 300px) and (max-width: 399px) {
   .card-wrapper {
@@ -585,12 +583,7 @@ export default {
     padding-top: 0px;
   }
   .userReview_wrapper {
-    width: 375px;
-    margin-left: 8px;
-  }
-  /* レビューない時のメッセージのレイアウト */
-  .msgLayout {
-    margin-bottom: 24px;
+    width: 360px;
     margin-left: 8px;
   }
 }
