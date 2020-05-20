@@ -58,7 +58,7 @@ export default {
   background-color: rgb(152, 149, 149);
 }
 .nonSelected {
-  background-color: rgb(214, 218, 214);
+  background-color: rgb(234, 237, 234);
 }
 @media screen and (min-width: 1001px) {
   #chipSizeMedium {

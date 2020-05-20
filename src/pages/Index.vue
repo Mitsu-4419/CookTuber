@@ -33,18 +33,15 @@
         <div class="cookImageWrapperTopPage-title row">
           <q-icon name="far fa-play-circle" size="sm" style="margin-top:5px;"></q-icon>
           <span class="cookImageWrapperTopPage-title-span">高評価の多い料理動画</span>
-          <q-space></q-space>
-          <!-- <div class="selectWrapper">
-            <q-select outlined v-model="sortGenre" :options="options" class="topPageSelectBox" />
-          </div>-->
-          <!-- <div class="tagSelectButton">
+          <div class="tagSelectButton">
             <q-btn
-              label="Tagで検索"
+              label="詳細検索"
               color="light-green-14"
               style="font-weight:bold"
               @click="chooseTag=true"
             ></q-btn>
-          </div>-->
+            <q-space></q-space>
+          </div>
         </div>
         <div class="TopPageTagWrapper">
           <div class="TopPagechooseTagModal-TagWrapper row">
@@ -401,6 +398,9 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 30px;
+}
+.tagSelectButton {
+  margin-left: 20px;
 }
 .TopPagechooseTagModal-TagWrapper {
 }

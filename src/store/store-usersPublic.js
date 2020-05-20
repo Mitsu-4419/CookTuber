@@ -367,6 +367,9 @@ const getters = {
   // ユーザーIDのお気に入りVideoReviewを取ってくる。
   getfavoriteCookedObject: state => (userId, tab) => {
     const valueArray = state.usersPublicInfo;
+    console.log(userId);
+    console.log(valueArray);
+    console.log(valueArray[userId]);
     let userFavoriteObj = valueArray[userId].favoriteVTRObj;
     let returnObj = {};
     if (tab == "cooked") {

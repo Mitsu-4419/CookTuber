@@ -65,6 +65,7 @@ export default {
     this.starPoint = Number(this.reviewInfo.star_number);
     this.videoKey = this.reviewInfo.videoId;
     this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
+    console.log(this.reviewInfo);
   },
   components: {
     editReviewInfoModal: require("components/EditReviewCard/editReviewModal.vue")
