@@ -22,7 +22,7 @@
           <q-btn
             class="registerButton"
             label="登録"
-            color="light-green-4"
+            color="light-green-14"
             @click="showReviewMakeModal"
           ></q-btn>
         </div>
@@ -352,7 +352,7 @@ export default {
   mounted() {},
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
-    registerReviewModal: require("components/RegisterReviewModal/registerReviewModal.vue")
+    registerReviewModal: require("components/RegisterReviewModalTopPage/registerReviewModal.vue")
       .default,
     CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
       .default,
@@ -391,6 +391,7 @@ export default {
 .registerButton {
   margin-top: 10px;
   width: 150px;
+  font-weight: bold;
   margin-right: auto;
   margin-left: auto;
 }
@@ -424,7 +425,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
-  background: rgb(252, 252, 201);
+  background: rgb(252, 252, 215);
   border-radius: 20px;
   height: 60px;
   padding: 10px;

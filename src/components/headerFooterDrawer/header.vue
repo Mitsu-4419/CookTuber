@@ -159,7 +159,7 @@ export default {
 .headerTop {
   position: initial;
   height: 70px;
-  background: #f7f3e8;
+  background: rgb(252, 252, 224);
 }
 .headerTitleIcon {
   margin-left: 10px;

@@ -44,7 +44,7 @@ module.exports = function(/* ctx */) {
       //            (not treeshaking Quasar; biggest bundle size; convenient)
       all: "auto",
 
-      components: ["QSelect"],
+      components: ["QSelect", "QAvatar"],
       directives: ["Ripple", "ClosePopup"],
 
       // Quasar plugins

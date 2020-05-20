@@ -30,9 +30,7 @@
         </div>
         <div class="tagInputWrapper">
           <div class="tagSelectBox" style="min-width: 250px; max-width: 300px">
-            <!-- <q-badge color="secondary" class="q-mb-md">
-          Model: {{ modelMultiple || '[]' }}
-            </q-badge>-->
+            <!-- <q-badge color="secondary" class="q-mb-md">Model: {{ modelMultiple || '[]' }}</q-badge> -->
             <q-select
               filled
               v-model="modelMultiple"
@@ -43,6 +41,15 @@
               label="タグを選んでください（複数可）"
               options-selected-class="optionSelected"
             />
+            <!-- <q-select
+              filled
+              v-model="modelMultiple"
+              multiple
+              :options="options"
+              use-chips
+              stack-label
+              label="Multiple selection"
+            />-->
           </div>
         </div>
         <q-card-section class>投稿したレビューはマイページで確認できます</q-card-section>
@@ -68,6 +75,7 @@ export default {
       text: "",
       ratingModel: 1,
       modelMultiple: [],
+
       options: []
     };
   },
@@ -91,6 +99,7 @@ export default {
           }
         });
       }
+      console.log(tagArray);
       // VideoId をURLから取り出す
       let splicedURL1 = this.registerURL.split("&")[0];
       let videoId = splicedURL1.split("v=")[1];

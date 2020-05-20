@@ -57,7 +57,7 @@
               :star-size="20"
               :increment="0.1"
               :padding="4"
-              active-color="yellow"
+              active-color="#ffd400"
               text-class="custom-Text"
             ></star-rating>
           </div>
