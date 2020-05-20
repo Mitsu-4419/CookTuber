@@ -9,9 +9,9 @@
     <!-- ーーーーーーーーーーー -->
     <!-- ページ上部のプロフィール載せる欄 -->
     <!-- ーーーーーーーーーーー -->
-    <div class="row card-holder">
+    <div class="card-holder">
       <!-- ページの左側 -->
-      <div class="CookVideoWrapperLeft">
+      <div class="CookVideoWrapperUpper">
         <q-video
           id="ytplayer"
           type="text/html"
@@ -21,12 +21,25 @@
           "
           frameborder="0"
         ></q-video>
-        <div class="row q-mt-md">
-          <div class="cookDetailPageVideoTitle">{{ cookVideos[key].videoTitle }}</div>
-        </div>
-        <div class="row q-mt-sm">
+      </div>
+    </div>
+    <div class="row" style="margin-top:20px;">
+      <div class="CookVideoWrapperDownLeft">
+        <div class="row cookDetailPageVideoTitleWrapper">
+          <q-avatar size="60px" style="margin-right:5px;">
+            <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" />
+          </q-avatar>
           <q-space></q-space>
-          <div style="font-size:16px;">{{cookVideos[key].channelTitle }}</div>
+          <div class="column" style=" width: 85%;">
+            <div class="row">
+              <q-space></q-space>
+              <div class="cookDetailPageVideoTitle">{{ cookVideos[key].videoTitle }}</div>
+            </div>
+            <div class="row q-mt-sm">
+              <q-space></q-space>
+              <div style="font-size:18px;">{{cookVideos[key].channelTitle }}</div>
+            </div>
+          </div>
         </div>
         <div class="StarWrapperVideoDetailPage">
           <star-rating
@@ -35,20 +48,9 @@
             :star-size="30"
             :increment="0.1"
             :padding="12"
-            active-color="yellow"
+            active-color="#ffd400"
             text-class="custom-Text"
           ></star-rating>
-        </div>
-      </div>
-      <!-- ページの右側 -->
-      <div class="CookVideoWrapperRight" v-if="cookVideos[key]">
-        <div class="row" style="margin-top:60px;" @click.prevent="ShowReviewMakeModal()">
-          <q-icon
-            name="fas fa-utensils"
-            size="2.1em"
-            :class="cooked == true ? 'cookActive' : 'cookNonActive'"
-          />
-          <span class="favoriteNum">{{cookVideos[key].registerCount }}</span>
         </div>
         <div class="tagsWrapperVideoDetailPage">
           <q-chip
@@ -57,34 +59,28 @@
             :key="tag"
           >{{allTags[tagName].tagName}}</q-chip>
         </div>
-        <div class="q-mt-lg">
+        <div
+          class="row"
+          style="width:90%;margin-right:auto;margin-left:auto;"
+          @click.prevent="ShowReviewMakeModal()"
+        >
+          <q-space></q-space>
+          <q-icon
+            name="fas fa-utensils"
+            size="2.1em"
+            :class="cooked == true ? 'cookActive' : 'cookNonActive'"
+          />
+          <span class="favoriteNum">{{cookVideos[key].registerCount }}</span>
+        </div>
+      </div>
+      <div class="CookVideoWrapperDownRight">
+        <div class="CookVideoDetail">
           <q-scroll-area class="price-buy-detail">
             <div>{{ cookVideos[key].videoDescription }}</div>
           </q-scroll-area>
         </div>
       </div>
     </div>
-
-    <!-- ユーザーのレビューを載せる欄 -->
-    <!-- <div class="userReview_wrapper">
-      <div class="review_title_wrapper">
-        <span>ファンからのオススメ</span>
-      </div>
-      <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
-      <div class>
-        <q-scroll-area horizontal style="width:95%;height:300px;">
-          <div class="row no-wrap">
-            <userReviewCard
-              :review="review"
-              :id="key"
-              v-for="(review, key) in userReviews"
-              :key="key"
-            />
-          </div>
-          <div class="msgLayout">{{msg}}</div>
-        </q-scroll-area>
-      </div>
-    </div>-->
     <!-- --------------------- -->
     <!-- ページの下段のところ -->
     <!-- --------------------- -->
@@ -144,7 +140,8 @@ export default {
     ...mapState("tags", ["allTags"]),
     ...mapState("videos", ["cookVideos"]),
     ...mapGetters("usersPublic", ["getYoutuberReview"]),
-    ...mapState("auth", ["userId", "loggedIn"])
+    ...mapState("auth", ["userId", "loggedIn"]),
+    ...mapState("youtubers", ["YoutubersChannel_info"])
   },
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTRFromCard"]),
@@ -289,23 +286,38 @@ export default {
 }
 /* 画面全体 */
 .card-holder {
-  margin: 16px auto;
-  justify-content: center;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: -20px;
+  /* background: red; */
 }
-.CookVideoWrapperLeft {
-  min-width: 350px;
+/* ページの下段の左側 */
+.CookVideoWrapperDownLeft {
+  width: 50%;
+  /* background: green; */
+}
+.CookVideoWrapperDownRight {
   width: 48%;
-  margin-right: 48px;
+  height: 300px;
+  /* background: orange; */
 }
 .cookDetailPageVideoTitle {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
+  height: 50px;
+  overflow: hidden;
+}
+.CookVideoDetail {
+  padding: 10px;
+}
+.cookDetailPageVideoTitleWrapper {
+  padding: 5px;
 }
 .StarWrapperVideoDetailPage {
   margin-top: 15px;
   display: flex;
   justify-content: center;
-  background: rgb(147, 143, 143);
+  /* background: rgb(147, 143, 143); */
 }
 .tagsWrapperVideoDetailPage {
   padding: 4px;
@@ -319,7 +331,7 @@ export default {
 }
 .price-buy-detail {
   width: 100%;
-  height: 300px;
+  height: 280px;
   font-size: 15px;
   color: rgb(89, 87, 87);
 }
@@ -391,20 +403,23 @@ export default {
   text-decoration: none;
   color: black;
 }
-@media screen and (min-width: 821px) {
-  #ytplayer {
-    width: 100%;
-    height: 315.25px;
-    margin: auto;
-    margin-top: 70px;
-  }
+#ytplayer {
+  width: 100%;
+  height: 500px;
+  margin: auto;
+  margin-top: 70px;
+  max-width: 945px;
+}
+@media screen and (min-width: 821px) and (max-width: 1022px) {
   .userReview_wrapper {
     width: 90%;
   }
-  /* .q-card {
-    width: 360px;
-    height: 256px;
-  } */
+  #ytplayer {
+    width: 100%;
+    height: 450px;
+    margin: auto;
+    margin-top: 70px;
+  }
 }
 @media screen and (min-width: 770px) and (max-width: 820px) {
   .q-layout-padding {
@@ -424,20 +439,15 @@ export default {
   .text-body1 {
     overflow-wrap: break-word;
   }
-
-  #ytplayer {
-    width: 366px;
-    height: 253px;
-    margin-left: auto;
-    margin-right: auto;
-  }
   .userReview_wrapper {
     width: 750px;
   }
-  /* .q-card {
-    width: 336px;
-    height: 256px;
-  } */
+  #ytplayer {
+    width: 100%;
+    height: 400px;
+    margin: auto;
+    margin-top: 70px;
+  }
 }
 @media screen and (min-width: 600px) and (max-width: 769px) {
   .card-wrapper {
@@ -462,17 +472,17 @@ export default {
   .text-body1 {
     overflow-wrap: break-word;
   }
-  #ytplayer {
-    width: 366px;
-    height: 253px;
-    margin-left: auto;
-    margin-right: auto;
-  }
   .review_title_wrapper {
     margin-left: 8px;
   }
   .userReview_wrapper {
     width: 600px;
+  }
+  #ytplayer {
+    width: 100%;
+    height: 400px;
+    margin: auto;
+    margin-top: 70px;
   }
 }
 @media screen and (min-width: 500px) and (max-width: 599px) {
@@ -481,26 +491,18 @@ export default {
     margin-top: 16px;
     margin-right: 0px;
   }
-  #ytplayer {
-    width: 366px;
-    height: 253px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .card-holder {
-    margin-right: 32px;
-  }
   .review_title_wrapper {
     margin-left: 8px;
   }
   .userReview_wrapper {
     width: 500px;
   }
-  /* .q-card {
+  #ytplayer {
     width: 100%;
-    height: 234px;
-    margin-right: 16px;
-  } */
+    height: 350px;
+    margin: auto;
+    margin-top: 70px;
+  }
 }
 @media screen and (min-width: 400px) and (max-width: 499px) {
   .card-wrapper {
@@ -519,9 +521,6 @@ export default {
     height: 320px;
     margin: 16px;
   }
-  /* .card-holder {
-    margin: 0px;
-  } */
   .card-wrapper {
     margin: 0px;
     padding-top: 0px;
@@ -569,9 +568,6 @@ export default {
   }
   .back_button {
     display: none;
-  }
-  .card-holder {
-    margin: 0px;
   }
   .card-img {
     max-width: 100%;
