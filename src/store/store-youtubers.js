@@ -68,12 +68,13 @@ const actions = {
         "https://www.googleapis.com/youtube/v3/channels",
         {
           params: {
-            key: "AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s",
+            key: "",
             id: payload.snippet.channelId,
             part: "statistics, snippet"
           }
         }
       );
+      // AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s
       const url = Data.data.items[0].snippet.thumbnails.default.url;
       const name = Data.data.items[0].snippet.title;
       const description = Data.data.items[0].snippet.description;
@@ -143,12 +144,13 @@ const actions = {
         "https://www.googleapis.com/youtube/v3/channels",
         {
           params: {
-            key: "AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s",
+            key: "",
             id: payload.snippet.channelId,
             part: "statistics, snippet"
           }
         }
       );
+      // AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s
       const url = Data.data.items[0].snippet.thumbnails.default.url;
       const name = Data.data.items[0].snippet.title;
       const description = Data.data.items[0].snippet.description;

@@ -29,14 +29,15 @@
                 text-class="custom-Text"
               ></star-rating>
             </div>
-            <div class="tagsWrapperMyPageCooked">
+            <div class="tagsWrapperMyPageCooked" v-if="reviewInfo">
               <q-chip
-                size="sm"
+                size="xs"
                 v-for="tag in reviewInfo.tagArray"
                 :key="tag"
               >{{allTags[tag].tagName}}</q-chip>
             </div>
             <div class="row bottomsWrapper">
+              <q-space></q-space>
               <div class="likeCountWrapper">
                 <q-icon
                   name="fas fa-utensils"
@@ -302,15 +303,15 @@ export default {
 .bottomsWrapper {
   /* display: flex; */
   margin-top: 8px;
-  width: 80%;
+  width: 90%;
   margin-right: auto;
   margin-left: auto;
 }
 .likeCountWrapper {
-  width: 38%;
+  width: 22%;
 }
 .editButtontWrapper {
-  margin-left: 6px;
+  margin-left: -4px;
 }
 .likeNumber {
   margin-left: 10px;
@@ -352,6 +353,7 @@ export default {
 .tagsWrapperMyPageCooked {
   padding-left: 3px;
   padding-right: 3px;
+  height: 40px;
 }
 .favoriteLikeNumber {
   font-family: "Russo One", sans-serif;

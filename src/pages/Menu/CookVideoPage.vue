@@ -126,6 +126,7 @@ export default {
       }
     },
     SetCookVideo(value) {
+      console.log(value);
       this.cookVideoTagSort = value;
     },
     SETTagArray(payload) {
