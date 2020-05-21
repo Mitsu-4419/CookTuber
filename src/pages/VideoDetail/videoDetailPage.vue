@@ -32,11 +32,9 @@
           <q-space></q-space>
           <div class="column" style=" width: 85%;">
             <div class="row">
-              <q-space></q-space>
               <div class="cookDetailPageVideoTitle">{{ cookVideos[key].videoTitle }}</div>
             </div>
             <div class="row q-mt-sm">
-              <q-space></q-space>
               <div style="font-size:18px;">{{cookVideos[key].channelTitle }}</div>
             </div>
           </div>
@@ -52,23 +50,20 @@
             text-class="custom-Text"
           ></star-rating>
         </div>
-        <div class="tagsWrapperVideoDetailPage">
+        <div class="tagsWrapperVideoDetailPage" v-if="Object.keys(cookVideos[key].tagMap).length>0">
           <q-chip
             size="14px"
             v-for="(tag,tagName) in cookVideos[key].tagMap"
-            :key="tag"
+            :key="tagName"
           >{{allTags[tagName].tagName}}</q-chip>
         </div>
-        <div
-          class="row"
-          style="width:90%;margin-right:auto;margin-left:auto;"
-          @click.prevent="ShowReviewMakeModal()"
-        >
-          <q-space></q-space>
+        <div class="row" style="width:100%;margin-right:auto;margin-left:auto;margin-top:13px;">
           <q-icon
             name="fas fa-utensils"
             size="2.1em"
             :class="cooked == true ? 'cookActive' : 'cookNonActive'"
+            style="margin-left:70px;z-index:100;cursor:pointer"
+            @click.prevent="ShowReviewMakeModal()"
           />
           <span class="favoriteNum">{{cookVideos[key].registerCount }}</span>
         </div>
@@ -316,12 +311,14 @@ export default {
 .StarWrapperVideoDetailPage {
   margin-top: 15px;
   display: flex;
-  justify-content: center;
+  justify-content: start;
+  margin-left: 80px;
   /* background: rgb(147, 143, 143); */
 }
 .tagsWrapperVideoDetailPage {
   padding: 4px;
   margin-top: 15px;
+  margin-left: 80px;
 }
 .CookVideoWrapperRight {
   width: 46%;

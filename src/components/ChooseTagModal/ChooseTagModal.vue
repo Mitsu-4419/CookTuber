@@ -88,7 +88,12 @@
       </div>
     </q-card-section>
     <q-card-actions align="right" class="q-mt-md">
-      <q-btn label="OK" color="light-green-4" v-close-popup @click="$emit('closeModal')" />
+      <q-btn
+        label="OK"
+        style="margin-right:5%; font-weight:bold;background-color:#ff9933;color:white;"
+        v-close-popup
+        @click="$emit('closeModal')"
+      />
     </q-card-actions>
   </q-card>
 </template>

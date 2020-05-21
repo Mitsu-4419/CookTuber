@@ -56,6 +56,7 @@ const mutations = {
       "tagArray",
       payload.obj.tagArray
     );
+    console.log(payload.obj.updatedAt);
     Vue.set(
       state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
       "updatedAt",
@@ -216,11 +217,14 @@ const actions = {
   // ===================================
   updateFavoriteVTR({ commit, state }, payload) {
     // Userの情報の変更
+    let updateTime = new Date().getTime();
+    let updateObject = {};
+    updateObject["seconds"] = Number(updateTime) / 1000;
     let Payload = {
       uid: payload.uid,
       docId: payload.docId,
       obj: {
-        updatedAt: firestorebase.FieldValue.serverTimestamp(),
+        updatedAt: updateObject,
         review: payload.review,
         star_number: payload.star_number,
         tagArray: payload.selectedTags,
@@ -367,9 +371,6 @@ const getters = {
   // ユーザーIDのお気に入りVideoReviewを取ってくる。
   getfavoriteCookedObject: state => (userId, tab) => {
     const valueArray = state.usersPublicInfo;
-    console.log(userId);
-    console.log(valueArray);
-    console.log(valueArray[userId]);
     let userFavoriteObj = valueArray[userId].favoriteVTRObj;
     let returnObj = {};
     if (tab == "cooked") {
@@ -385,7 +386,6 @@ const getters = {
           returnObj[key] = userFavoriteObj[key];
         }
       });
-      console.log(returnObj);
       return returnObj;
     }
   },
@@ -481,7 +481,6 @@ const getters = {
       for (let j in array) {
         sortedByMany[array[j]]["rankInfo"] = Number(j) + 1;
       }
-      console.log(sortedByMany);
       return sortedByMany;
     }
   },

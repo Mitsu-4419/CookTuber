@@ -10,8 +10,7 @@
         <q-space></q-space>
         <q-btn
           label="詳細検索"
-          color="light-green-14"
-          style="margin-right:5%; font-weight:bold"
+          style="margin-right:5%; font-weight:bold;background-color:#ff9933;color:white;"
           @click="chooseTag=true"
         ></q-btn>
       </div>

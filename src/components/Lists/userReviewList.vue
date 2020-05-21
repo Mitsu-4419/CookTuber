@@ -10,15 +10,6 @@
       <q-item-label class="listNickName">{{ review.nickName }}</q-item-label>
       <q-item-label class="listReview">{{ review.review }}</q-item-label>
       <q-item-label class="row reviewLikeWrapper">
-        <star-rating
-          :read-only="true"
-          v-model="starUserReview"
-          :star-size="20"
-          :increment="0.1"
-          :padding="7"
-          active-color="#ffd400"
-          text-class="custom-Text"
-        ></star-rating>
         <div class="likeButton">
           <q-icon
             name="fas fa-thumbs-up"
@@ -28,6 +19,15 @@
           ></q-icon>
         </div>
         <section class="likeNumber">{{ LikeNumbers }}</section>
+        <star-rating
+          :read-only="true"
+          v-model="starUserReview"
+          :star-size="20"
+          :increment="0.1"
+          :padding="2"
+          active-color="#ffd400"
+          text-class="custom-Text"
+        ></star-rating>
       </q-item-label>
     </q-item-section>
   </q-item>
@@ -96,7 +96,9 @@ export default {
 <style lang='scss' >
 .reviewList {
   margin: 10px 5px;
-  /* border: 1px solid black; */
+  // background: red;
+  width: 480px; /* border: 1px solid black; */
+  background: rgb(250, 250, 250);
   .listNickName {
     font-size: 11px;
   }
@@ -108,8 +110,8 @@ export default {
   }
   //   星の数字と合わせている
   .likeNumber {
-    margin-left: 4px;
-    margin-top: 7px;
+    margin-left: 6px;
+    margin-top: 5px;
     font-size: 15px;
   }
   .reviewLikeWrapper {
