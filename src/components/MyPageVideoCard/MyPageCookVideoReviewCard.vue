@@ -224,7 +224,7 @@ export default {
     this.starPoint = Number(this.reviewInfo.star_number);
     this.checkIfUserLikeOrNot();
     this.checkIfUserWroteReviewOrNot();
-    this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
+    this.timeBehind = getdiffTimeNonCook(this.reviewInfo.updatedAt);
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,

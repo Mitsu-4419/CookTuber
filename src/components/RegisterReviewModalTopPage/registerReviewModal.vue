@@ -3,12 +3,10 @@
     <q-card class="reviewSubmitTitleCard">
       <div class="reviewSubmitTitle">
         <q-card-section class="row reviewSubmitTitleCardSection">
-          <!-- <q-icon name="edit" size="md"></q-icon> -->
           <div>お気に入り料理登録</div>
         </q-card-section>
       </div>
       <div class="starWrapper">
-        <!-- <q-rating v-model="ratingModel" size="2.5em" :max="5" color="color" icon-half="star_half" /> -->
         <star-rating
           v-model="ratingModel"
           :star-size="33"
@@ -34,17 +32,6 @@
             <div class="row">
               <ChipTopPageModal v-for="tag in tagArray" :key="tag.tagName" :tag="tag" :id="tag" />
             </div>
-            <!-- <q-badge color="secondary" class="q-mb-md">Model: {{ modelMultiple || '[]' }}</q-badge>
-            <q-select
-              filled
-              v-model="modelMultiple"
-              multiple
-              :options="options"
-              use-chips
-              stack-label
-              label="タグを選んでください（複数可）"
-              options-selected-class="optionSelected"
-            />-->
             <q-popup-proxy :offset="[10, 10]">
               <q-card class="tagSelectPopUp">
                 <div class="row">

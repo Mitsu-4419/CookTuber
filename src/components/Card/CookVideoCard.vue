@@ -5,8 +5,12 @@
       style="text-decoration:none;color:black;"
     >
       <q-img id="ytplayer" :src="cookVideoDetail.thumbnail"></q-img>
-      <div class="videoDetail" v-if="YoutubersChannel_info[cookVideoDetail.channelId]">
-        <q-avatar size="md" style="margin-right:10px">
+      <div class="videoDetail">
+        <q-avatar
+          size="md"
+          style="margin-right:10px"
+          v-if="YoutubersChannel_info[cookVideoDetail.channelId]"
+        >
           <img :src="YoutubersChannel_info[cookVideoDetail.channelId].iconUrl" />
         </q-avatar>
         <div class="videoWrapper">

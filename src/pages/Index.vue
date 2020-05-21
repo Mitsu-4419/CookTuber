@@ -22,7 +22,7 @@
           <q-btn
             class="registerButton"
             label="登録"
-            color="light-green-14"
+            style="font-weight:bold; background-color:#ff9933;color:white;"
             @click="showReviewMakeModal"
           ></q-btn>
         </div>
@@ -37,8 +37,7 @@
           <div class="tagSelectButton">
             <q-btn
               label="詳細検索"
-              color="light-green-14"
-              style="font-weight:bold"
+              style="font-weight:bold; background-color:#ff9933;color:white;"
               @click="chooseTag=true"
             ></q-btn>
             <q-space></q-space>
@@ -207,6 +206,10 @@
         tag="topPage"
       />
     </q-dialog>
+    <!-- 料理を後でつくるに登録しましたのModal -->
+    <q-dialog v-model="noticeRegistered" persistent>
+      <NoticeRegistered :userId="userId" />
+    </q-dialog>
   </div>
 </template>
 
@@ -217,6 +220,7 @@ export default {
   data() {
     return {
       chooseTag: false,
+      noticeRegistered: false,
       registerURL: "",
       alertToSignUp: false,
       reviewSubmit: false,
@@ -323,6 +327,7 @@ export default {
           favoriteVTRvideoID: this.VideoId,
           snippet: this.Snippet
         });
+        this.noticeRegistered = true;
       }
     },
     SetCookVideo(value) {
@@ -363,7 +368,8 @@ export default {
       .default,
     ChooseTagModal: require("components/ChooseTagModal/ChooseTagModal.vue")
       .default,
-    ChipComponent: require("components/Chip/ChipComponent.vue").default
+    ChipComponent: require("components/Chip/ChipComponent.vue").default,
+    NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default
   }
 };
 </script>
@@ -425,7 +431,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
-  background: rgb(252, 252, 215);
+  background: #f7f3e8;
   border-radius: 20px;
   height: 60px;
   padding: 10px;

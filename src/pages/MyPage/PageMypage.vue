@@ -75,11 +75,13 @@ export default {
     if (this.userId == this.pageUserId) {
       this.userOrNot = true;
     }
-    console.log(this.getfavoriteCookedObject(this.pageUserId, this.tab));
   },
   watch: {
     $route(to, from) {
       this.pageUserId = getParam("id");
+      if (this.userId == this.pageUserId) {
+        this.userOrNot = true;
+      }
     }
   }
 };

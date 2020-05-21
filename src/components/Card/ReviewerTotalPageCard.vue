@@ -75,7 +75,6 @@ export default {
     // if (this.loggedIn) {
     //   this.userId = Object.values(this.userInfo)[0].id;
     // }
-    console.log(this.usersInfo.rankInfo);
   },
   created() {
     // this.starModel = this.chkFavoriteTubers();

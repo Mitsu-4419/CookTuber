@@ -260,7 +260,6 @@ const getters = {
   // Getttersを使ってやると、うまくいかなかったためあえて上記の関数を繰り返し記述している
   // =============
   sortByTagOfCookVideos: state => payload => {
-    console.log(payload);
     const Videos = state.cookVideos;
     // channelIdと星を１対１に対応したObjの配列をつく
     let newVideoObj = {};
@@ -283,7 +282,6 @@ const getters = {
       returnObject[array[i].videoId] = newVideoObj[array[i].videoId];
     }
     let videos = returnObject;
-
     if (payload.length == 0) {
       return videos;
     } else {
@@ -301,18 +299,18 @@ const getters = {
           resultObject[key] = videos[key];
         }
       });
-      let Array = Object.values(resultObject);
-      Array.sort(function(a, b) {
-        if (Number(a.score) < Number(b.score)) return 1;
-        if (Number(a.score) > Number(b.score)) return -1;
-        return 0;
-      });
-      let ReturnObject = {};
-      for (let i in Array) {
-        ReturnObject[Array[i].videoId] = resultObject[Array[i].videoId];
-      }
-      console.log(ReturnObject);
-      return ReturnObject;
+      // let Array = Object.values(resultObject);
+      // Array.sort(function(a, b) {
+      //   if (Number(a.score) < Number(b.score)) return 1;
+      //   if (Number(a.score) > Number(b.score)) return -1;
+      //   return 0;
+      // });
+      // let ReturnObject = {};
+      // for (let i in Array) {
+      //   ReturnObject[Array[i].videoId] = resultObject[Array[i].videoId];
+      // }
+      // console.log(ReturnObject);
+      return resultObject;
     }
   },
   sortByTagOfCookVideosTop5: (state, getters) => payload => {

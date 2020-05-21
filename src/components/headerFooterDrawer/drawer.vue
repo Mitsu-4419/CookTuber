@@ -70,13 +70,13 @@ export default {
 
 <style>
 .q-drawer {
-  background-color: #f9f7f2;
+  background-color: #f9f6f1;
 }
 .drawerIcon {
   color: #9f7346;
 }
 .q-item.q-router-link--active {
-  color: #f7b25d;
+  color: #f7ac51;
 }
 </style>
 

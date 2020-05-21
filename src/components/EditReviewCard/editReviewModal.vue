@@ -3,12 +3,10 @@
     <q-card class="reviewSubmitTitleCard">
       <div class="reviewSubmitTitle">
         <q-card-section class="row reviewSubmitTitleCardSection">
-          <!-- <q-icon name="edit" size="md"></q-icon> -->
           <div>お気に入り料理登録</div>
         </q-card-section>
       </div>
       <div class="starWrapper">
-        <!-- <q-rating v-model="ratingModel" size="2.5em" :max="5" color="color" icon-half="star_half" /> -->
         <star-rating
           v-model="RatingModel"
           :star-size="33"
@@ -29,27 +27,106 @@
           />
         </div>
         <div class="tagInputWrapper">
-          <div class="tagSelectBox" style="min-width: 250px; max-width: 300px">
-            <!-- <q-badge color="secondary" class="q-mb-md">
-          Model: {{ modelMultiple || '[]' }}
-            </q-badge>-->
-            <q-select
-              filled
-              v-model="modelMultiple"
-              multiple
-              :options="options"
-              use-chips
-              stack-label
-              label="タグを選んでください（複数可）"
-              options-selected-class="optionSelected"
-            />
+          <div class="tagSelectBox" clickable @click="tagSelectModal=true">
+            <span>タグを選んでください（複数可）</span>
+            <div class="row">
+              <ChipTopPageModal v-for="tag in TAGArray" :key="tag.tagName" :tag="tag" :id="tag" />
+            </div>
+            <q-popup-proxy :offset="[10, 10]">
+              <q-card class="tagSelectPopUp">
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('countryLarge')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('materialLarge')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('specialGenre')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('time')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('meatSmall')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('fishSmall')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('riceSmall')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('vegetableSmall')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+                <div class="row">
+                  <ChipTopPageModal
+                    v-for="(tag, key) in sortedTag('noodleSmall')"
+                    :key="key"
+                    :tag="tag"
+                    :id="key"
+                    @setActivatedTag="setTagArray"
+                  />
+                </div>
+              </q-card>
+            </q-popup-proxy>
           </div>
         </div>
         <q-card-actions align="right" class="q-mt-md">
-          <q-btn color="green-13" type="submit">
+          <q-btn flat label="キャンセル" color="black" v-close-popup />
+          <q-btn
+            style="width:100px;font-weight:bold; background-color:#ff9933;color:white;"
+            type="submit"
+          >
             <span style="font-weight:bold;">投稿</span>
           </q-btn>
-          <q-btn flat label="キャンセル" color="black" v-close-popup />
         </q-card-actions>
       </q-form>
     </q-card>
@@ -65,25 +142,35 @@ export default {
     return {
       Review: this.review,
       RatingModel: 1,
-      modelMultiple: [],
-      options: []
+      TAGArray: [],
+      tagSelectModal: false
     };
   },
   computed: {
     ...mapState("tags", ["allTags"]),
-    ...mapState("auth", ["userId"])
+    ...mapState("auth", ["userId"]),
+    ...mapGetters("tags", ["sortedTag"])
   },
   methods: {
     ...mapActions("usersPublic", ["updateFavoriteVTR"]),
     ...mapActions("tags", ["updateVideoAtTag"]),
     ...mapActions("videos", ["updateVideoData"]),
     // ...mapActions("youtubers", ["incrementFavorite"]),
+    setTagArray(value) {
+      // すでに配列内にある場合はその要素を外す
+      if (this.TAGArray.includes(value)) {
+        let idx = this.TAGArray.indexOf(value);
+        this.TAGArray.splice(idx, 1);
+      } else {
+        this.TAGArray.push(value);
+      }
+    },
     submitEdittedReview() {
       // tagのValueを再びKeyに変更する
       let selectedTagArray = [];
-      for (let j = 0; j < this.modelMultiple.length; j++) {
+      for (let j = 0; j < this.TAGArray.length; j++) {
         Object.keys(this.allTags).forEach(key => {
-          if (this.modelMultiple[j] == this.allTags[key].tagName) {
+          if (this.TAGArray[j] == this.allTags[key].tagName) {
             selectedTagArray.push(key);
           }
         });
@@ -132,14 +219,17 @@ export default {
     }
   },
   created() {
-    Object.keys(this.allTags).forEach(key => {
-      this.options.push(this.allTags[key].tagName);
-    });
+    // Object.keys(this.allTags).forEach(key => {
+    //   this.options.push(this.allTags[key].tagName);
+    // });
     this.RatingModel = this.starPoint;
     for (let j = 0; j < this.tagArray.length; j++) {
       let key = this.tagArray[j];
-      this.modelMultiple.push(this.allTags[key].tagName);
+      this.TAGArray.push(this.allTags[key].tagName);
     }
+  },
+  components: {
+    ChipTopPageModal: require("components/Chip/ChipTopPageModal.vue").default
   }
 };
 </script>

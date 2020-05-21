@@ -16,10 +16,16 @@
             </div>
           </div>
         </div>
-        <div class="row" v-show="userOrNot">
+        <div class="row" style="margin-top:10px;">
           <span class="timeDisplayNonCook">{{timeBehind}}</span>
           <q-space></q-space>
-          <q-icon name="edit" size="1.9em" class="editIcon" @click.prevent="EditReviewModal = true"></q-icon>
+          <q-icon
+            v-show="userOrNot"
+            name="edit"
+            size="1.9em"
+            class="editIcon"
+            @click.prevent="EditReviewModal = true"
+          ></q-icon>
         </div>
       </router-link>
     </q-card>
@@ -65,7 +71,7 @@ export default {
     this.starPoint = Number(this.reviewInfo.star_number);
     this.videoKey = this.reviewInfo.videoId;
     this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
-    console.log(this.reviewInfo);
+    console.log(this.userOrNot);
   },
   components: {
     editReviewInfoModal: require("components/EditReviewCard/editReviewModal.vue")

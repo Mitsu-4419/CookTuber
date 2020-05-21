@@ -9,8 +9,13 @@
       <br />ユーザー登録、ログインが必要です
     </q-card-section>
     <q-card-actions align="right" class="q-mt-md">
-      <q-btn label="ログインへ" color="light-green-4" v-close-popup to="/auth/sign_in" />
       <q-btn flat label="キャンセル" color="black" v-close-popup />
+      <q-btn
+        label="ログインへ"
+        style="font-weight:bold; background-color:#ff9933;color:white;"
+        v-close-popup
+        to="/auth/sign_in"
+      />
     </q-card-actions>
   </q-card>
 </template>
