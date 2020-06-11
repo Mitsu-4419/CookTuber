@@ -14,7 +14,7 @@
           <img :src="YoutubersChannel_info[cookVideoDetail.channelId].iconUrl" />
         </q-avatar>
         <div class="videoWrapper">
-          <div class="videoTitle">{{ cookVideoDetail.videoTitle}}</div>
+          <div class="videoTitleCookPage2">{{ cookVideoDetail.videoTitle}}</div>
           <div class="videoChannel">{{ cookVideoDetail.channelTitle }}</div>
           <star-rating
             :read-only="true"
@@ -68,8 +68,10 @@ export default {
   margin-top: 12px;
   padding-right: 8px;
 }
-.videoTitle {
+.videoTitleCookPage2 {
   height: 45px;
+  padding: 0;
+  font-weight: bold;
 }
 .youTuberIcon {
   display: block;
@@ -113,7 +115,7 @@ export default {
     margin-left: auto;
     margin-right: auto;
   }
-  .videoTitle {
+  .videoTitleCookPage2 {
     font-size: 14px;
     color: #030303;
     font-weight: 500;
@@ -140,7 +142,7 @@ export default {
     margin-right: 10px;
     margin-bottom: 10px;
   }
-  .videoTitle {
+  .videoTitleCookPage2 {
     font-size: 14px;
     color: #030303;
     font-weight: 500;
@@ -166,7 +168,7 @@ export default {
     margin-right: 10px;
     margin-bottom: 10px;
   }
-  .videoTitle {
+  .videoTitleCookPage2 {
     font-size: 14px;
     color: #030303;
     font-weight: 500;
@@ -184,14 +186,14 @@ export default {
 }
 @media screen and (min-width: 1025px) and (max-width: 1129px) {
   .videoChannel,
-  .videoTitle {
+  .videoTitleCookPage2 {
     max-width: 200px;
     overflow: hidden;
   }
 }
 @media screen and (min-width: 900px) and (max-width: 1024px) {
   .videoChannel,
-  .videoTitle {
+  .videoTitleCookPage2 {
     max-width: 280px;
     overflow: hidden;
   }
@@ -205,7 +207,7 @@ export default {
 }
 @media screen and (min-width: 750px) and (max-width: 899px) {
   .videoChannel,
-  .videoTitle {
+  .videoTitleCookPage2 {
     max-width: 220px;
     overflow: hidden;
   }
@@ -226,7 +228,7 @@ export default {
 }
 @media screen and (min-width: 600px) and (max-width: 749px) {
   .videoChannel,
-  .videoTitle {
+  .videoTitleCookPage2 {
     max-width: 210px;
     /* text-overflow: ellipsis;
     white-space: nowrap; */
@@ -249,7 +251,7 @@ export default {
 }
 @media screen and (min-width: 500px) and (max-width: 599px) {
   .videoChannel,
-  .videoTitle {
+  .videoTitleCookPage2 {
     max-width: 165px;
     /* text-overflow: ellipsis;
     white-space: nowrap; */
@@ -277,7 +279,7 @@ export default {
 /* スマホの設定 */
 @media screen and (min-width: 350px) and (max-width: 499px) {
   .videoChannel,
-  .videoTitle {
+  .videoTitleCookPage2 {
     font-size: 8px;
     max-width: 110px;
     text-overflow: ellipsis;

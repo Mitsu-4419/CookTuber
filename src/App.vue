@@ -12,6 +12,8 @@ export default {
     ...mapActions("auth", ["handleAuthStateChange"]),
     ...mapActions("usersPublic", ["getUsersPublicProfile"]),
     ...mapActions("tags", ["getTags"]),
+    ...mapActions("menuTag", ["getMenuTag"]),
+    ...mapActions("materialTag", ["getMaterialTag"]),
     ...mapActions("videos", ["getAllCookingVideos"]),
     ...mapActions("youtubers", ["getYoutubers_info"])
   },
@@ -21,6 +23,8 @@ export default {
     this.getTags();
     this.getAllCookingVideos();
     this.getYoutubers_info();
+    this.getMenuTag();
+    this.getMaterialTag();
   }
 };
 </script>

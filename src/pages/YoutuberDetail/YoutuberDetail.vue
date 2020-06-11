@@ -24,10 +24,10 @@
           <star-rating
             :read-only="true"
             v-model="starYoutuberDetail"
-            :star-size="26"
+            :star-size="35"
             :increment="0.1"
-            :padding="4"
-            active-color="yellow"
+            :padding="8"
+            active-color="#ffd400"
             text-class="custom-Text"
           ></star-rating>
         </div>
@@ -257,7 +257,7 @@ export default {
 .YoutuberDetail-starWrapper {
   display: flex;
   justify-content: center;
-  background-color: rgb(164, 163, 163);
+  /* background-color: rgb(164, 163, 163); */
   width: 87%;
   margin-left: auto;
   margin-right: auto;
@@ -365,7 +365,7 @@ export default {
     margin-right: auto;
   }
 } */
-
+/* */
 @media screen and (min-width: 770px) and (max-width: 820px) {
   .q-layout-padding {
     padding: 8px;

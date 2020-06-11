@@ -68,7 +68,7 @@ const actions = {
         "https://www.googleapis.com/youtube/v3/channels",
         {
           params: {
-            key: "AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s",
+            key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
             id: payload.snippet.channelId,
             part: "statistics, snippet"
           }
@@ -144,7 +144,7 @@ const actions = {
         "https://www.googleapis.com/youtube/v3/channels",
         {
           params: {
-            key: "AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s",
+            key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
             id: payload.snippet.channelId,
             part: "statistics, snippet"
           }
