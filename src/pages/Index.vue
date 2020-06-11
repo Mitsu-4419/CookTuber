@@ -110,6 +110,101 @@
       <div class="MoreButton_wrapper">
         <q-btn flat to="/video" class="moreButton" label="もっとみる"></q-btn>
       </div>
+      <!-- -------------------------->
+      <!-- Menuのタグを選ぶ、実験的に挿入 -->
+      <!-- -------------------------->
+      <div class="cookImageWrapperTopPage">
+        <div class="cookImageWrapperTopPage-title row">
+          <q-icon name="far fa-play-circle" size="sm" style="margin-top:5px;"></q-icon>
+          <span class="cookImageWrapperTopPage-title-span">メニューで選ぶ</span>
+        </div>
+        <div class="TopPageTagWrapper">
+          <div class="TopPagechooseTagModal-TagWrapper row">
+            <ChipComponent
+              v-for="tag in Object.keys(menuTag)"
+              :key="tag"
+              :tagName="menuTag[tag].menuName"
+              :id="tag"
+              @setActivatedTag="setMenuTag"
+              flag="topPage"
+            />
+          </div>
+        </div>
+        <!-- ----------- -->
+        <!-- tagが何も選ばれていない時 -->
+        <!-- ----------- -->
+        <div class="cookImageTopPageWrapper row" v-if="Object.keys(selectedMenuVideo).length ==0">
+          <CookVideoCardTopPage
+            v-for="(cookVideoDetail, key) in getTop5VideoAtTopPage"
+            :key="key"
+            :videoId="key"
+            :cookVideoDetail="cookVideoDetail"
+            @setCookVideo="SetCookVideo"
+          />
+        </div>
+
+        <div class="cookImageTopPageWrapper row" v-else>
+          <CookVideoCardTopPage
+            v-for="(cookVideoDetail, key) in selectedMenuVideo"
+            :key="key"
+            :videoId="key"
+            :cookVideoDetail="cookVideoDetail"
+            @setCookVideo="SetCookVideo"
+          />
+        </div>
+      </div>
+      <div class="MoreButton_wrapper">
+        <q-btn flat to="/video" class="moreButton" label="もっとみる"></q-btn>
+      </div>
+      <!-- -------------------------->
+      <!-- Materialのタグを選ぶ、実験的に挿入 -->
+      <!-- -------------------------->
+      <div class="cookImageWrapperTopPage">
+        <div class="cookImageWrapperTopPage-title row">
+          <q-icon name="far fa-play-circle" size="sm" style="margin-top:5px;"></q-icon>
+          <span class="cookImageWrapperTopPage-title-span">材料で選ぶ</span>
+        </div>
+        <div class="TopPageTagWrapper">
+          <div class="TopPagechooseTagModal-TagWrapper row">
+            <ChipComponent
+              v-for="tag in Object.keys(materialTag)"
+              :key="tag"
+              :tagName="materialTag[tag].name"
+              :id="tag"
+              @setActivatedTag="setMaterialTag"
+              flag="topPage"
+            />
+          </div>
+        </div>
+        <!-- ----------- -->
+        <!-- tagが何も選ばれていない時 -->
+        <!-- ----------- -->
+        <div
+          class="cookImageTopPageWrapper row"
+          v-if="Object.keys(selectedMaterialVideo).length ==0"
+        >
+          <CookVideoCardTopPage
+            v-for="(cookVideoDetail, key) in getTop5VideoAtTopPage"
+            :key="key"
+            :videoId="key"
+            :cookVideoDetail="cookVideoDetail"
+            @setCookVideo="SetCookVideo"
+          />
+        </div>
+
+        <div class="cookImageTopPageWrapper row" v-else>
+          <CookVideoCardTopPage
+            v-for="(cookVideoDetail, key) in selectedMaterialVideo"
+            :key="key"
+            :videoId="key"
+            :cookVideoDetail="cookVideoDetail"
+            @setCookVideo="SetCookVideo"
+          />
+        </div>
+      </div>
+      <div class="MoreButton_wrapper">
+        <q-btn flat to="/video" class="moreButton" label="もっとみる"></q-btn>
+      </div>
       <!-- --------------------------- -->
       <!-- ２段目のYoutuberのところ -->
       <!-- --------------------------- -->
@@ -232,13 +327,16 @@ export default {
       VideoId: "",
       cookVideoTagSort: {},
       tagArray: [],
-      TAGArray: []
+      TAGArray: [],
+      selectedMenuVideo: {},
+      selectedMaterialVideo: {}
     };
   },
   computed: {
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
-    ...mapState("auth", ["userId"]),
+    ...mapState("menuTag", ["menuTag"]),
+    ...mapState("materialTag", ["materialTag"]),
     ...mapGetters("videos", [
       "getTop5VideoAtTopPage",
       "sortByTagOfCookVideosTop5"
@@ -246,7 +344,9 @@ export default {
     ...mapGetters("youtubers", ["getTop5Youtuber"]),
     ...mapGetters("usersPublic", ["getTop5Reviewer"]),
     ...mapGetters("tags", ["sortedTag"]),
-    ...mapState("tags", ["allTags"])
+    ...mapState("tags", ["allTags"]),
+    ...mapGetters("menuTag", ["menuSelectedVideo"]),
+    ...mapGetters("materialTag", ["materialSelectedVideo"])
   },
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTR"]),
@@ -266,7 +366,7 @@ export default {
           "https://www.googleapis.com/youtube/v3/videos",
           {
             params: {
-              key: "AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s",
+              key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
               id: videoId,
               part: "snippet"
             }
@@ -352,6 +452,12 @@ export default {
         let payload = this.tagArray;
         this.cookVideoTagSort = this.sortByTagOfCookVideosTop5(payload);
       }
+    },
+    setMenuTag(value) {
+      this.selectedMenuVideo = this.menuSelectedVideo(value);
+    },
+    setMaterialTag(value) {
+      this.selectedMaterialVideo = this.materialSelectedVideo(value);
     }
   },
   mounted() {},

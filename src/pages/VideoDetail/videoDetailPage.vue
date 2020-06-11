@@ -12,66 +12,107 @@
     <div class="card-holder">
       <!-- ページの左側 -->
       <div class="CookVideoWrapperUpper">
-        <q-video
-          id="ytplayer"
-          type="text/html"
-          :src="
-            'https://www.youtube.com/embed/' +
-             key
-          "
-          frameborder="0"
-        ></q-video>
+        <q-video id="ytplayer" type="text/html" :src="videoURL" frameborder="0"></q-video>
       </div>
     </div>
     <div class="row" style="margin-top:20px;">
       <div class="CookVideoWrapperDownLeft">
         <div class="row cookDetailPageVideoTitleWrapper">
-          <q-avatar size="60px" style="margin-right:5px;">
-            <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" />
+          <q-avatar size="60px;" style="margin-right:5px;" class="avatorLarge">
+            <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
+          </q-avatar>
+          <q-avatar size="lg" style="margin-right:5px;" class="avatorMedium">
+            <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
+          </q-avatar>
+          <q-avatar size="md" style="margin-right:5px;" class="avatorSmall">
+            <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
           </q-avatar>
           <q-space></q-space>
-          <div class="column" style=" width: 85%;">
+          <div class="column videoTitleAndName">
             <div class="row">
               <div class="cookDetailPageVideoTitle">{{ cookVideos[key].videoTitle }}</div>
             </div>
-            <div class="row q-mt-sm">
-              <div style="font-size:18px;">{{cookVideos[key].channelTitle }}</div>
+            <div class="row q-mt-xs">
+              <div style="font-size:15px;">{{cookVideos[key].channelTitle }}</div>
+            </div>
+            <div class="StarWrapperVideoDetailPage">
+              <star-rating
+                :read-only="true"
+                v-model="starPoint"
+                :star-size="18"
+                :increment="0.1"
+                :padding="6"
+                active-color="#ffd400"
+                text-class="custom-Text"
+              ></star-rating>
+            </div>
+            <div
+              class="tagsWrapperVideoDetailPage"
+              v-if="Object.keys(cookVideos[key].tagMap).length>0"
+            >
+              <q-chip
+                size="14px"
+                v-for="(tag,tagName) in cookVideos[key].tagMap"
+                :key="tagName"
+              >{{allTags[tagName].tagName}}</q-chip>
+            </div>
+            <div style="width:100%;margin-right:auto;margin-left:auto;margin-top:-6px;">
+              <q-icon
+                name="fas fa-utensils"
+                size="1.4em"
+                :class="cooked == true ? 'cookActive' : 'cookNonActive'"
+                style="z-index:100;cursor:pointer"
+                @click.prevent="ShowReviewMakeModal()"
+              />
+              <span class="favoriteNum">{{cookVideos[key].registerCount }}</span>
             </div>
           </div>
         </div>
-        <div class="StarWrapperVideoDetailPage">
-          <star-rating
-            :read-only="true"
-            v-model="starPoint"
-            :star-size="30"
-            :increment="0.1"
-            :padding="12"
-            active-color="#ffd400"
-            text-class="custom-Text"
-          ></star-rating>
-        </div>
-        <div class="tagsWrapperVideoDetailPage" v-if="Object.keys(cookVideos[key].tagMap).length>0">
-          <q-chip
-            size="14px"
-            v-for="(tag,tagName) in cookVideos[key].tagMap"
-            :key="tagName"
-          >{{allTags[tagName].tagName}}</q-chip>
-        </div>
-        <div class="row" style="width:100%;margin-right:auto;margin-left:auto;margin-top:13px;">
-          <q-icon
-            name="fas fa-utensils"
-            size="2.1em"
-            :class="cooked == true ? 'cookActive' : 'cookNonActive'"
-            style="margin-left:70px;z-index:100;cursor:pointer"
-            @click.prevent="ShowReviewMakeModal()"
-          />
-          <span class="favoriteNum">{{cookVideos[key].registerCount }}</span>
+        <div class="receipeWrapper">
+          <q-scroll-area class="price-buy-detailMaterial">
+            <q-list
+              dense
+              bordered
+              padding
+              class="recepieDetailWrapper"
+              v-if="cookVideos[key].materials"
+            >
+              <div v-for="item in Object.keys(cookVideos[key].materials)" :key="item">
+                <span style="font-weight:bold" d>{{item}}</span>
+                <div v-for="(volume,key) in cookVideos[key].materials[item]" :key="key">
+                  <q-item clickable v-ripple>
+                    <q-checkbox
+                      class="materialcheck"
+                      keep-color
+                      color="grey-5"
+                      v-model="val"
+                      size="xs"
+                    />
+                    <q-item-section class="materialItem">{{key}}</q-item-section>
+                    <q-item-section class="materialItem">{{volume}}</q-item-section>
+                  </q-item>
+                </div>
+              </div>
+            </q-list>
+          </q-scroll-area>
         </div>
       </div>
       <div class="CookVideoWrapperDownRight">
         <div class="CookVideoDetail">
           <q-scroll-area class="price-buy-detail">
-            <div>{{ cookVideos[key].videoDescription }}</div>
+            <q-list dense padding class="rounded-borders" v-if="cookVideos[key].videoSummary">
+              <div v-for="(howto,key) in cookVideos[key].videoSummary" :key="key">
+                <q-item v-ripple>
+                  <q-item-section
+                    style="z-index:100;cursor:pointer;color:blue"
+                    @click.prevent="changeURL(Number(key))"
+                    class="howtoLeft"
+                  >{{ Math.floor(Number(key)/60)}}:{{Number(key)%60}}</q-item-section>
+                  <q-item-section class="howtoRight">{{howto}}</q-item-section>
+                </q-item>
+              </div>
+            </q-list>
+            <div v-else>{{ cookVideos[key].videoDescription }}</div>
           </q-scroll-area>
         </div>
       </div>
@@ -115,6 +156,7 @@ import { SessionStorage } from "quasar";
 import { firestoreDb } from "src/boot/firebase";
 import Vue from "vue";
 import { getParam } from "src/functions/getParam";
+
 export default {
   data() {
     return {
@@ -127,7 +169,12 @@ export default {
       cooked: false,
       starPoint: 0,
       userReviews: {},
-      documentId: ""
+      documentId: "",
+      teal: false,
+      val: false,
+      Seconds: 0,
+      videoURL: "",
+      materialKeyArray: []
     };
   },
   computed: {
@@ -197,6 +244,16 @@ export default {
           cooked: false
         });
       }
+    },
+    changeURL(value) {
+      console.log("hoge");
+      console.log(value);
+      this.videoURL =
+        "https://www.youtube.com/embed/" +
+        this.key +
+        "?start=" +
+        value +
+        "&autoplay=1";
     }
     // setYoutuberKey(value) {
     //   SessionStorage.set("YoutuberKey", value);
@@ -258,17 +315,26 @@ export default {
   mounted() {
     this.getUserReviews();
     // this.checkIfFavorite();
+    if (this.cookVideos[this.key].materials) {
+      this.materialNameArray = Object.keys(this.cookVideos[this.key].materials);
+      console.log(this.cookVideos[this.key].materials);
+    }
   },
   created() {
     this.key = getParam("key");
+    this.videoURL = "https://www.youtube.com/embed/" + getParam("key");
     if (this.cookVideos[this.key]) {
       this.starPoint = this.cookVideos[this.key].starPoint;
       // this.checkWritedReview();
     }
+    // Object.keys(cookVideos[key].materials).sort(function(a, b) {
+    //   return a > b ? 1 : -1;
+    // });
+    // this.materialKeyArray = Object.keys(cookVideos[key].materials);
   }
 };
 </script>
-<style scoped>
+<style scoped lang='scss'>
 .back_button {
   height: 24px;
   display: flex;
@@ -291,28 +357,45 @@ export default {
   width: 50%;
   /* background: green; */
 }
+
 .CookVideoWrapperDownRight {
   width: 48%;
   height: 300px;
   /* background: orange; */
 }
 .cookDetailPageVideoTitle {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
-  height: 50px;
+  max-height: 40px;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 .CookVideoDetail {
   padding: 10px;
+  .q-item {
+    height: 80px;
+  }
+
+  .howtoLeft {
+    width: 50px;
+    height: 25px;
+    flex: none;
+  }
+  .howtoRight {
+    width: 269px;
+    height: 25px;
+    flex: none;
+  }
 }
 .cookDetailPageVideoTitleWrapper {
   padding: 5px;
+  width: 100%;
 }
 .StarWrapperVideoDetailPage {
-  margin-top: 15px;
+  margin-top: 1px;
   display: flex;
   justify-content: start;
-  margin-left: 80px;
+  /* margin-left: 80px; */
   /* background: rgb(147, 143, 143); */
 }
 .tagsWrapperVideoDetailPage {
@@ -328,9 +411,17 @@ export default {
 }
 .price-buy-detail {
   width: 100%;
-  height: 280px;
+  height: 500px;
   font-size: 15px;
   color: rgb(89, 87, 87);
+  background-color: rgb(248, 251, 254);
+}
+.price-buy-detailMaterial {
+  width: 100%;
+  height: 500px;
+  font-size: 15px;
+  color: rgb(89, 87, 87);
+  background-color: rgb(254, 249, 254);
 }
 /* .price-buy-detail {
   height: 400px;
@@ -365,10 +456,10 @@ export default {
 } */
 /* お気に入り星の数表示 */
 .favoriteNum {
-  font-size: 21px;
+  font-size: 15px;
   font-weight: bold;
   margin-left: 10px;
-  margin-top: 1px;
+  margin-top: 0px;
 }
 /* 右側のDetailのランの文字 */
 .infoWrapper {
@@ -406,6 +497,35 @@ export default {
   margin: auto;
   margin-top: 70px;
   max-width: 945px;
+}
+.videoTitleAndName {
+  width: 85%;
+}
+.recepieDetailWrapper {
+  border: 0px;
+}
+.materialItem {
+  width: 150px;
+}
+
+.materialcheck {
+  height: 25px;
+}
+.receipeWrapper {
+  width: 98%;
+  margin-right: auto;
+  margin-left: auto;
+  /* background: green; */
+  min-height: 260px;
+  margin-top: 20px;
+  padding: 5px;
+  background: rgb(252, 246, 247);
+  color: #111111;
+  .q-item__section--main {
+    width: 138px;
+    height: 25px;
+    flex: none;
+  }
 }
 @media screen and (min-width: 821px) and (max-width: 1022px) {
   .userReview_wrapper {
@@ -578,6 +698,25 @@ export default {
   .userReview_wrapper {
     width: 360px;
     margin-left: 8px;
+  }
+}
+@media screen and (min-width: 949px) {
+  .avatorMedium {
+    display: none;
+  }
+  .avatorSmall {
+    display: none;
+  }
+}
+@media screen and (min-width: 500px) and (max-width: 948px) {
+  .avatorLarge {
+    display: none;
+  }
+  .avatorSmall {
+    display: none;
+  }
+  .videoTitleAndName {
+    width: 78%;
   }
 }
 </style>
