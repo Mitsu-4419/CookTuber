@@ -14,17 +14,20 @@ export default {
     ...mapActions("tags", ["getTags"]),
     ...mapActions("menuTag", ["getMenuTag"]),
     ...mapActions("materialTag", ["getMaterialTag"]),
+    ...mapActions("genreTag", ["getGenreTag"]),
     ...mapActions("videos", ["getAllCookingVideos"]),
-    ...mapActions("youtubers", ["getYoutubers_info"])
+    ...mapActions("youtubers", ["getYoutubers_info"]),
+    ...mapActions("timeTag", ["getTimeTag"])
   },
   created() {
+    this.getAllCookingVideos();
     this.handleAuthStateChange();
     this.getUsersPublicProfile();
-    this.getTags();
-    this.getAllCookingVideos();
+    this.getGenreTag();
     this.getYoutubers_info();
     this.getMenuTag();
     this.getMaterialTag();
+    this.getTimeTag();
   }
 };
 </script>

@@ -26,7 +26,7 @@
             :rules="[val => !!val || '* 料理のReviewを入力してください']"
           />
         </div>
-        <div class="tagInputWrapper">
+        <!-- <div class="tagInputWrapper">
           <div class="tagSelectBox" clickable @click="tagSelectModal=true">
             <span>タグを選んでください（複数可）</span>
             <div class="row">
@@ -118,7 +118,7 @@
               </q-card>
             </q-popup-proxy>
           </div>
-        </div>
+        </div>-->
         <q-card-section class>投稿したレビューはマイページで確認できます</q-card-section>
         <q-card-actions align="right" class="q-mt-md">
           <q-btn color="green-13" type="submit">
@@ -142,9 +142,9 @@ export default {
     return {
       writeReview: false,
       text: "",
-      ratingModel: 1,
-      tagArray: [],
-      tagSelectModal: false
+      ratingModel: 1
+      // tagArray: [],
+      // tagSelectModal: false
     };
   },
   computed: {
@@ -169,14 +169,14 @@ export default {
     },
     submitReview() {
       // tagのValueを再びKeyに変更する
-      let TagArray = [];
-      for (let j = 0; j < this.tagArray.length; j++) {
-        Object.keys(this.allTags).forEach(key => {
-          if (this.tagArray[j].tagName == this.allTags[key].tagName) {
-            TagArray.push(key);
-          }
-        });
-      }
+      // let TagArray = [];
+      // for (let j = 0; j < this.tagArray.length; j++) {
+      //   Object.keys(this.allTags).forEach(key => {
+      //     if (this.tagArray[j].tagName == this.allTags[key].tagName) {
+      //       TagArray.push(key);
+      //     }
+      //   });
+      // }
       // VideoId をURLから取り出す
       let splicedURL1 = this.registerURL.split("&")[0];
       let videoId = splicedURL1.split("v=")[1];

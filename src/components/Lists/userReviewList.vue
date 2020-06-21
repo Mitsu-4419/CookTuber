@@ -5,7 +5,6 @@
         <img :src="review.photoURL" />
       </q-avatar>
     </q-item-section>
-
     <q-item-section>
       <q-item-label class="listNickName">{{ review.nickName }}</q-item-label>
       <q-item-label class="listReview">{{ review.review }}</q-item-label>
@@ -97,7 +96,7 @@ export default {
 .reviewList {
   margin: 10px 5px;
   // background: red;
-  width: 480px; /* border: 1px solid black; */
+  width: 90%; /* border: 1px solid black; */
   background: rgb(250, 250, 250);
   .listNickName {
     font-size: 11px;

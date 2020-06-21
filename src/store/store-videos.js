@@ -1,7 +1,6 @@
-import * as firebase from "firebase/app";
-import { firestoreDb } from "src/boot/firebase";
+import { firestoreDb, firestorebase } from "src/boot/firebase";
 import Vue from "vue";
-import { arrayIncludedOrNot } from "src/functions/arrayIncludedOrNot";
+import axios from "axios";
 const state = {
   cookVideos: {}
 };
@@ -18,30 +17,14 @@ const mutations = {
     state.cookVideos[payload.id].starPoint =
       Number(state.cookVideos[payload.id].starPoint) +
       Number(payload.starPoint);
-    Vue.set(state.cookVideos[payload.id], "tagArray", payload.tagArray);
-  },
-  // ==========================
-  // MypageからVideo情報変更
-  // ==========================
-  reduceTagsMutate(state, payload) {
-    Vue.set(
-      state.cookVideos[payload.id].tagMap,
-      payload.key,
-      state.cookVideos[payload.id].tagMap[payload.key]--
-    );
-  },
-  addTagsMutate(state, payload) {
-    Vue.set(
-      state.cookVideos[payload.id].tagMap,
-      payload.key,
-      state.cookVideos[payload.id].tagMap[payload.key]++
-    );
-  },
-  addNewTagsMutate(state, payload) {
-    Vue.set(state.cookVideos[payload.id].tagMap, payload.key, 1);
   },
   updateVideoDataMutate(state, payload) {
     Vue.set(state.cookVideos[payload.id], "starPoint", payload.starPoint);
+  },
+  deleteVideoDataMutate(state, payload) {
+    Number(state.cookVideos[payload.favoriteVTRvideoID].registerCount) - 1;
+    Number(state.cookVideos[payload.favoriteVTRvideoID].starPoint) -
+      Number(payload.star_number);
   }
 };
 
@@ -51,23 +34,34 @@ const actions = {
   // ーーーーーーーーーーー
   async getAllCookingVideos({ commit }) {
     const sp = await firestoreDb.collection("video_info").get();
-    sp.forEach(doc => {
+    sp.forEach(async doc => {
       let payload = {
         id: doc.id,
         obj: doc.data()
       };
-      // console.log(payload);
       commit("setAllCookingVideosMutation", payload);
+      // const res = await axios.get(
+      //   "https://www.googleapis.com/youtube/v3/videos",
+      //   {
+      //     params: {
+      //       key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
+      //       id: doc.id,
+      //       part: "statistics"
+      //     }
+      //   }
+      // );
+      // firestoreDb
+      //   .collection("video_info")
+      //   .doc(doc.id)
+      //   .update({
+      //     viewCount: res.data.items[0].statistics.viewCount
+      //   });
     });
   },
   // ーーーーーーーーーーー
   // Video情報を追加する
   // ーーーーーーーーーーー
   async addVideoData({ commit }, payload) {
-    let tagMap = {};
-    for (let k = 0; k < payload.selectedTags.length; k++) {
-      tagMap[payload.selectedTags[k]] = 1;
-    }
     if (!Object.keys(state.cookVideos).includes(payload.favoriteVTRvideoID)) {
       const snippet = payload.snippet;
       firestoreDb
@@ -83,7 +77,7 @@ const actions = {
           registerCount: 1,
           // 星の点数を加算していく
           starPoint: Number(payload.star_number),
-          tagMap: tagMap,
+          // tagMap: tagMap,
           videoId: payload.favoriteVTRvideoID
         });
       let PAYLOAD = {
@@ -95,61 +89,26 @@ const actions = {
         thumbnail: snippet.thumbnails.medium.url,
         registerCount: 1,
         starPoint: Number(payload.star_number),
-        tagMap: tagMap,
+        // tagMap: tagMap,
         videoId: payload.favoriteVTRvideoID
       };
       commit("addVideoInfoMutate", PAYLOAD);
     } else {
-      // ビデオがすでに登録してあった場合
-      // Stateからすでに登録しているTagを取ってきて、それ以外をUpDateするようにする
-      let videoTagMap = state.cookVideos[payload.favoriteVTRvideoID].tagMap;
-      // ビデオが登録してあったけどTagは付いていなかった時
-      if (!videoTagMap) {
-        firestoreDb
-          .collection("video_info")
-          .doc(payload.favoriteVTRvideoID)
-          .update({
-            registerCount: firestorebase.FieldValue.increment(1),
-            // 星の点数を加算していく
-            starPoint: firestorebase.FieldValue.increment(
-              Number(payload.star_number)
-            ),
-            tagMap: tagMap
-          });
-        let payloaded = {
-          id: payload.favoriteVTRvideoID,
-          starPoint: Number(payload.star_number),
-          tagMap: tagMap
-        };
-        commit("uploadVideoMutate", payloaded);
-      } else {
-        // 今回選ばれたタグの配列
-        let selectedArray = payload.selectedTags;
-        for (let t = 0; t < selectedArray.length; t++) {
-          if (Object.keys(tagMap).includes(selectedArray[t])) {
-            tagMap[selectedArray[t]]++;
-          } else {
-            tagMap[selectedArray[t]] = 1;
-          }
-        }
-        firestoreDb
-          .collection("video_info")
-          .doc(payload.favoriteVTRvideoID)
-          .update({
-            registerCount: firestorebase.FieldValue.increment(1),
-            // 星の点数を加算していく
-            starPoint: firestorebase.FieldValue.increment(
-              Number(payload.star_number)
-            ),
-            tagMap: tagMap
-          });
-        let payloaded = {
-          id: payload.favoriteVTRvideoID,
-          starPoint: Number(payload.star_number),
-          tagMap: tagMap
-        };
-        commit("uploadVideoMutate", payloaded);
-      }
+      firestoreDb
+        .collection("video_info")
+        .doc(payload.favoriteVTRvideoID)
+        .update({
+          registerCount: firestorebase.FieldValue.increment(1),
+          // 星の点数を加算していく
+          starPoint: firestorebase.FieldValue.increment(
+            Number(payload.star_number)
+          )
+        });
+      let payloaded = {
+        id: payload.favoriteVTRvideoID,
+        starPoint: Number(payload.star_number)
+      };
+      commit("uploadVideoMutate", payloaded);
     }
   },
   // ====================================
@@ -194,29 +153,6 @@ const actions = {
   //  MyPageからVideoDataの変更をする
   // ======================================
   async updateVideoData({ commit }, payload) {
-    // まず最初に付いていてタグを減算してから、新しくつけたタグを加える
-    let TAGMAP = state.cookVideos[payload.favoriteVTRvideoID].tagMap;
-    let arrayBefore = payload.beforeTags;
-    for (let l = 0; l < arrayBefore.length; l++) {
-      let puyload = {
-        id: payload.favoriteVTRvideoID,
-        key: arrayBefore[l]
-      };
-      commit("reduceTagsMutate", puyload);
-    }
-    // 次に新しくつけたタグを加算していく
-    let arrayAfter = payload.selectedTags;
-    for (let o = 0; o < arrayBefore.length; o++) {
-      let poyload = {
-        id: payload.favoriteVTRvideoID,
-        key: arrayAfter[o]
-      };
-      if (Object.keys(TAGMAP).includes(arrayAfter[o])) {
-        commit("addTagsMutate", poyload);
-      } else {
-        commit("addNewTagsMutate", poyload);
-      }
-    }
     // 次に星の計算をする
     let changeAmount =
       Number(payload.star_number) - Number(payload.beforeStarNumber);
@@ -227,6 +163,18 @@ const actions = {
       id: payload.favoriteVTRvideoID
     };
     commit("updateVideoDataMutate", payyload);
+  },
+  async deleteVideoData({ commit }, payload) {
+    commit("deleteVideoDataMutate", payload);
+    firestoreDb
+      .collection("video_info")
+      .doc(payload.favoriteVTRvideoID)
+      .update({
+        registerCount: firestorebase.FieldValue.increment(-1),
+        starPoint: firestorebase.FieldValue.increment(
+          -Number(payload.star_number)
+        )
+      });
   }
 };
 
@@ -244,91 +192,15 @@ const getters = {
       }
     });
     let array = Object.values(newVideos);
-    array.sort(function(a, b) {
-      if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
-      if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
-      return 0;
-    });
-    let returnObject = {};
-    for (let i in array) {
-      returnObject[array[i].videoId] = newVideos[array[i].videoId];
-    }
-    return returnObject;
-  },
-  // tagの配列が送られた時にTagに基づいてソートしてObjを返す
-  // ==============
-  // Getttersを使ってやると、うまくいかなかったためあえて上記の関数を繰り返し記述している
-  // =============
-  sortByTagOfCookVideos: state => payload => {
-    const Videos = state.cookVideos;
-    // channelIdと星を１対１に対応したObjの配列をつく
-    let newVideoObj = {};
-    Object.keys(Videos).forEach(key => {
-      if (Videos[key].registerCount > 0) {
-        let averageStar =
-          Number(Videos[key].starPoint) / Number(Videos[key].registerCount);
-        Videos[key]["AverageStar"] = averageStar;
-        newVideoObj[key] = Videos[key];
-      }
-    });
-    let array = Object.values(newVideoObj);
-    array.sort(function(a, b) {
-      if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
-      if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
-      return 0;
-    });
-    let returnObject = {};
-    for (let i in array) {
-      returnObject[array[i].videoId] = newVideoObj[array[i].videoId];
-    }
-    let videos = returnObject;
-    if (payload.length == 0) {
-      return videos;
-    } else {
-      let resultObject = {};
-      Object.keys(videos).forEach(key => {
-        if (arrayIncludedOrNot(payload, Object.keys(videos[key].tagMap))) {
-          // いくつか選ばれたタグのスコアを加算していくためにScoreという項目をつくる
-          videos[key]["score"] = 0;
-          for (let j in payload) {
-            // tagがVideoに紐づけられていたらScoreをつける、逆にTagが付いていなかったらvideoから外す
-            if (Object.keys(videos[key].tagMap).includes(payload[j])) {
-              videos[key]["score"] += Number(videos[key]["tagMap"][payload[j]]);
-            }
-          }
-          resultObject[key] = videos[key];
-        }
-      });
-      // let Array = Object.values(resultObject);
-      // Array.sort(function(a, b) {
-      //   if (Number(a.score) < Number(b.score)) return 1;
-      //   if (Number(a.score) > Number(b.score)) return -1;
-      //   return 0;
-      // });
-      // let ReturnObject = {};
-      // for (let i in Array) {
-      //   ReturnObject[Array[i].videoId] = resultObject[Array[i].videoId];
-      // }
-      // console.log(ReturnObject);
-      return resultObject;
-    }
-  },
-  sortByTagOfCookVideosTop5: (state, getters) => payload => {
-    console.log(payload);
-    let videoObj = getters.sortByTagOfCookVideos(payload);
-    let keyArray = [];
-    for (let i = 0; i < 5; i++) {
-      keyArray.push(Object.keys(videoObj)[i]);
-    }
     let returnObj = {};
-    for (let j in keyArray) {
-      let KEY = keyArray[j];
-      returnObj[KEY] = videoObj[KEY];
-      if (returnObj[KEY]) {
-        returnObj[KEY]["rankInfo"] = Number(j) + 1;
-      }
+    array.sort(function(a, b) {
+      if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
+      if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
+      return 0;
+    });
+    for (let k in array) {
+      returnObj[array[k].videoId] = array[k];
     }
-    console.log(returnObj);
     return returnObj;
   },
   // ==============================
@@ -349,13 +221,9 @@ const getters = {
   // ===============================
   getTop5VideoAtTopPage: (state, getters) => {
     let videoObj = getters.CookVideoStarOrder;
-    let keyArray = [];
-    for (let i = 0; i < 5; i++) {
-      keyArray.push(Object.keys(videoObj)[i]);
-    }
     let returnObj = {};
-    for (let j in keyArray) {
-      let KEY = keyArray[j];
+    for (let j = 0; j < 5; j++) {
+      let KEY = Object.keys(videoObj)[j];
       returnObj[KEY] = videoObj[KEY];
       if (returnObj[KEY]) {
         returnObj[KEY]["rankInfo"] = Number(j) + 1;

@@ -2,7 +2,7 @@
   <div>
     <q-card class="videoReviewCard q-pa-sm">
       <router-link :to="{ name: 'video', query: { key: reviewInfo.videoId} }" class="myCardWrapper">
-        <div class="row" style="width:100%;height:180px;" v-if="cookVideos[reviewInfo.videoId]">
+        <div class="row" style="width:100%;height:138px;" v-if="cookVideos[reviewInfo.videoId]">
           <div class="MyPageThumbnailWrapper">
             <q-img
               class="MyPageThumbnail"
@@ -11,64 +11,70 @@
             ></q-img>
           </div>
           <div class="videoTitleWrapperWrapperMypageCooked column">
-            <div class="videoTitleWrapper">
-              <span class="videoTitle-mypage">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
-            </div>
-            <div class="row videoChannelNameWrapper">
-              <q-space />
-              <span class="videoChannelName-Mypage">{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
-            </div>
-            <div class="StarWrapperMypage">
-              <star-rating
-                :read-only="true"
-                v-model="starPoint"
-                :star-size="21"
-                :increment="0.1"
-                :padding="8"
-                active-color="#ffd400"
-                text-class="custom-Text"
-              ></star-rating>
-            </div>
-            <div class="tagsWrapperMyPageCooked" v-if="reviewInfo">
-              <q-chip
-                size="xs"
-                v-for="tag in reviewInfo.tagArray"
-                :key="tag"
-              >{{allTags[tag].tagName}}</q-chip>
-            </div>
-            <div class="row bottomsWrapper">
-              <q-space></q-space>
-              <div class="likeCountWrapper">
-                <q-icon
-                  name="fas fa-utensils"
-                  size="1.3em"
-                  :class="cooked == true ? 'cookActive' : 'cookNonActive'"
-                  @click.prevent="ShowReviewMakeModal()"
-                />
-                <span class="favoriteLikeNumber">{{cookVideos[reviewInfo.videoId].registerCount}}</span>
-                <!-- <span class="favoriteNumber" style="color:black">0</span> -->
+            <div style="margin-top:auto;margin-bottom:auto;">
+              <div class="videoTitleWrapper">
+                <span class="videoTitle-mypage">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
               </div>
-              <div class="likeCountWrapper row">
-                <q-icon
-                  name="fas fa-thumbs-up"
-                  size="1.3em"
-                  :class="userLike == true ? 'likeActive' : 'likeNonActive'"
-                  @click.prevent="addDecreaseLike()"
-                />
-                <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
+              <div class="row videoChannelNameWrapper">
+                <q-space />
+                <span
+                  class="videoChannelName-Mypage"
+                >{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
               </div>
-              <div class="editButtontWrapper" v-show="userOrNot">
-                <q-icon
-                  name="edit"
-                  size="1.3em"
-                  class="editIcon"
-                  @click.prevent="editReviewModal = true"
-                ></q-icon>
+              <div class="StarWrapperMypage mypage-starRating-large">
+                <star-rating
+                  :read-only="true"
+                  v-model="starPoint"
+                  :star-size="21"
+                  :increment="0.1"
+                  :padding="8"
+                  active-color="#ffd400"
+                  text-class="custom-Text"
+                ></star-rating>
+              </div>
+              <div class="StarWrapperMypage mypage-starRating-small">
+                <star-rating
+                  :read-only="true"
+                  v-model="starPoint"
+                  :star-size="18"
+                  :increment="0.1"
+                  :padding="4"
+                  active-color="#ffd400"
+                  text-class="custom-Text"
+                ></star-rating>
+              </div>
+              <div class="row bottomsWrapper">
+                <q-space></q-space>
+                <div class="likeCountWrapper">
+                  <q-icon
+                    name="fas fa-utensils"
+                    size="1.3em"
+                    :class="cooked == true ? 'cookActive' : 'cookNonActive'"
+                    @click.prevent="ShowReviewMakeModal()"
+                  />
+                  <span class="favoriteLikeNumber">{{cookVideos[reviewInfo.videoId].registerCount}}</span>
+                </div>
+                <div class="likeCountWrapper row">
+                  <q-icon
+                    name="fas fa-thumbs-up"
+                    size="1.3em"
+                    :class="userLike == true ? 'likeActive' : 'likeNonActive'"
+                    @click.prevent="addDecreaseLike()"
+                  />
+                  <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
+                </div>
+                <div class="editButtontWrapper" v-show="userOrNot">
+                  <q-icon
+                    name="edit"
+                    size="1.3em"
+                    class="editIcon"
+                    @click.prevent="editReviewModal = true"
+                  ></q-icon>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
         <div class="reviewWrapperMyPage">
           <div class="reviewMyPageCooked">{{reviewInfo.review}}</div>
           <div class="row">
@@ -88,6 +94,7 @@
         :videoId="reviewInfo.videoId"
         @closeModal="editReviewModal = false"
         :docId="docId"
+        flag="cooked"
       />
     </q-dialog>
     <!-- 料理を作ったのか、これからつくるかのModal -->
@@ -206,17 +213,6 @@ export default {
           cooked: false,
           docId: this.docId
         });
-        // this.addNewVideoData({
-        //   uid: this.userId,
-        //   favoriteVTRvideoID: this.reviewInfo.videoId,
-        //   snippet: this.Snippet
-        // });
-        // this.addNewYoutuberInfo({
-        //   uid: this.userId,
-        //   channelId: this.Snippet.channelId,
-        //   favoriteVTRvideoID: this.VideoId,
-        //   snippet: this.Snippet
-        // });
       }
     }
   },
@@ -244,8 +240,7 @@ export default {
   color: black;
 }
 .videoReviewCard {
-  width: 476px;
-  height: 285px;
+  height: 245px;
   /* max-width: 600px; */
   margin-right: 5px;
   margin-bottom: 5px;
@@ -299,7 +294,6 @@ export default {
   margin-top: 4px;
   color: rgb(121, 118, 118);
 }
-
 .bottomsWrapper {
   /* display: flex; */
   margin-top: 8px;
@@ -339,16 +333,18 @@ export default {
 }
 .reviewWrapperMyPage {
   padding: 5px;
-  width: 95%;
-  height: 85px;
+  width: 100%;
+  height: 89px;
   font-size: 14px;
   margin-right: auto;
   margin-left: auto;
-  background: rgb(242, 241, 241);
+  margin-top: 5px;
+  background: rgb(250, 249, 249);
 }
 .reviewMyPageCooked {
   height: 55px;
   width: 100%;
+  padding: 5px;
 }
 .tagsWrapperMyPageCooked {
   padding-left: 3px;
@@ -378,7 +374,7 @@ export default {
   font-size: 12px;
   color: #5d5e61;
 }
-@media screen and (min-width: 768px) and (max-width: 1184px) {
+@media screen and (min-width: 1125px) and (max-width: 1184px) {
   .reviewCardRight {
     width: 188px;
     height: 275px；;
@@ -387,13 +383,45 @@ export default {
     width: 434px;
   }
 }
-@media screen and (min-width: 400px) and (max-width: 767px) {
+@media screen and (min-width: 1125px) {
+  .mypage-starRating-small {
+    display: none;
+  }
+}
+@media screen and (min-width: 1000px) and (max-width: 1124px) {
+  .reviewCardRight {
+    width: 240px;
+    height: 275px；;
+  }
+  .videoReviewCard {
+    width: 380px;
+  }
+  .mypage-starRating-large {
+    display: none;
+  }
+}
+@media screen and (min-width: 769px) and (max-width: 999px) {
   .reviewCardRight {
     width: 240px;
     height: 275px；;
   }
   .videoReviewCard {
     width: 500px;
+  }
+  .mypage-starRating-small {
+    display: none;
+  }
+}
+@media screen and (min-width: 500px) and (max-width: 768px) {
+  .reviewCardRight {
+    width: 240px;
+    height: 275px；;
+  }
+  .videoReviewCard {
+    width: 480px;
+  }
+  .mypage-starRating-small {
+    display: none;
   }
 }
 </style>

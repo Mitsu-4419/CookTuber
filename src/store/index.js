@@ -2,9 +2,10 @@ import Vue from "vue";
 import Vuex from "vuex";
 import auth from "./store-auth.js";
 import usersPublic from "./store-usersPublic.js";
-import tags from "./store-tags.js";
 import materialTag from "./store-materialTag.js";
 import menuTag from "./store-menuTag.js";
+import genreTag from "./store-genreTag.js";
+import timeTag from "./store-timeTag.js";
 import youtubers from "./store-youtubers.js";
 import videos from "./store-videos.js";
 // import example from './module-example'
@@ -26,11 +27,12 @@ export default function(/* { ssrContext } */) {
       // example
       auth,
       usersPublic,
-      tags,
       youtubers,
       videos,
       menuTag,
-      materialTag
+      materialTag,
+      genreTag,
+      timeTag
     },
 
     // enable strict mode (adds overhead!)

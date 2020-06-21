@@ -29,16 +29,15 @@
         </div>
       </router-link>
     </q-card>
-
     <!-- レビューの編集モーダル -->
     <q-dialog v-model="EditReviewModal">
       <editReviewInfoModal
         :review="reviewInfo.review"
-        :tagArray="reviewInfo.tagArray"
         :starPoint="Number(reviewInfo.star_number)"
         :videoId="reviewInfo.videoId"
         @closeModal="EditReviewModal = false"
         :docId="docId"
+        flag="nonCooked"
       />
     </q-dialog>
   </div>
@@ -61,8 +60,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("videos", ["cookVideos"]),
-    ...mapState("tags", ["allTags"])
+    ...mapState("videos", ["cookVideos"])
   },
   actions: {
     ...mapActions("usersPublic", ["changeReviewInfo"])
@@ -71,7 +69,6 @@ export default {
     this.starPoint = Number(this.reviewInfo.star_number);
     this.videoKey = this.reviewInfo.videoId;
     this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
-    console.log(this.userOrNot);
   },
   components: {
     editReviewInfoModal: require("components/EditReviewCard/editReviewModal.vue")
@@ -151,5 +148,10 @@ export default {
 .timeDisplayNonCook {
   color: rgb(109, 108, 108);
   margin-left: 10px;
+}
+@media screen and (min-width: 500px) and (max-width: 839px) {
+  .videoNonCookedReviewCard {
+    width: 230px;
+  }
 }
 </style>

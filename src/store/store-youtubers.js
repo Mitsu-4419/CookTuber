@@ -74,7 +74,6 @@ const actions = {
           }
         }
       );
-      // AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s
       const url = Data.data.items[0].snippet.thumbnails.default.url;
       const name = Data.data.items[0].snippet.title;
       const description = Data.data.items[0].snippet.description;
@@ -150,7 +149,6 @@ const actions = {
           }
         }
       );
-      // AIzaSyA7kq_sOzjdxusYJ_K3hm1d7HMAVYEGK_s
       const url = Data.data.items[0].snippet.thumbnails.default.url;
       const name = Data.data.items[0].snippet.title;
       const description = Data.data.items[0].snippet.description;
@@ -231,31 +229,18 @@ const getters = {
         return 0;
       });
     }
-    let sortedYoutubers = {};
-    for (let i = 0; i < array.length; i++) {
-      sortedYoutubers[array[i].id] = array[i];
-      if (sortedYoutubers[array[i].id]) {
-        sortedYoutubers[array[i].id]["rankInfo"] = Number(i) + 1;
-      }
-    }
-    return sortedYoutubers;
+    return array;
   },
   // トップページでトップ５の高評価Youtuberの表示
   getTop5Youtuber: (state, getters) => {
-    let videoObj = getters.getSortedYoutubers("高評価が多い順");
+    let videoArray = getters.getSortedYoutubers("高評価が多い順");
     let keyArray = [];
     for (let i = 0; i < 5; i++) {
-      keyArray.push(Object.keys(videoObj)[i]);
-    }
-    let returnObj = {};
-    for (let j in keyArray) {
-      let KEY = keyArray[j];
-      returnObj[KEY] = videoObj[KEY];
-      if (returnObj[KEY]) {
-        returnObj[KEY]["rankInfo"] = Number(j) + 1;
+      if (videoArray[i]) {
+        keyArray.push(videoArray[i]);
       }
     }
-    return returnObj;
+    return keyArray;
   },
   // Searchに言語があった時に引っかかったYoutuberをObjectとして返すゲッター
   searchAllYoutubers: state => {

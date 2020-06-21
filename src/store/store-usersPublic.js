@@ -105,6 +105,12 @@ const mutations = {
       "photoURL",
       payload.userPhotoURL
     );
+  },
+  deleteVideoDataMutate(state, payload) {
+    Vue.delete(
+      state.usersPublicInfo[payload.uid]["favoriteVTRObj"],
+      payload.docId
+    );
   }
 };
 
@@ -245,6 +251,15 @@ const actions = {
         cooked: true
       });
   },
+  deleteFavoriteVTR({ commit }, payload) {
+    commit("deleteVideoDataMutate", payload);
+    firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.uid)
+      .collection("favorite_VTR")
+      .doc(payload.docId)
+      .delete();
+  },
   // ーーーーーーーーーーーーーーーーーーーーーーーーーー
   // プロフィールの編集のところ
   // ーーーーーーーーーーーーーーーーーーーーーーーーーー
@@ -321,7 +336,6 @@ const actions = {
   // カードなどからレビューの投稿
   // -----------------------------
   async addFavoriteVTRFromCard({ commit, state }, payload) {
-    console.log("hagehga");
     await firestoreDb
       .collection("userPublicInfo")
       .doc(payload.uid)
@@ -334,7 +348,6 @@ const actions = {
         channelId: payload.channelId,
         LikeArray: [],
         star_number: payload.star_number,
-        tagArray: payload.selectedTags,
         videoId: payload.favoriteVTRvideoID,
         cooked: payload.cooked
       });
@@ -358,7 +371,6 @@ const actions = {
         uid: payload.uid,
         videoId: payload.favoriteVTRvideoID,
         star_number: payload.star_number,
-        tagArray: payload.selectedTags,
         LikeArray: [],
         cooked: payload.cooked
       }
@@ -372,34 +384,36 @@ const getters = {
   getfavoriteCookedObject: state => (userId, tab) => {
     const valueArray = state.usersPublicInfo;
     let userFavoriteObj = valueArray[userId].favoriteVTRObj;
-    let returnObj = {};
     if (tab == "cooked") {
+      let returnObje = {};
       Object.keys(userFavoriteObj).forEach(key => {
         if (userFavoriteObj[key].cooked == true) {
-          returnObj[key] = userFavoriteObj[key];
+          returnObje[key] = userFavoriteObj[key];
         }
       });
-      return returnObj;
+      return returnObje;
     } else if (tab == "NotCooked") {
+      let returnObjo = {};
       Object.keys(userFavoriteObj).forEach(key => {
         if (userFavoriteObj[key].cooked == false) {
-          returnObj[key] = userFavoriteObj[key];
+          returnObjo[key] = userFavoriteObj[key];
         }
       });
-      return returnObj;
+      return returnObjo;
     }
   },
   // ユーザーのObjにユーザーのレビュー数、付いたいいねの総数を入れる処理
   setLikeNumReviewNum: state => {
     const userInfoTotal = state.usersPublicInfo;
     Object.keys(userInfoTotal).forEach(key => {
-      let reviewNum = Number(
-        Object.keys(userInfoTotal[key].favoriteVTRObj).length
-      );
       let obj = userInfoTotal[key].favoriteVTRObj;
+      let reviewNum = 0;
       let LikeNum = 0;
       Object.keys(obj).forEach(id => {
         LikeNum += Number(obj[id].LikeArray.length);
+        if (obj[id].cooked == true) {
+          reviewNum++;
+        }
       });
       userInfoTotal[key]["reviewNum"] = reviewNum;
       userInfoTotal[key]["LikeNumber"] = LikeNum;
@@ -423,25 +437,15 @@ const getters = {
       });
     }
     // トップ２０だけ取り出す
-    let sortedByMany = {};
+    let returnArray = [];
     if (valArray.length < 20) {
-      for (let i = 0; i < valArray.length; i++) {
-        sortedByMany[valArray[i].id] = valArray[i];
-        let KEY = valArray[i].id;
-        if (sortedByMany[KEY]) {
-          sortedByMany[KEY]["rankInfo"] = Number(i) + 1;
-        }
-      }
+      return valArray;
     } else {
       for (let i = 0; i < 20; i++) {
-        sortedByMany[valArray[i].id] = valArray[i];
-        let KEY = valArray[i].id;
-        if (sortedByMany[KEY]) {
-          sortedByMany[KEY]["rankInfo"] = Number(i) + 1;
-        }
+        returnArray.push(valArray[i]);
       }
+      return returnArray;
     }
-    return sortedByMany;
   },
   // -------------------------------
   // topPageでトップレビューワーを取ってくるところ
@@ -466,23 +470,13 @@ const getters = {
       if (Number(a.LikeNumber) > Number(b.LikeNumber)) return -1;
       return 0;
     });
-    let sortedByMany = {};
-    if (valArray.length < 5) {
-      for (let i = 0; i < valArray.length; i++) {
-        sortedByMany[valArray[i].id] = valArray[i];
-      }
-    } else {
-      for (let i = 0; i < 5; i++) {
-        sortedByMany[valArray[i].id] = valArray[i];
+    let KeyArray = [];
+    for (let i = 0; i < 5; i++) {
+      if (valArray[i]) {
+        KeyArray.push(valArray[i]);
       }
     }
-    if (Object.keys(sortedByMany).length == 5) {
-      let array = Object.keys(sortedByMany);
-      for (let j in array) {
-        sortedByMany[array[j]]["rankInfo"] = Number(j) + 1;
-      }
-      return sortedByMany;
-    }
+    return KeyArray;
   },
   makeFavorite_VTRCount: state => {
     let valueArray = Object.values(state.usersPublicInfo);
@@ -504,6 +498,28 @@ const getters = {
     });
     return resultObj;
   },
+  // ==============================
+  // Detailページでレビュー投稿者のFavoriteVideoを取ってくる関数
+  // ===============================
+  getReviewersFavoriteVideos: state => (userArray, pageVideoID) => {
+    const userInfo = state.usersPublicInfo;
+    let allVideoArray = [];
+    for (let i in userArray) {
+      const userFavObj = userInfo[userArray[i]].favoriteVTRObj;
+      const objArray = Object.values(userFavObj);
+      for (let j in objArray) {
+        if (
+          !allVideoArray.includes(objArray[j].videoId) &&
+          objArray[j].videoId !== pageVideoID &&
+          objArray[j].cooked == true
+        ) {
+          allVideoArray.push(objArray[j].videoId);
+        }
+      }
+    }
+    return allVideoArray;
+  },
+
   // ==============================
   // 検索でユーザーを表示する関数
   // ===============================
@@ -528,144 +544,6 @@ const getters = {
     // console.log(returnObject);
     return returnObject;
   }
-  // videolIdごとにレビュー情報を取ってきている
-  // getYoutuberReview: (state, getters) => channelId => {
-  //   const FavoriteCount = getters.makeYoutuberFavoriteCount;
-  //   let resultObj = {};
-  //   Object.keys(FavoriteCount).forEach(key => {
-  //     if (FavoriteCount[key].channelId == channelId) {
-  //       resultObj[key] = FavoriteCount[key];
-  //     }
-  //   });
-  //   return resultObj;
-  // },
-  // userPublicのデータからKeyをDocID、データをお気に入りのデータとしてお気に入りを全て取ってきたオブジェクトを作る
-  // makeYoutuberFavoriteCount: state => {
-  //   let valueArray = Object.values(state.usersPublicInfo);
-  //   let YoutuberFavoriteCountObject = {};
-  //   for (let i = 0; i < valueArray.length; i++) {
-  //     Object.keys(valueArray[i].favoriteYoutuberObj).forEach(key => {
-  //       YoutuberFavoriteCountObject[key] =
-  //         valueArray[i].favoriteYoutuberObj[key];
-  //     });
-  //   }
-  //   return YoutuberFavoriteCountObject;
-  // },
-  // 共通の処理
-  // チャンネルIdとお気に入り数の一対一のオブジェクトを返すGetter
-  // {channelId:'お気に入り数',}
-  // makeNumberArray: state => obj => {
-  //   const NumberObj = {};
-  //   let valueArray = Object.values(obj);
-  //   let keyArray = Object.keys(obj);
-  //   for (let j = 0; j < keyArray.length; j++) {
-  //     let Key = valueArray[j].channelId;
-  //     NumberObj[Key] = 0;
-  //   }
-  //   for (let i = 0; i < valueArray.length; i++) {
-  //     let key = valueArray[i].channelId;
-  //     NumberObj[key]++;
-  //   }
-  //   return NumberObj;
-  // },
-  // NumberObjを良いね数でランキングに並び替える関数
-  // makeRankingObj: state => NumberObj => {
-  //   let ObjArray = [];
-  //   let kkeyArray = Object.keys(NumberObj);
-  //   for (let k = 0; k < kkeyArray.length; k++) {
-  //     let payload = {
-  //       id: kkeyArray[k],
-  //       count: NumberObj[kkeyArray[k]]
-  //     };
-  //     ObjArray.push(payload);
-  //   }
-  //   ObjArray.sort(function(a, b) {
-  //     if (Number(a.count) < Number(b.count)) return 1;
-  //     if (Number(a.count) > Number(b.count)) return -1;
-  //     return 0;
-  //   });
-  //   let rankResultObj = {};
-  //   if (ObjArray.length < 11) {
-  //     for (let q = 0; q < ObjArray.length; q++) {
-  //       let payload = {
-  //         rank: q + 1,
-  //         count: ObjArray[q].count
-  //       };
-  //       rankResultObj[ObjArray[q].id] = payload;
-  //     }
-  //   } else {
-  //     for (let q = 0; q < 10; q++) {
-  //       let payload = {
-  //         rank: q + 1,
-  //         count: ObjArray[q].count
-  //       };
-  //       rankResultObj[ObjArray[q].id] = payload;
-  //     }
-  //   }
-  //   return rankResultObj;
-  // },
-  // 全体の{channelId:'お気に入り数'}のArrrayを返す
-  // getNumberArray: (state, getters) => {
-  //   const FavoriteCount = getters.makeYoutuberFavoriteCount;
-  //   return getters.makeNumberArray(FavoriteCount);
-  // },
-  // getDailyRanking: (state, getters) => {
-  //   const FavoriteCount = getters.makeYoutuberFavoriteCount;
-  //   // 現在時刻を秒で取得
-  //   let date = new Date();
-  //   let a = date.getTime();
-  //   let nowSeconds = Math.floor(a / 1000);
-  //   // 1日は86400秒
-  //   let startSeconds = Number(nowSeconds) - 86400;
-  //   let sortedObj = {};
-  //   Object.keys(FavoriteCount).forEach(key => {
-  //     let regiDate = FavoriteCount[key].createdAt.seconds;
-  //     if (startSeconds < regiDate && regiDate < nowSeconds) {
-  //       sortedObj[key] = FavoriteCount[key];
-  //     }
-  //   });
-  //   let NumBerObj = getters.makeNumberArray(sortedObj);
-  //   return getters.makeRankingObj(NumBerObj);
-  // },
-  // getWeeklyRanking: (state, getters) => {
-  //   const FavoriteCount = getters.makeYoutuberFavoriteCount;
-  //   // 現在時刻を秒で取得
-  //   let date = new Date();
-  //   let a = date.getTime();
-  //   let nowSeconds = Math.floor(a / 1000);
-  //   // 1週間は604800秒
-  //   let startSeconds = Number(nowSeconds) - 604800;
-  //   let sortedObj = {};
-  //   Object.keys(FavoriteCount).forEach(key => {
-  //     let regiDate = FavoriteCount[key].createdAt.seconds;
-  //     if (startSeconds < regiDate && regiDate < nowSeconds) {
-  //       sortedObj[key] = FavoriteCount[key];
-  //     }
-  //   });
-  //   let NumBerObj = getters.makeNumberArray(sortedObj);
-  //   return getters.makeRankingObj(NumBerObj);
-  // },
-  // getMonthlyRanking: (state, getters) => {
-  //   const FavoriteCount = getters.makeYoutuberFavoriteCount;
-  //   // 現在時刻を秒で取得
-  //   let date = new Date();
-  //   let a = date.getTime();
-  //   let nowSeconds = Math.floor(a / 1000);
-  //   // １ヶ月は18144000秒
-  //   let startSeconds = Number(nowSeconds) - 18144000;
-  //   let sortedObj = {};
-  //   Object.keys(FavoriteCount).forEach(key => {
-  //     let regiDate = FavoriteCount[key].createdAt.seconds;
-  //     if (startSeconds < regiDate && regiDate < nowSeconds) {
-  //       sortedObj[key] = FavoriteCount[key];
-  //     }
-  //   });
-  //   let NumBerObj = getters.makeNumberArray(sortedObj);
-  //   return getters.makeRankingObj(NumBerObj);
-  // },
-  // getAllTermRanking: (state, getters) => {
-  //   return getters.makeRankingObj(getters.getNumberArray);
-  // }
 };
 
 export default {

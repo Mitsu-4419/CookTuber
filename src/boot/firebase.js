@@ -34,7 +34,8 @@ let firestorebase = firebase.firestore;
 
 const uiConfig = {
   signInFlow: "redirect",
-  signInSuccessUrl: "http://127.0.0.1:8081/",
+  signInSuccessUrl: "cooktuber.com",
+  // signInSuccessUrl: "http://127.0.0.1:8081/",
   signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
   customParameters: {
     // Forces account selection even when one account

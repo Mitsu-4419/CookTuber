@@ -26,7 +26,7 @@
             :rules="[val => !!val || '* 料理のReviewを入力してください']"
           />
         </div>
-        <div class="tagInputWrapper">
+        <!-- <div class="tagInputWrapper">
           <div class="tagSelectBox" clickable @click="tagSelectModal=true">
             <span>タグを選んでください（複数可）</span>
             <div class="row">
@@ -118,7 +118,7 @@
               </q-card>
             </q-popup-proxy>
           </div>
-        </div>
+        </div>-->
         <q-card-section class>投稿したレビューはマイページで確認できます</q-card-section>
         <q-card-actions align="right" class="q-mt-md">
           <q-btn flat label="キャンセル" color="black" v-close-popup />
@@ -143,9 +143,9 @@ export default {
     return {
       writeReview: false,
       text: "",
-      ratingModel: 1,
-      tagArray: [],
-      tagSelectModal: false
+      ratingModel: 1
+      // tagArray: [],
+      // tagSelectModal: false
     };
   },
   computed: {
@@ -156,37 +156,33 @@ export default {
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTRFromCard"]),
     ...mapActions("videos", ["addVideoData"]),
-    ...mapActions("tags", ["setVideoAtTag"]),
     ...mapActions("youtubers", ["addYoutuberInfoFromCard"]),
     // ...mapActions("youtubers", ["incrementFavorite"]),
-    setTagArray(value) {
-      // すでに配列内にある場合はその要素を外す
-      if (this.tagArray.includes(value)) {
-        let idx = this.tagArray.indexOf(value);
-        this.tagArray.splice(idx, 1);
-      } else {
-        this.tagArray.push(value);
-      }
-    },
+    // setTagArray(value) {
+    //   // すでに配列内にある場合はその要素を外す
+    //   if (this.tagArray.includes(value)) {
+    //     let idx = this.tagArray.indexOf(value);
+    //     this.tagArray.splice(idx, 1);
+    //   } else {
+    //     this.tagArray.push(value);
+    //   }
+    // },
     submitReviewFromCard() {
-      // tagのValueを再びKeyに変更する
-      let TagArray = [];
-      for (let j = 0; j < this.tagArray.length; j++) {
-        Object.keys(this.allTags).forEach(key => {
-          if (this.tagArray[j] == this.allTags[key].tagName) {
-            TagArray.push(key);
-          }
-        });
-      }
-      console.log(TagArray);
+      // // tagのValueを再びKeyに変更する
+      // let TagArray = [];
+      // for (let j = 0; j < this.tagArray.length; j++) {
+      //   Object.keys(this.allTags).forEach(key => {
+      //     if (this.tagArray[j] == this.allTags[key].tagName) {
+      //       TagArray.push(key);
+      //     }
+      //   });
+      // }
+      // console.log(TagArray);
       // VideoId をURLから取り出す
-      let splicedURL1 = this.registerURL.split("&")[0];
-      let videoId = splicedURL1.split("v=")[1];
       this.addFavoriteVTRFromCard({
         uid: this.userId,
         review: this.text,
         favoriteVTRvideoID: this.videoId,
-        selectedTags: TagArray,
         star_number: this.ratingModel,
         channelId: this.channelId,
         cooked: true
@@ -195,28 +191,18 @@ export default {
       this.addVideoData({
         uid: this.userId,
         favoriteVTRvideoID: this.videoId,
-        selectedTags: TagArray,
         star_number: this.ratingModel
       });
       // Youtuber情報を更新する
       this.addYoutuberInfoFromCard({
         uid: this.userId,
-        channelId: this.snippet.channelId,
-        favoriteVTRvideoID: videoId,
-        selectedTags: TagArray,
+        channelId: this.channelId,
+        favoriteVTRvideoID: this.videoId,
         star_number: this.ratingModel,
         channelId: this.channelId
       });
-      // tagがつけられていたらState、Dbを更新する
-      if (this.modelMultiple.length > 0) {
-        // tagのStateの更新をする
-        this.setVideoAtTag({
-          selectedTags: TagArray,
-          videoId: videoId
-        });
-      }
       this.writeReview = false;
-      this.$router.push({ name: "mypage", query: { id: this.userId } });
+      // this.$router.push({ name: "mypage", query: { id: this.userId } });
     }
   },
   mounted() {
