@@ -13,7 +13,6 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "dependencies": {
-    "cc.fovea.cordova.openwith": "^2.0.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-browsertab": "^0.2.0",
     "cordova-plugin-buildinfo": "^4.0.0",
@@ -24,7 +23,6 @@
     "cordova-plugin-inappbrowser": "^4.0.0",
     "cordova-plugin-media": "^5.0.3",
     "cordova-plugin-wkwebview-engine": "^1.2.1",
-    "cordova-universal-links-plugin": "git+https://github.com/walteram/cordova-universal-links-plugin.git",
     "cordova-universal-links-plugin-fix": "^1.2.1"
   },
   "devDependencies": {
@@ -33,7 +31,6 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-universal-links-plugin": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-browsertab": {},
       "cordova-plugin-buildinfo": {},
@@ -44,13 +41,9 @@
         "KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE": "NO"
       },
       "cordova-plugin-wkwebview-engine": {},
+      "cordova-universal-links-plugin": {},
       "cordova-plugin-customurlscheme": {
-        "URL_SCHEME": "shotashimura0619.shareURL"
-      },
-      "cc.fovea.cordova.openwith": {
-        "ANDROID_MIME_TYPE": "image/*",
-        "IOS_URL_SCHEME": "ccfoveaopenwithdemo",
-        "IOS_UNIFORM_TYPE_IDENTIFIER": "public.image"
+        "URL_SCHEME": "com.cooktuber.20200621"
       }
     },
     "platforms": [
