@@ -33,20 +33,11 @@
         </div>
       </div>
       <div class="YoutuberDetailcard-wrapperRIGHT">
-        <!-- <div class="row" @click.prevent="switchFav()">
-          <q-icon
-            v-model="ratingModel"
-            name="fas fa-star"
-            size="1.8em"
-            :class="ratingModel == 1 ? 'starActive' : 'starNonActive'"
-        />-->
-        <!-- <span class="favoriteNum">{{ getNumberArray[key] }}</span> -->
-        <!-- </div> -->
         <div class="row">
           <div class="YoutuberDetail-name">{{ YoutubersChannel_info[key].name }}</div>
         </div>
-        <div class="price-buy-detail q-mt-lg">
-          <q-scroll-area style="height: 200px; max-width: 400px;">
+        <div class="q-mt-lg">
+          <q-scroll-area style="height: 250px; max-width: 450px;">
             <div class="text-body1 text-grey-7">{{ YoutubersChannel_info[key].description }}</div>
           </q-scroll-area>
         </div>
@@ -250,7 +241,7 @@ export default {
 }
 .YoutuberDetailcard-wrapperLEFT {
   min-width: 350px;
-  width: 45%;
+  width: 40%;
   /* margin-right: 48px;
   padding-top: 40px; */
 }
@@ -281,14 +272,14 @@ export default {
   min-width: 340px;
   width: 46%;
   height: 340px;
-  margin: 8px;
+
   padding: 8px;
   justify-content: center;
 }
 .YoutuberDetailcard-img {
   border-radius: 20px;
   margin-top: 15px;
-  width: 80%;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
 }

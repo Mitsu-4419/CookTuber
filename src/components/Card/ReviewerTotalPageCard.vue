@@ -4,19 +4,15 @@
     <!-- TopPage -->
     <!-- ------- -->
     <q-card class="my-ReviewrCard" v-if="usersInfo">
-      <router-link :to="{ name: 'mypage', query: { id: uid } }" class="myCardWrapper">
+      <router-link :to="{ name: 'mypage', query: { id: usersInfo.id } }" class="myCardWrapper">
+        <q-img v-if="rankInfo == 1" class="reviewerrankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
         <q-img
-          v-if="usersInfo.rankInfo == 1"
-          class="reviewerrankIcon"
-          src="statics/rankIcon/crown_gold.png"
-        ></q-img>
-        <q-img
-          v-else-if="usersInfo.rankInfo == 2"
+          v-else-if="rankInfo == 2"
           class="reviewerrankIcon"
           src="statics/rankIcon/crown_silver.png"
         ></q-img>
         <q-img
-          v-else-if="usersInfo.rankInfo == 3"
+          v-else-if="rankInfo == 3"
           class="reviewerrankIcon"
           src="statics/rankIcon/crown_copper.png"
         ></q-img>
@@ -60,29 +56,16 @@
 import { SessionStorage } from "quasar";
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
-  props: ["usersInfo", "uid"],
+  props: ["usersInfo", "id"],
   data() {
-    return {};
+    return {
+      rankInfo: Number(this.id) + 1
+    };
   },
-  computed: {},
   methods: {
     setYoutuberKey(value) {
       SessionStorage.set("YoutuberKey", value);
     }
-  },
-  components: {},
-  mounted() {
-    // if (this.loggedIn) {
-    //   this.userId = Object.values(this.userInfo)[0].id;
-    // }
-  },
-  created() {
-    // this.starModel = this.chkFavoriteTubers();
-    // this.checkWritedReview();
-    // this.checkIfFavorite();
-    // this.starYoutuberGot = Number(
-    //   this.channelInfo.starPoint / this.channelInfo.reviewCount
-    // );
   }
 };
 </script>
@@ -97,9 +80,9 @@ export default {
   position: absolute;
 }
 .my-ReviewrCard {
-  width: 185px;
+  width: 195px;
   height: 238px;
-  margin-right: 15px;
+  margin-right: 10px;
   margin-bottom: 15px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

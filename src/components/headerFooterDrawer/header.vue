@@ -4,9 +4,10 @@
       <q-toolbar-title>
         <div class="row">
           <q-btn flat to="/" class="headerTitleIcon">
-            <q-avatar>
-              <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" />
-            </q-avatar>
+            <q-img
+              src="/statics/Logo/CookTuberLogo.png"
+              style="width:45px;height:38px;"
+            ></q-img>
             <q-toolbar-title>
               <span class="headerTitle">Cook Tuber</span>
             </q-toolbar-title>
@@ -25,26 +26,42 @@
               bottom-slots
               bg-color="white"
               :rules="[
-                  val =>
-                    val.length >= 3 ||
-                    val.length == 0 ||
-                    '３文字以上入力してください'
-                ]"
+                val =>
+                  val.length >= 3 ||
+                  val.length == 0 ||
+                  '３文字以上入力してください'
+              ]"
             >
               <template v-slot:append>
-                <q-icon name="close" @click="searchField = ''" class="cursor-pointer deleteicon" />
+                <q-icon
+                  name="close"
+                  @click="searchField = ''"
+                  class="cursor-pointer deleteicon"
+                />
               </template>
             </q-input>
           </router-link>
         </div>
       </q-toolbar-title>
       <router-link to="/search" style="text-decoration: none;">
-        <q-icon name="fas fa-search" size="sm" color="black" class="searchIcon"></q-icon>
+        <q-icon
+          name="fas fa-search"
+          size="sm"
+          color="black"
+          class="searchIcon"
+        ></q-icon>
       </router-link>
       <!-- 未ログインSTART -->
       <div class="loginWrapper">
         <div v-if="!loggedIn">
-          <q-btn class="newRegisterButton" push color="black" label="新規登録" flat to="/auth/sign_up"></q-btn>
+          <q-btn
+            class="newRegisterButton"
+            push
+            color="black"
+            label="新規登録"
+            flat
+            to="/auth/sign_up"
+          ></q-btn>
           <q-btn
             class="loginButtonLarge"
             push
@@ -70,14 +87,18 @@
             <q-avatar size="md">
               <img :src="LoginUserPublicData['photoURL']" />
             </q-avatar>
-            <q-btn-dropdown color="black" flat :label="LoginUserPublicData['nickName']">
+            <q-btn-dropdown
+              color="black"
+              flat
+              :label="LoginUserPublicData['nickName']"
+            >
               <q-list>
                 <router-link
                   class="routerDec"
                   :to="{
-                      name: 'mypage',
-                      query: { id: userId }
-                    }"
+                    name: 'mypage',
+                    query: { id: userId }
+                  }"
                   exact
                   replace
                 >
@@ -149,7 +170,7 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 /* ヘッダー */
 .headerTitle {
   color: #3c3c3c;
@@ -162,8 +183,7 @@ export default {
   background: #f7f3e8;
 }
 .headerTitleIcon {
-  margin-left: 10px;
-  width: 210px;
+  width: 220px;
 }
 .menuIcon {
   color: #767194;

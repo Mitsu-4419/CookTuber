@@ -1,12 +1,13 @@
-
- <template>
-  <q-layout view="hHh lpr fFf" class="shadow-2 rounded-borders">
+<template>
+  <q-layout view="hHh lpR lFf" class="shadow-2 rounded-borders">
     <headerComponent />
     <drawerComponent />
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-    <footerComponent />
+    <div id="wrapper">
+      <q-page-container>
+        <router-view />
+      </q-page-container>
+      <footerComponent />
+    </div>
   </q-layout>
 </template>
 
@@ -26,9 +27,13 @@ export default {
 };
 </script>
 
-
 <style>
 body {
   color: #3c3c3c;
+}
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 </style>

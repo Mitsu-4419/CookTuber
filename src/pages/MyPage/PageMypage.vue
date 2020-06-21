@@ -11,8 +11,8 @@
           <div class="introduction">{{ usersPublicInfo[pageUserId].introduction }}</div>
         </div>
       </div>
-      <!-- つくったか　これからつくるのかのTAB -->
-      <q-tabs v-model="tab" inline-label>
+      <!-- つくったかこれからつくるのかのTAB -->
+      <q-tabs v-model="tab" inline-label style="margin-top:30px;">
         <q-tab name="cooked" class="cookedTab" icon="fas fa-utensils" label="料理済み"></q-tab>
         <q-tab name="NotCooked" class="cookedTab" icon="fas fa-carrot" label="後で作る" />
       </q-tabs>
@@ -159,7 +159,7 @@ Cardコンポーネントでカードの大きさを指定 */
   }
 }
 /* 画面のサイズが1129以上1280以下の時は横にCard3枚並べる */
-@media screen and (min-width: 768px) and (max-width: 1184px) {
+@media screen and (min-width: 1125px) and (max-width: 1184px) {
   .cookVideoReview {
     width: 878px;
     margin-right: auto;
@@ -167,9 +167,17 @@ Cardコンポーネントでカードの大きさを指定 */
     margin-top: 25px;
   }
 }
-@media screen and (min-width: 400px) and (max-width: 767px) {
+@media screen and (min-width: 1000px) and (max-width: 1124px) {
   .cookVideoReview {
-    width: 505px;
+    width: 770px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 25px;
+  }
+}
+@media screen and (min-width: 500px) and (max-width: 999px) {
+  .cookVideoReview {
+    width: 500px;
     margin-right: auto;
     margin-left: auto;
     margin-top: 25px;
@@ -199,9 +207,17 @@ Cardコンポーネントでカードの大きさを指定 */
     margin-top: 25px;
   }
 }
-@media screen and (min-width: 828px) and (max-width: 1144px) {
+@media screen and (min-width: 840px) and (max-width: 1144px) {
   .NonCookVideoReview {
     width: 610px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 25px;
+  }
+}
+@media screen and (min-width: 500px) and (max-width: 839px) {
+  .NonCookVideoReview {
+    width: 470px;
     margin-right: auto;
     margin-left: auto;
     margin-top: 25px;

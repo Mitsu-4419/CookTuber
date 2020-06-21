@@ -32,7 +32,8 @@ export default {
   props: ["tagName", "id", "TAGArray", "flag"],
   data() {
     return {
-      active: false
+      active: false,
+      menuTagArray: []
     };
   },
   methods: {
@@ -43,6 +44,9 @@ export default {
         this.active = true;
       }
       this.$emit("setActivatedTag", this.id);
+    },
+    resetChip() {
+      this.active = false;
     }
   },
   created() {

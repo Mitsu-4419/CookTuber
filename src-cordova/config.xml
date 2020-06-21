@@ -18,8 +18,23 @@
         <allow-intent href="market:*" />
     </platform>
     <platform name="ios">
+        <allow-navigation href="*" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <preference name="OverrideUserAgent" value="Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Mobile/15E148 Safari/605.1.15" />
+        <allow-navigation href="http://*" />
+        <allow-navigation href="https://*" />
+        <preference name="WKWebViewOnly" value="true" />
+        <feature name="CDVWKWebViewEngine">
+            <param name="ios-package" value="CDVWKWebViewEngine" />
+        </feature>
+        <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+        <universal-links>
+            <host name="https://cooktuber.page.link/toppage" scheme="https" />
+            <host name="cooktuber-e01f1.firebaseapp.com" scheme="https">
+                <path url="/__/auth/callback" />
+            </host>
+        </universal-links>
     </platform>
     <allow-navigation href="about:*" />
 </widget>

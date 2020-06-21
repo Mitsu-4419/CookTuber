@@ -3,76 +3,64 @@ import Vue from "vue";
 import { arrayIncludedOrNot } from "src/functions/arrayIncludedOrNot";
 import { arrayElementIncludeOrNot } from "src/functions/arrayElementIncludeOrNot";
 const state = {
-  menuTag: {}
+  genreTag: {}
 };
 
 const mutations = {
-  getAllMenuTagsMutate(state, payload) {
-    Vue.set(state.menuTag, payload.id, payload.obj);
+  getAllGenreTagsMutate(state, payload) {
+    Vue.set(state.genreTag, payload.id, payload.obj);
   }
 };
 const actions = {
-  async getMenuTag({ commit }) {
-    const snap = await firestoreDb.collection("menuTag").get();
+  async getGenreTag({ commit }) {
+    const snap = await firestoreDb.collection("genreTag").get();
     snap.forEach(doc => {
       let payload = {
         id: doc.id,
         obj: doc.data()
       };
-      commit("getAllMenuTagsMutate", payload);
+      commit("getAllGenreTagsMutate", payload);
     });
   }
 };
 
 const getters = {
-  sortedMenuTag: state => meta => {
-    const alltags = state.menuTag;
-    let returnObj = {};
-    if (meta == "meat") {
+  sortedGenreTag: state => genre => {
+    const alltags = state.genreTag;
+    if (genre == "country") {
+      let returnObj = {};
       Object.keys(alltags).forEach(key => {
-        if (alltags[key].meta == "meat") {
+        if (alltags[key].meta == "country") {
           returnObj[key] = alltags[key];
         }
       });
       return returnObj;
-    } else if (meta == "rice") {
+    } else if (genre == "material") {
+      let returnObj = {};
       Object.keys(alltags).forEach(key => {
-        if (alltags[key].meta == "rice") {
+        if (alltags[key].meta == "material") {
           returnObj[key] = alltags[key];
         }
       });
       return returnObj;
-    } else if (meta == "chinese") {
+    } else if (genre == "special") {
+      let returnObj = {};
       Object.keys(alltags).forEach(key => {
         if (alltags[key].meta == "special") {
           returnObj[key] = alltags[key];
         }
       });
       return returnObj;
-    } else if (meta == "noodle") {
-      Object.keys(alltags).forEach(key => {
-        if (alltags[key].meta == "noodle") {
-          returnObj[key] = alltags[key];
-        }
-      });
-      return returnObj;
-    } else if (meta == "other") {
-      Object.keys(alltags).forEach(key => {
-        if (alltags[key].meta == "other") {
-          returnObj[key] = alltags[key];
-        }
-      });
-      return returnObj;
     }
   },
-  menuSelectedVideo: (state, getters, rootState, rootGetters) => (
+  sortByTagOfCookVideos: (state, getters, rootState, rootGetters) => (
     payload,
     model
   ) => {
-    const rankObj = rootGetters["videos/CookVideoStarOrder"];
     let resultObject = {};
-    if (payload.menuArray.length == 0 && payload.timeMenuArray.length == 0) {
-      let array = Object.values(rankObj);
+    let videos = rootGetters["videos/CookVideoStarOrder"];
+    if (payload.genreArray.length == 0 && payload.timeArray.length == 0) {
+      let array = Object.values(videos);
       if (model == "星の数順") {
         array.sort(function(a, b) {
           if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
@@ -93,13 +81,10 @@ const getters = {
         });
       }
       return array;
-    } else if (
-      payload.menuArray.length > 0 &&
-      payload.timeMenuArray.length == 0
-    ) {
-      Object.keys(rankObj).forEach(key => {
-        if (arrayIncludedOrNot(payload.menuArray, rankObj[key].menuTag)) {
-          resultObject[key] = rankObj[key];
+    } else if (payload.genreArray.length > 0 && payload.timeArray.length == 0) {
+      Object.keys(videos).forEach(key => {
+        if (arrayIncludedOrNot(payload.genreArray, videos[key].genreTag)) {
+          resultObject[key] = videos[key];
         }
       });
       let array = Object.values(resultObject);
@@ -109,31 +94,24 @@ const getters = {
           if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
           return 0;
         });
-        return array;
       } else if (model == "再生回数順") {
         array.sort(function(a, b) {
           if (Number(a.viewCount) < Number(b.viewCount)) return 1;
           if (Number(a.viewCount) > Number(b.viewCount)) return -1;
           return 0;
         });
-        return array;
       } else if (model == "レビュー数多い順") {
         array.sort(function(a, b) {
           if (Number(a.registerCount) < Number(b.registerCount)) return 1;
           if (Number(a.registerCount) > Number(b.registerCount)) return -1;
           return 0;
         });
-        return array;
       }
-    } else if (
-      payload.menuArray.length == 0 &&
-      payload.timeMenuArray.length > 0
-    ) {
-      Object.keys(rankObj).forEach(key => {
-        if (
-          arrayElementIncludeOrNot(payload.timeMenuArray, rankObj[key].timeTag)
-        ) {
-          resultObject[key] = rankObj[key];
+      return array;
+    } else if (payload.genreArray.length == 0 && payload.timeArray.length > 0) {
+      Object.keys(videos).forEach(key => {
+        if (arrayElementIncludeOrNot(payload.timeArray, videos[key].timeTag)) {
+          resultObject[key] = videos[key];
         }
       });
       if (Object.keys(resultObject)) {
@@ -144,33 +122,31 @@ const getters = {
             if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
             return 0;
           });
-          return array;
         } else if (model == "再生回数順") {
           array.sort(function(a, b) {
             if (Number(a.viewCount) < Number(b.viewCount)) return 1;
             if (Number(a.viewCount) > Number(b.viewCount)) return -1;
             return 0;
           });
-          return array;
         } else if (model == "レビュー数多い順") {
           array.sort(function(a, b) {
             if (Number(a.registerCount) < Number(b.registerCount)) return 1;
             if (Number(a.registerCount) > Number(b.registerCount)) return -1;
             return 0;
           });
-          return array;
         }
+        return array;
       } else {
         let MArray = [];
         return MArray;
       }
     } else {
-      Object.keys(rankObj).forEach(key => {
+      Object.keys(videos).forEach(key => {
         if (
-          arrayIncludedOrNot(payload.menuArray, rankObj[key].menuTag) &&
-          arrayElementIncludeOrNot(payload.timeMenuArray, rankObj[key].timeTag)
+          arrayIncludedOrNot(payload.genreArray, videos[key].genreTag) &&
+          arrayElementIncludeOrNot(payload.timeArray, videos[key].timeTag)
         ) {
-          resultObject[key] = rankObj[key];
+          resultObject[key] = videos[key];
         }
       });
       let array = Object.values(resultObject);
@@ -180,27 +156,24 @@ const getters = {
           if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
           return 0;
         });
-        return array;
       } else if (model == "再生回数順") {
         array.sort(function(a, b) {
           if (Number(a.viewCount) < Number(b.viewCount)) return 1;
           if (Number(a.viewCount) > Number(b.viewCount)) return -1;
           return 0;
         });
-        return array;
       } else if (model == "レビュー数多い順") {
         array.sort(function(a, b) {
           if (Number(a.registerCount) < Number(b.registerCount)) return 1;
           if (Number(a.registerCount) > Number(b.registerCount)) return -1;
           return 0;
         });
-        return array;
       }
+      return array;
     }
-    return resultObject;
   },
-  sortByMenuOfCookVideosTop5: (state, getters) => (payload, model) => {
-    let videoObj = getters.menuSelectedVideo(payload, model);
+  sortByTagOfCookVideosTop5: (state, getters) => (payload, model) => {
+    let videoObj = getters.sortByTagOfCookVideos(payload, model);
     let keyArray = [];
     if (videoObj.length > 5) {
       for (let i = 0; i < 5; i++) {
@@ -208,19 +181,8 @@ const getters = {
       }
       return keyArray;
     } else {
-      for (let j = 0; j < videoObj.length; j++) {
-        console.log(videoObj[j]);
-      }
       return videoObj;
     }
-  },
-  allmenuTags: state => {
-    const keyArray = Object.keys(state.menuTag);
-    let returnObj = {};
-    for (let i in keyArray) {
-      returnObj[keyArray[i]] = false;
-    }
-    return returnObj;
   }
 };
 export default {

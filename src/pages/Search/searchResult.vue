@@ -104,8 +104,7 @@ export default {
     ...mapActions("youtubers", ["setSearch"])
   },
   components: {
-    CookVideoCardTopPage: require("components/Card/CookVideoCardTopPage.vue")
-      .default,
+    CookVideoCardTopPage: require("components/Card/CookVideoCard.vue").default,
     CardYoutuber: require("components/Card/CardYoutuber.vue").default,
     ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
       .default

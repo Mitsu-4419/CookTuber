@@ -5,18 +5,14 @@
     <!-- ------- -->
     <q-card class="my-cardYoutuber" v-if="channelInfo">
       <router-link :to="{ name: 'show', query: { key: channelInfo.id } }" class="myCardWrapper">
+        <q-img v-if="rankInfo == 1" class="YoutuberrankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
         <q-img
-          v-if="channelInfo.rankInfo == 1"
-          class="YoutuberrankIcon"
-          src="statics/rankIcon/crown_gold.png"
-        ></q-img>
-        <q-img
-          v-else-if="channelInfo.rankInfo == 2"
+          v-else-if="rankInfo == 2"
           class="YoutuberrankIcon"
           src="statics/rankIcon/crown_silver.png"
         ></q-img>
         <q-img
-          v-else-if="channelInfo.rankInfo == 3"
+          v-else-if="rankInfo == 3"
           class="YoutuberrankIcon"
           src="statics/rankIcon/crown_copper.png"
         ></q-img>
@@ -62,17 +58,6 @@
             ></star-rating>
           </div>
         </q-card-section>
-        <!-- <div class="row">
-          <div class="row favoriteCountWrapper" @click.prevent="switchFav()">
-            <q-icon
-              v-model="ratingModel"
-              name="fas fa-star"
-              size="1.8em"
-              :class="ratingModel == 1 ? 'starActive' : 'starNonActive'"
-        />-->
-        <!-- <span class="favoriteNumber">{{ rankInfo.count }}</span> -->
-        <!-- </div> -->
-        <!-- </div> -->
       </router-link>
     </q-card>
   </div>
@@ -82,10 +67,11 @@
 import { SessionStorage } from "quasar";
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
-  props: ["channelInfo", "channelId"],
+  props: ["channelInfo", "id"],
   data() {
     return {
-      starYoutuberGot: 0
+      starYoutuberGot: 0,
+      rankInfo: Number(this.id) + 1
     };
   },
   computed: {
@@ -105,43 +91,6 @@ export default {
         console.log("nothing");
       }
     },
-    // ユーザーがお気に入り登録しているかどうかの判断
-    // ユーザーがログインしていなかったら全てratingModelを１にする
-    // そのYoutuberに対してログインユーザーが書き込んだレビューを取ってくる
-    // checkIfFavorite() {
-    //   if (this.loggedIn == false) {
-    //     this.ratingModel = 1;
-    //   } else if (this.loggedIn == true) {
-    //     let object = Object.values(this.userInfo)[0].favoriteYoutuberObj;
-    //     let array = [];
-    //     for (let j = 0; j < Object.values(object).length; j++) {
-    //       array.push(Object.values(object)[j].channelId);
-    //     }
-    //     if (array.includes(this.id)) {
-    //       this.ratingModel = 1;
-    //     } else {
-    //       this.ratingModel = 0;
-    //     }
-    //   } else {
-    //     console.log("何らかのエラーが発生しています。");
-    //   }
-    // },
-    // // そのYoutuberに対してログインユーザーが書き込んだレビューを取ってくる
-    // checkWritedReview() {
-    //   let getReview = this.getYoutuberReview(this.channelInfo.id);
-    //   let userReview;
-    //   if (this.loggedIn) {
-    //     Object.keys(getReview).forEach(key => {
-    //       if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
-    //         userReview = getReview[key].review;
-    //         // DocumentId をStateに入れる
-    //         this.documentId = key;
-    //       }
-    //     });
-    //     this.writedReview = userReview;
-    //     // this.ratingModel = 0;
-    //   }
-    // },
     closeReviewSubmi() {
       (this.writeReview = false), (this.ratingModel = 0);
     },
@@ -152,15 +101,7 @@ export default {
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default
   },
-  mounted() {
-    // if (this.loggedIn) {
-    //   this.userId = Object.values(this.userInfo)[0].id;
-    // }
-  },
   created() {
-    // this.starModel = this.chkFavoriteTubers();
-    // this.checkWritedReview();
-    // this.checkIfFavorite();
     if (this.channelInfo) {
       if (this.channelInfo.reviewCount > 0) {
         this.starYoutuberGot = Number(

@@ -21,8 +21,16 @@ const routes = [
         component: () => import("pages/Menu/PageYoutubers.vue")
       },
       {
-        path: "/cookvideos",
-        component: () => import("pages/Menu/CookVideoPage.vue")
+        path: "/genreCookvideos",
+        component: () => import("pages/Menu/genreCookVideoPage.vue")
+      },
+      {
+        path: "/menuCookvideos",
+        component: () => import("pages/Menu/menuCookVideoPage.vue")
+      },
+      {
+        path: "/materialCookvideos",
+        component: () => import("pages/Menu/materialCookVideoPage.vue")
       },
       {
         path: "/show",
@@ -68,15 +76,18 @@ const routes = [
         component: () => import("pages/Menu/NewsPage.vue")
       },
       {
-        path: "/video",
-        component: () => import("pages/VideoDetail/videoDetailPage.vue"),
-        name: "video"
-      },
-      {
         path: "/search",
         component: () => import("pages/Search/searchResult.vue"),
         name: "search",
         props: true
+      },
+      {
+        path: "/privacypolicy",
+        component: () => import("pages/Others/PlivacyPolicyPage.vue")
+      },
+      {
+        path: "/termsOfService",
+        component: () => import("pages/Others/TermsOfServicePage.vue")
       }
     ]
   }

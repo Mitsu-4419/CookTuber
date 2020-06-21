@@ -1,20 +1,43 @@
 <template>
   <div class="cookVideoCard" v-if="cookVideoDetail">
     <router-link
-      :to="{ name: 'video', query: { key:videoId  } }"
+      :to="{ name: 'video', query: { key: cookVideoDetail.videoId } }"
       style="text-decoration:none;color:black;"
     >
-      <q-img id="ytplayer" :src="cookVideoDetail.thumbnail"></q-img>
+      <q-img
+        v-if="rankInfo == 1"
+        class="rankIcon"
+        src="statics/rankIcon/crown_gold.png"
+      ></q-img>
+      <q-img
+        v-else-if="rankInfo == 2"
+        class="rankIcon"
+        src="statics/rankIcon/crown_silver.png"
+      ></q-img>
+      <q-img
+        v-else-if="rankInfo == 3"
+        class="rankIcon"
+        src="statics/rankIcon/crown_copper.png"
+      ></q-img>
+      <q-img
+        id="ytplayer"
+        :src="cookVideoDetail.thumbnail"
+        :ratio="16 / 9"
+      ></q-img>
       <div class="videoDetail">
         <q-avatar
           size="md"
           style="margin-right:10px"
           v-if="YoutubersChannel_info[cookVideoDetail.channelId]"
         >
-          <img :src="YoutubersChannel_info[cookVideoDetail.channelId].iconUrl" />
+          <img
+            :src="YoutubersChannel_info[cookVideoDetail.channelId].iconUrl"
+          />
         </q-avatar>
         <div class="videoWrapper">
-          <div class="videoTitleCookPage2">{{ cookVideoDetail.videoTitle}}</div>
+          <div class="videoTitleCookPage2">
+            {{ cookVideoDetail.videoTitle }}
+          </div>
           <div class="videoChannel">{{ cookVideoDetail.channelTitle }}</div>
           <star-rating
             :read-only="true"
@@ -31,14 +54,14 @@
   </div>
 </template>
 
-
 <script>
 import { mapState } from "vuex";
 export default {
-  props: ["videoId", "cookVideoDetail"],
+  props: ["cookVideoDetail", "id"],
   data() {
     return {
-      starAverageNumber: 0
+      starAverageNumber: 0,
+      rankInfo: this.id + 1
     };
   },
   computed: {
@@ -51,15 +74,17 @@ export default {
         Number(this.cookVideoDetail.registerCount);
     }
   }
-  //   components: {
-  //     LiveVideoCard: require("components/VideoCard/LiveVideoCard.vue").default
-  //   }
 };
 </script>
 
 <style>
-.ytp-large-play-button .ytp-button {
-  display: none;
+.rankIcon {
+  width: 38px;
+  height: 38px;
+  margin-left: 3px;
+  margin-top: -45px;
+  z-index: 10;
+  position: absolute;
 }
 .videoDetail {
   width: 98%;
@@ -73,14 +98,19 @@ export default {
   padding: 0;
   font-weight: bold;
 }
-.youTuberIcon {
-  display: block;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin-right: 12px;
+#ytplayer {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
-
+.videoTitleCookPage2 {
+  font-size: 14px;
+  color: #030303;
+  font-weight: 600;
+  font-family: Roboto, Arial, sans-serif;
+  max-width: 190px;
+  overflow: hidden;
+}
 @media screen and (min-width: 1736px) {
   /* card内の動画の設定 */
   .cookVideoChannelWrapper {
@@ -103,25 +133,10 @@ export default {
   }
 }
 @media screen and (min-width: 1600px) {
-  .cookVideoCard {
-    width: 24%;
-    padding-top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
   #ytplayer {
     width: 100%;
-    /* height: 145.278px; */
     margin-left: auto;
     margin-right: auto;
-  }
-  .videoTitleCookPage2 {
-    font-size: 14px;
-    color: #030303;
-    font-weight: 500;
-    font-family: Roboto, Arial, sans-serif;
-    max-width: 190px;
-    overflow: hidden;
   }
   .videoChannel {
     font-size: 12px;
@@ -135,21 +150,6 @@ export default {
 }
 /* ビデオを横に４つ並べる範囲 */
 @media screen and (min-width: 1410px) and (max-width: 1735px) {
-  /* card内の動画の設定 */
-  .cookVideoCard {
-    width: 24%;
-    padding-top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-  .videoTitleCookPage2 {
-    font-size: 14px;
-    color: #030303;
-    font-weight: 500;
-    font-family: Roboto, Arial, sans-serif;
-    max-width: 260px;
-    overflow: hidden;
-  }
   .videoChannel {
     font-size: 12px;
     color: #606060;
@@ -161,21 +161,6 @@ export default {
   }
 }
 @media screen and (min-width: 1025px) and (max-width: 1409px) {
-  /* card内の動画の設定 */
-  .cookVideoCard {
-    width: 32%;
-    padding-top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-  .videoTitleCookPage2 {
-    font-size: 14px;
-    color: #030303;
-    font-weight: 500;
-    font-family: Roboto, Arial, sans-serif;
-    max-width: 260px;
-    overflow: hidden;
-  }
   .videoChannel {
     font-size: 12px;
     color: #606060;
@@ -197,33 +182,12 @@ export default {
     max-width: 280px;
     overflow: hidden;
   }
-  /* card内の動画の設定 */
-  .cookVideoCard {
-    width: 48%;
-    padding-top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
 }
 @media screen and (min-width: 750px) and (max-width: 899px) {
   .videoChannel,
   .videoTitleCookPage2 {
     max-width: 220px;
     overflow: hidden;
-  }
-  /* card内の動画の設定 */
-  .cookVideoCard {
-    width: 48%;
-    padding-top: 10px;
-    margin-top: 10px;
-    margin-right: 3px;
-    margin-left: 3px;
-    margin-bottom: 10px;
-  }
-  #ytplayer {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 @media screen and (min-width: 600px) and (max-width: 749px) {
@@ -234,20 +198,6 @@ export default {
     white-space: nowrap; */
     overflow: hidden;
   }
-  /* card内の動画の設定 */
-  .cookVideoCard {
-    width: 48%;
-    padding-top: 10px;
-    margin-top: 10px;
-    margin-right: 3px;
-    margin-left: 3px;
-    margin-bottom: 10px;
-  }
-  #ytplayer {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
 }
 @media screen and (min-width: 500px) and (max-width: 599px) {
   .videoChannel,
@@ -256,20 +206,6 @@ export default {
     /* text-overflow: ellipsis;
     white-space: nowrap; */
     overflow: hidden;
-  }
-  /* card内の動画の設定 */
-  .cookVideoCard {
-    width: 48%;
-    padding-top: 10px;
-    margin-top: 10px;
-    margin-right: 3px;
-    margin-left: 3px;
-    margin-bottom: 10px;
-  }
-  #ytplayer {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
   }
   /* 星の大きさ */
   .vue-star-rating-star {
@@ -286,23 +222,38 @@ export default {
     white-space: nowrap;
     overflow: hidden;
   }
-  /* card内の動画の設定 */
-  .cookVideoCard {
-    width: 48%;
-    padding-top: 8px;
-    margin-top: 8px;
-    margin-right: 3px;
-    margin-left: 3px;
-    margin-bottom: 8px;
-  }
-  #ytplayer {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
+
   /* 星の大きさ */
   .vue-star-rating-star {
     width: 10px;
+  }
+}
+@media screen and (min-width: 1670px) {
+  .cookVideoCard {
+    width: 19%;
+    margin-right: 7px;
+    margin-bottom: 7px;
+  }
+}
+@media screen and (min-width: 1288px) and (max-width: 1669px) {
+  .cookVideoCard {
+    width: 24%;
+    margin-right: 7px;
+    margin-bottom: 7px;
+  }
+}
+@media screen and (min-width: 880px) and (max-width: 1287px) {
+  .cookVideoCard {
+    width: 32%;
+    margin-right: 7px;
+    margin-bottom: 7px;
+  }
+}
+@media screen and (min-width: 500px) and (max-width: 879px) {
+  .cookVideoCard {
+    width: 48%;
+    margin-right: 7px;
+    margin-bottom: 7px;
   }
 }
 </style>
