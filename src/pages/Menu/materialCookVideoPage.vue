@@ -4,11 +4,16 @@
       <!-- ソートと検索のところSelect -->
       <div class="row q-mr-md">
         <div class="videoTitleCookPage row">
-          <q-icon name="fas fa-carrot" color="grey-14" size="md" class="q-mr-md q-ml-sm"></q-icon>
+          <q-icon
+            name="fas fa-carrot"
+            color="grey-14"
+            size="md"
+            class="q-mr-md q-ml-sm"
+          ></q-icon>
           <div class="cookVideoTitle">材料で選ぶ</div>
         </div>
         <q-select
-          style="width:180px;margin-left:30px;"
+          class="genrePageFirstSelect"
           dense
           rounded
           outlined
@@ -34,7 +39,7 @@
         </div>
         <div class="row">
           <ChipComponent
-            v-for="tag in Object.keys( sortedMaterialTag('meat'))"
+            v-for="tag in Object.keys(sortedMaterialTag('meat'))"
             :key="tag"
             :tagName="materialTag[tag].name"
             :id="tag"
@@ -45,7 +50,7 @@
         </div>
         <div class="row">
           <ChipComponent
-            v-for="tag in Object.keys( sortedMaterialTag('rice'))"
+            v-for="tag in Object.keys(sortedMaterialTag('rice'))"
             :key="tag"
             :tagName="materialTag[tag].name"
             :id="tag"
@@ -54,18 +59,7 @@
             ref="menuchip"
           />
           <ChipComponent
-            v-for="tag in Object.keys( sortedMaterialTag('noodle'))"
-            :key="tag"
-            :tagName="materialTag[tag].name"
-            :id="tag"
-            @setActivatedTag="setMaterialTag"
-            flag="topPage"
-            ref="menuchip"
-          />
-        </div>
-        <div class="row">
-          <ChipComponent
-            v-for="tag in Object.keys( sortedMaterialTag('fish'))"
+            v-for="tag in Object.keys(sortedMaterialTag('noodle'))"
             :key="tag"
             :tagName="materialTag[tag].name"
             :id="tag"
@@ -76,16 +70,7 @@
         </div>
         <div class="row">
           <ChipComponent
-            v-for="tag in Object.keys( sortedMaterialTag('alcohol'))"
-            :key="tag"
-            :tagName="materialTag[tag].name"
-            :id="tag"
-            @setActivatedTag="setMaterialTag"
-            flag="topPage"
-            ref="menuchip"
-          />
-          <ChipComponent
-            v-for="tag in Object.keys( sortedMaterialTag('wheat'))"
+            v-for="tag in Object.keys(sortedMaterialTag('fish'))"
             :key="tag"
             :tagName="materialTag[tag].name"
             :id="tag"
@@ -96,7 +81,27 @@
         </div>
         <div class="row">
           <ChipComponent
-            v-for="tag in Object.keys( sortedMaterialTag('seasoning'))"
+            v-for="tag in Object.keys(sortedMaterialTag('alcohol'))"
+            :key="tag"
+            :tagName="materialTag[tag].name"
+            :id="tag"
+            @setActivatedTag="setMaterialTag"
+            flag="topPage"
+            ref="menuchip"
+          />
+          <ChipComponent
+            v-for="tag in Object.keys(sortedMaterialTag('wheat'))"
+            :key="tag"
+            :tagName="materialTag[tag].name"
+            :id="tag"
+            @setActivatedTag="setMaterialTag"
+            flag="topPage"
+            ref="menuchip"
+          />
+        </div>
+        <div class="row">
+          <ChipComponent
+            v-for="tag in Object.keys(sortedMaterialTag('seasoning'))"
             :key="tag"
             :tagName="materialTag[tag].name"
             :id="tag"
@@ -109,7 +114,10 @@
     </div>
     <div class="row CookVideoTotalWrapper">
       <CookVideoCard
-        v-for="(cookVideoDetail, key) in materialSelectedVideo({materialArray:tagMaterialArray, timeArray:tagMaterialTimeArray}, materialModel)"
+        v-for="(cookVideoDetail, key) in materialSelectedVideo(
+          { materialArray: tagMaterialArray, timeArray: tagMaterialTimeArray },
+          materialModel
+        )"
         :key="key"
         :id="key"
         :videoId="key"
@@ -176,5 +184,32 @@ export default {
 }
 .selectedTag {
   color: yellow;
+}
+.genrePageFirstSelect {
+  width: 180px;
+  margin-left: 30px;
+}
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .genrePageFirstSelect {
+    width: 140px;
+    margin-left: 10px;
+  }
+  .CookVideoTitleWrapper {
+    height: 50px;
+    margin-top: 0px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
+  .genrePageFirstSelect {
+    width: 140px;
+    margin-left: 8px;
+  }
+  .CookVideoTitleWrapper {
+    height: 50px;
+    margin-top: 0px;
+  }
+  .cookVideoTitle {
+    font-size: 16px;
+  }
 }
 </style>

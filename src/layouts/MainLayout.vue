@@ -3,7 +3,7 @@
     <headerComponent />
     <drawerComponent />
     <div id="wrapper">
-      <q-page-container>
+      <q-page-container style="margin-bottom:50px;">
         <router-view />
       </q-page-container>
       <footerComponent />
@@ -27,7 +27,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 body {
   color: #3c3c3c;
 }
@@ -35,5 +35,15 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+.platoform-ios {
+  .q-header {
+    padding-top: constant(safe-area-inset-top); // for iOS 11.0
+    padding-top: env(safe-area-inset-top); // for iOS 11.2 +
+  }
+  .q-footer {
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 </style>

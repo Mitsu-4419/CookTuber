@@ -6,24 +6,27 @@
       icon="star"
       clickable
       @click="setActiveTag"
-      :class="active?'selected':'nonSelected'"
-    >{{tagName}}</q-chip>
+      :class="active ? 'selected' : 'nonSelected'"
+      >{{ tagName }}</q-chip
+    >
     <q-chip
       id="chipSizeMedium"
       size="10.5px"
       icon="star"
       clickable
       @click="setActiveTag"
-      :class="active?'selected':'nonSelected'"
-    >{{tagName}}</q-chip>
+      :class="active ? 'selected' : 'nonSelected'"
+      >{{ tagName }}</q-chip
+    >
     <q-chip
       id="chipSizeSmall"
       size="9.5px"
       icon="star"
       clickable
       @click="setActiveTag"
-      :class="active?'selected':'nonSelected'"
-    >{{tagName}}</q-chip>
+      :class="active ? 'selected' : 'nonSelected'"
+      >{{ tagName }}</q-chip
+    >
   </div>
 </template>
 
@@ -80,7 +83,7 @@ export default {
     display: none;
   }
 }
-@media screen and (min-width: 500px) and (max-width: 909px) {
+@media screen and (min-width: 300px) and (max-width: 909px) {
   #chipSizeLarge {
     display: none;
   }

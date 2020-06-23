@@ -4,11 +4,16 @@
       <!-- ソートと検索のところSelect -->
       <div class="row q-mr-md">
         <div class="videoTitleCookPage row">
-          <q-icon name="fas fa-book-open" color="grey-14" size="md" class="q-mr-md q-ml-sm"></q-icon>
+          <q-icon
+            name="fas fa-book-open"
+            color="grey-14"
+            size="md"
+            class="q-mr-md q-ml-sm"
+          ></q-icon>
           <div class="cookVideoTitle">メニューで選ぶ</div>
         </div>
         <q-select
-          style="width:180px;margin-left:30px;"
+          class="genrePageFirstSelect"
           dense
           rounded
           outlined
@@ -96,7 +101,10 @@
     </div>
     <div class="row CookVideoTotalWrapper">
       <CookVideoCard
-        v-for="(cookVideoDetail, key) in menuSelectedVideo({menuArray:tagMenuArray, timeMenuArray:tagMenuTimeArray}, this.menuModel)"
+        v-for="(cookVideoDetail, key) in menuSelectedVideo(
+          { menuArray: tagMenuArray, timeMenuArray: tagMenuTimeArray },
+          this.menuModel
+        )"
         :key="key"
         :id="key"
         :cookVideoDetail="cookVideoDetail"
@@ -164,5 +172,32 @@ export default {
 }
 .selectedTag {
   color: yellow;
+}
+.genrePageFirstSelect {
+  width: 180px;
+  margin-left: 30px;
+}
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .genrePageFirstSelect {
+    width: 140px;
+    margin-left: 10px;
+  }
+  .CookVideoTitleWrapper {
+    height: 50px;
+    margin-top: 0px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
+  .genrePageFirstSelect {
+    width: 140px;
+    margin-left: 8px;
+  }
+  .CookVideoTitleWrapper {
+    height: 50px;
+    margin-top: 0px;
+  }
+  .cookVideoTitle {
+    font-size: 16px;
+  }
 }
 </style>

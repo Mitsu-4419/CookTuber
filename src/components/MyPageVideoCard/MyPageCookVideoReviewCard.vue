@@ -1,25 +1,34 @@
 <template>
   <div>
     <q-card class="videoReviewCard q-pa-sm">
-      <router-link :to="{ name: 'video', query: { key: reviewInfo.videoId} }" class="myCardWrapper">
-        <div class="row" style="width:100%;height:138px;" v-if="cookVideos[reviewInfo.videoId]">
+      <router-link
+        :to="{ name: 'video', query: { key: reviewInfo.videoId } }"
+        class="myCardWrapper"
+      >
+        <div
+          class="row"
+          style="width:100%;height:138px;"
+          v-if="cookVideos[reviewInfo.videoId]"
+        >
           <div class="MyPageThumbnailWrapper">
             <q-img
               class="MyPageThumbnail"
               :src="cookVideos[reviewInfo.videoId].thumbnail"
-              :ratio="16/9"
+              :ratio="16 / 9"
             ></q-img>
           </div>
           <div class="videoTitleWrapperWrapperMypageCooked column">
             <div style="margin-top:auto;margin-bottom:auto;">
               <div class="videoTitleWrapper">
-                <span class="videoTitle-mypage">{{cookVideos[reviewInfo.videoId].videoTitle}}</span>
+                <span class="videoTitle-mypage">{{
+                  cookVideos[reviewInfo.videoId].videoTitle
+                }}</span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
-                <span
-                  class="videoChannelName-Mypage"
-                >{{cookVideos[reviewInfo.videoId].channelTitle}}</span>
+                <span class="videoChannelName-Mypage">{{
+                  cookVideos[reviewInfo.videoId].channelTitle
+                }}</span>
               </div>
               <div class="StarWrapperMypage mypage-starRating-large">
                 <star-rating
@@ -52,7 +61,9 @@
                     :class="cooked == true ? 'cookActive' : 'cookNonActive'"
                     @click.prevent="ShowReviewMakeModal()"
                   />
-                  <span class="favoriteLikeNumber">{{cookVideos[reviewInfo.videoId].registerCount}}</span>
+                  <span class="favoriteLikeNumber">{{
+                    cookVideos[reviewInfo.videoId].registerCount
+                  }}</span>
                 </div>
                 <div class="likeCountWrapper row">
                   <q-icon
@@ -61,7 +72,9 @@
                     :class="userLike == true ? 'likeActive' : 'likeNonActive'"
                     @click.prevent="addDecreaseLike()"
                   />
-                  <span class="favoriteLikeNumber">{{reviewInfo.LikeArray.length}}</span>
+                  <span class="favoriteLikeNumber">{{
+                    reviewInfo.LikeArray.length
+                  }}</span>
                 </div>
                 <div class="editButtontWrapper" v-show="userOrNot">
                   <q-icon
@@ -76,10 +89,10 @@
           </div>
         </div>
         <div class="reviewWrapperMyPage">
-          <div class="reviewMyPageCooked">{{reviewInfo.review}}</div>
+          <div class="reviewMyPageCooked">{{ reviewInfo.review }}</div>
           <div class="row">
             <q-space></q-space>
-            <span class="timeDiplayCookedCard">{{timeBehind}}</span>
+            <span class="timeDiplayCookedCard">{{ timeBehind }}</span>
           </div>
         </div>
       </router-link>
@@ -103,7 +116,10 @@
     </q-dialog>
     <!-- レビューをかく促すDialog -->
     <q-dialog v-model="reviewSubmit">
-      <registerReviewFromCard :videoId="reviewInfo.videoId" :channelId="reviewInfo.channelId" />
+      <registerReviewFromCard
+        :videoId="reviewInfo.videoId"
+        :channelId="reviewInfo.channelId"
+      />
     </q-dialog>
     <!-- ユーザー登録をする様に促すDialog -->
     <q-dialog v-model="alertToSignUp">
@@ -111,7 +127,6 @@
     </q-dialog>
   </div>
 </template>
-
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
@@ -339,7 +354,7 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-top: 5px;
-  background: rgb(250, 249, 249);
+  background: rgb(245, 243, 243);
 }
 .reviewMyPageCooked {
   height: 55px;
@@ -422,6 +437,22 @@ export default {
   }
   .mypage-starRating-small {
     display: none;
+  }
+}
+@media screen and (max-width: 499px) {
+  .mypage-starRating-large {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .videoReviewCard {
+    width: 395px;
+  }
+}
+@media screen and (min-width: 375px) and (max-width: 413px) {
+  .videoReviewCard {
+    width: 356px;
   }
 }
 </style>

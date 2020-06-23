@@ -110,7 +110,7 @@
       <q-btn
         class="footerMenuButton"
         icon="home"
-        size="11px"
+        size="14px"
         color="#3d3760"
         flat
         stack
@@ -138,7 +138,7 @@
       </q-btn>
       <q-btn
         class="footerMenuButton"
-        size="11px"
+        size="14px"
         color="#3d3760"
         flat
         stack
@@ -148,7 +148,7 @@
       </q-btn>
       <q-btn
         class="footerMenuButton"
-        size="11px"
+        size="14px"
         color="#3d3760"
         stack
         flat
@@ -158,7 +158,7 @@
       </q-btn>
       <q-btn
         class="footerMenuButton"
-        size="11px"
+        size="14px"
         color="#3d3760"
         to="/reviewtotal"
         flat
@@ -302,10 +302,10 @@ export default {
     }
   }
   .footerMenuButton {
-    width: 14%;
+    width: 15%;
   }
   .footerMenuButtonNotActive {
-    width: 14%;
+    width: 15%;
     background-blend-mode: overlay;
     background: rgb(158, 164, 165);
   }
@@ -338,10 +338,10 @@ export default {
     }
   }
   .footerMenuButton {
-    width: 14%;
+    width: 15%;
   }
   .footerMenuButtonNotActive {
-    width: 14%;
+    width: 15%;
     background-blend-mode: overlay;
     background: rgb(158, 164, 165);
   }

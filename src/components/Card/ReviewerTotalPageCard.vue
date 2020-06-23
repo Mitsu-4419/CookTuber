@@ -4,8 +4,15 @@
     <!-- TopPage -->
     <!-- ------- -->
     <q-card class="my-ReviewrCard" v-if="usersInfo">
-      <router-link :to="{ name: 'mypage', query: { id: usersInfo.id } }" class="myCardWrapper">
-        <q-img v-if="rankInfo == 1" class="reviewerrankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
+      <router-link
+        :to="{ name: 'mypage', query: { id: usersInfo.id } }"
+        class="myCardWrapper"
+      >
+        <q-img
+          v-if="rankInfo == 1"
+          class="reviewerrankIcon"
+          src="statics/rankIcon/crown_gold.png"
+        ></q-img>
         <q-img
           v-else-if="rankInfo == 2"
           class="reviewerrankIcon"
@@ -17,15 +24,13 @@
           src="statics/rankIcon/crown_copper.png"
         ></q-img>
         <div class="ReviewrIconWrapper">
-          <q-avatar size="140px">
+          <q-avatar class="reviewerIconImage">
             <img :src="usersInfo.photoURL" alt />
           </q-avatar>
         </div>
         <div class="row">
           <q-btn rounded class="channelName" no-caps>
-            {{
-            usersInfo.nickName
-            }}
+            {{ usersInfo.nickName }}
           </q-btn>
         </div>
         <q-card-section class="card_description">
@@ -33,17 +38,13 @@
           <div>
             レビュー投稿数:
             <span class="channelRegiNum">
-              {{
-              usersInfo.reviewNum
-              }}
+              {{ usersInfo.reviewNum }}
             </span>
           </div>
           <div class="YoutuberReviewNumWrapper">
             参考になった数:
             <span class="channelRegiNum">
-              {{
-              usersInfo.LikeNumber
-              }}
+              {{ usersInfo.LikeNumber }}
             </span>
           </div>
         </q-card-section>
@@ -163,12 +164,24 @@ export default {
   font-size: 15px;
   margin-bottom: 9px;
 }
-@media screen and (min-width: 360px) and (max-width: 499px) {
-  .my-cardYoutuber {
-    height: 270px;
+.reviewerIconImage {
+  width: 140px;
+  height: 140px;
+}
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .my-ReviewrCard {
+    height: 230px;
     width: 168px;
     margin-right: 0px;
     margin-left: 8px;
+  }
+  .reviewerrankIcon {
+    width: 30px;
+    height: 30px;
+    margin-left: -90px;
+    margin-top: -8px;
+    z-index: 10;
+    position: absolute;
   }
   .channelName {
     font-size: 9px;
@@ -190,6 +203,33 @@ export default {
   }
   .card_description {
     height: 50px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
+  .my-ReviewrCard {
+    height: 210px;
+    width: 164px;
+    margin-right: 0px;
+    margin-left: 4px;
+  }
+  .reviewerrankIcon {
+    width: 30px;
+    height: 30px;
+    margin-left: -90px;
+    margin-top: -8px;
+    z-index: 10;
+    position: absolute;
+  }
+  .reviewerIconImage {
+    width: 120px;
+    height: 120px;
+  }
+  .ReviewrIconWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 154px;
+    padding: 10px;
   }
 }
 </style>

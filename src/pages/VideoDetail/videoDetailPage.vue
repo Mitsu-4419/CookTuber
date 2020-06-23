@@ -16,21 +16,30 @@
           style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
           class="avatorLarge"
         >
-          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
+          <img
+            :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl"
+            style="width:100%"
+          />
         </q-avatar>
         <q-avatar
           size="lg"
           style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
           class="avatorMedium"
         >
-          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
+          <img
+            :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl"
+            style="width:100%"
+          />
         </q-avatar>
         <q-avatar
           size="md"
           style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
           class="avatorSmall"
         >
-          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
+          <img
+            :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl"
+            style="width:100%"
+          />
         </q-avatar>
         <div class="videoTitleAndName column">
           <div>
@@ -43,7 +52,7 @@
             >
               <q-tooltip>お気に入りに登録しますか？</q-tooltip>
             </q-icon>
-            <span class="favoriteNum">{{cookVideos[key].registerCount }}</span>
+            <span class="favoriteNum">{{ cookVideos[key].registerCount }}</span>
           </div>
           <div class="StarWrapperVideoDetailPage">
             <star-rating
@@ -59,7 +68,13 @@
         </div>
       </div>
       <div class="CookVideoWrapperUpper">
-        <q-video id="ytplayer" type="text/html" :src="videoURL" frameborder="0"></q-video>
+        <q-video
+          id="ytplayer"
+          type="text/html"
+          :src="videoURL"
+          frameborder="0"
+          :ratio="16 / 9"
+        ></q-video>
       </div>
     </div>
     <div
@@ -67,17 +82,20 @@
     >
       <div class="CookVideoWrapperDownLeft">
         <div class="receipeWrapper shadow-3">
-          <q-scroll-area class="price-buy-detailMaterial">
-            <q-list
-              dense
-              bordered
-              padding
-              class="recepieDetailWrapper"
-              v-if="cookVideos[key].materials"
-            >
-              <div v-for="item in Object.keys(cookVideos[key].materials)" :key="item">
-                <span style="font-weight:bold;margin-left:5px">{{item}}</span>
-                <div v-for="(volume,key) in cookVideos[key].materials[item]" :key="key">
+          <q-scroll-area
+            class="price-buy-detailMaterial"
+            v-if="cookVideos[key].materials"
+          >
+            <q-list dense bordered padding class="recepieDetailWrapper">
+              <div
+                v-for="item in Object.keys(cookVideos[key].materials)"
+                :key="item"
+              >
+                <span style="font-weight:bold;margin-left:5px">{{ item }}</span>
+                <div
+                  v-for="(volume, key) in cookVideos[key].materials[item]"
+                  :key="key"
+                >
                   <q-item clickable v-ripple>
                     <q-checkbox
                       class="materialcheck"
@@ -86,31 +104,58 @@
                       v-model="val"
                       size="xs"
                     />
-                    <q-item-section class="materialItem">{{key}}</q-item-section>
-                    <q-item-section class="materialItem">{{volume}}</q-item-section>
+                    <q-item-section class="materialItem">{{
+                      key
+                    }}</q-item-section>
+                    <q-item-section class="materialItem">{{
+                      volume
+                    }}</q-item-section>
                   </q-item>
                 </div>
               </div>
             </q-list>
           </q-scroll-area>
+          <q-scroll-area class="noDetail column" v-else>
+            <div class="no-detail-icon">
+              <q-icon name="fas fa-wrench" size="xl"></q-icon>
+            </div>
+            <span class="nodetail-title">Now working ......</span>
+          </q-scroll-area>
         </div>
       </div>
       <div class="CookVideoWrapperDownRight">
         <div class="CookVideoDetail shadow-3">
-          <q-scroll-area class="price-buy-detail">
-            <q-list dense padding class="rounded-borders" v-if="cookVideos[key].videoSummary">
-              <div v-for="(howto,key) in cookVideos[key].videoSummary" :key="key">
+          <q-scroll-area
+            class="price-buy-detail"
+            v-if="cookVideos[key].videoSummary"
+          >
+            <q-list dense padding class="rounded-borders">
+              <div
+                v-for="(howto, key) in cookVideos[key].videoSummary"
+                :key="key"
+              >
                 <q-item v-ripple>
                   <q-item-section
                     style="z-index:100;cursor:pointer;color:blue"
                     @click.prevent="changeURL(Number(key))"
                     class="howtoLeft"
-                  >{{ Math.floor(Number(key)/60)}}:{{Number(key)%60}}</q-item-section>
-                  <q-item-section class="howtoRight">{{howto}}</q-item-section>
+                    >{{ Math.floor(Number(key) / 60) }}:{{
+                      Number(key) % 60
+                    }}</q-item-section
+                  >
+                  <q-item-section class="howtoRight">{{
+                    howto
+                  }}</q-item-section>
                 </q-item>
               </div>
             </q-list>
-            <div v-else>{{ cookVideos[key].videoDescription }}</div>
+            <!-- <div v-else>{{ cookVideos[key].videoDescription }}</div> -->
+          </q-scroll-area>
+          <q-scroll-area class="noDetail column" v-else>
+            <div class="no-detail-icon">
+              <q-icon name="fas fa-wrench" size="xl"></q-icon>
+            </div>
+            <span class="nodetail-title">Now working ......</span>
           </q-scroll-area>
         </div>
       </div>
@@ -140,7 +185,10 @@
         </div>
         <q-scroll-area class="userRecommendVideoScroll">
           <CookRecommendVideo
-            v-for="videoId in getReviewersFavoriteVideos(reviewUserUidArray, key)"
+            v-for="videoId in getReviewersFavoriteVideos(
+              reviewUserUidArray,
+              key
+            )"
             :key="videoId"
             :videoId="videoId"
             :cookVideoDetail="cookVideos[videoId]"
@@ -170,7 +218,10 @@
         </div>
         <q-scroll-area class="userRecommendVideoScroll">
           <CookRecommendVideo
-            v-for="videoId in getReviewersFavoriteVideos(reviewUserUidArray, key)"
+            v-for="videoId in getReviewersFavoriteVideos(
+              reviewUserUidArray,
+              key
+            )"
             :key="videoId"
             :videoId="videoId"
             :cookVideoDetail="cookVideos[videoId]"
@@ -189,7 +240,10 @@
     </q-dialog>
     <!-- レビューをかく促すDialog -->
     <q-dialog v-model="reviewSubmit">
-      <registerReviewFromCard :videoId="key" :channelId="cookVideos[key].channelId" />
+      <registerReviewFromCard
+        :videoId="key"
+        :channelId="cookVideos[key].channelId"
+      />
     </q-dialog>
   </q-page>
 </template>
@@ -325,15 +379,30 @@ export default {
   created() {
     this.key = getParam("key");
     this.videoURL = "https://www.youtube.com/embed/" + getParam("key");
-    if (this.cookVideos[this.key]) {
+    if (this.cookVideos[this.key] && this.starPoint > 0) {
       this.starPoint =
         Number(this.cookVideos[this.key].starPoint) /
         Number(this.cookVideos[this.key].registerCount);
+    } else {
+      this.starPoint = 0;
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.key = getParam("key");
+      this.videoURL = "https://www.youtube.com/embed/" + getParam("key");
+      if (this.cookVideos[this.key] && this.starPoint > 0) {
+        this.starPoint =
+          Number(this.cookVideos[this.key].starPoint) /
+          Number(this.cookVideos[this.key].registerCount);
+      } else {
+        this.starPoint = 0;
+      }
     }
   }
 };
 </script>
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .back_button {
   height: 50px;
   display: flex;
@@ -432,6 +501,22 @@ export default {
   margin: 5px;
   color: rgb(89, 87, 87);
 }
+.noDetail {
+  width: 100%;
+  height: 100%;
+  background: rgba(84, 84, 84, 0.153);
+  text-align: center;
+}
+.no-detail-icon {
+  width: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 150px;
+}
+.nodetail-title {
+  font-size: 20px;
+  margin-top: 15px;
+}
 /* 表示する動画or画像 */
 .card-img {
   max-width: 330px;
@@ -492,10 +577,8 @@ export default {
 }
 #ytplayer {
   width: 100%;
-  height: 500px;
   margin: auto;
   min-width: 200px;
-  // margin-top: 70px;
   max-width: 945px;
 }
 .videoTitleAndName {
@@ -568,14 +651,6 @@ export default {
     }
   }
 }
-
-@media screen and (min-width: 821px) and (max-width: 1022px) {
-  #ytplayer {
-    width: 100%;
-    height: 450px;
-    margin: auto;
-  }
-}
 @media screen and (min-width: 770px) and (max-width: 820px) {
   .q-layout-padding {
     padding: 8px;
@@ -593,11 +668,6 @@ export default {
   }
   .text-body1 {
     overflow-wrap: break-word;
-  }
-  #ytplayer {
-    width: 100%;
-    height: 400px;
-    margin: auto;
   }
 }
 @media screen and (min-width: 600px) and (max-width: 769px) {
@@ -626,12 +696,6 @@ export default {
   .review_title_wrapper {
     margin-left: 8px;
   }
-  #ytplayer {
-    width: 100%;
-    height: 400px;
-    margin: auto;
-    // margin-top: 70px;
-  }
 }
 @media screen and (min-width: 500px) and (max-width: 599px) {
   .card-wrapper {
@@ -642,25 +706,12 @@ export default {
   .review_title_wrapper {
     margin-left: 8px;
   }
-  #ytplayer {
-    width: 100%;
-    height: 350px;
-    margin: auto;
-    // margin-top: 70px;
-  }
 }
-@media screen and (min-width: 400px) and (max-width: 499px) {
+@media screen and (min-width: 300px) and (max-width: 499px) {
   .card-wrapper {
     padding-top: 0px;
     margin-right: 0px;
     margin-top: 16px;
-  }
-  #ytplayer {
-    max-width: 100%;
-    height: 279px;
-  }
-  .back_button {
-    display: none;
   }
   .cardDetailWrapper {
     height: 320px;
@@ -670,18 +721,7 @@ export default {
     margin: 0px;
     padding-top: 0px;
   }
-  .q-video {
-    margin: 0px;
-  }
-  .card-img {
-    max-width: 100%;
-  }
-  .q-img {
-    width: 75%;
-    height: 340px;
-    margin: 0px;
-    padding-top: 0px;
-  }
+
   .q-layout-padding {
     padding: 0px;
   }
@@ -692,27 +732,68 @@ export default {
   .text-body1 {
     overflow-wrap: break-word;
   }
+  .price-buy-detailMaterial {
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    margin: 5px;
+    color: rgb(89, 87, 87);
+  }
+  .price-buy-detail {
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    color: rgb(89, 87, 87);
+  }
+  .q-item {
+    min-height: 41px;
+  }
+  .CookVideoDetail {
+    padding: 10px;
+    background: white;
+    width: 96%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 10px;
+    height: 450px;
+    .q-item {
+      height: 45px;
+      padding-left: 4px;
+    }
+    .howtoLeft {
+      width: 30px;
+      height: 25px;
+      flex: none;
+    }
+    .howtoRight {
+      width: 269px;
+      height: 25px;
+      flex: none;
+    }
+  }
 }
-@media screen and (min-width: 300px) and (max-width: 399px) {
-  .card-wrapper {
-    padding-top: 0px;
-    margin-right: 0px;
-  }
-  #ytplayer {
-    max-width: 100%;
-    height: 258px;
-  }
-  .back_button {
-    display: none;
-  }
-  .card-img {
-    max-width: 100%;
-  }
-  .q-img {
-    width: 75%;
-    height: 340px;
-    margin-left: 4px;
-    padding-top: 0px;
+@media screen and (min-width: 300px) and (max-width: 413px) {
+  .CookVideoDetail {
+    padding: 10px;
+    background: white;
+    width: 96%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 10px;
+    height: 450px;
+    .q-item {
+      height: 55px;
+      padding-left: 4px;
+    }
+    .howtoLeft {
+      width: 30px;
+      height: 25px;
+      flex: none;
+    }
+    .howtoRight {
+      height: 25px;
+      flex: none;
+    }
   }
 }
 @media screen and (min-width: 949px) {
@@ -732,6 +813,14 @@ export default {
   }
   .videoTitleAndName {
     width: 78%;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 499px) {
+  .avatorMedium {
+    display: none;
+  }
+  .avatorLarge {
+    display: none;
   }
 }
 </style>

@@ -1,16 +1,24 @@
 <template>
   <router-link
-    :to="{ name: 'video', query: { key:videoId  } }"
+    :to="{ name: 'video', query: { key: videoId } }"
     style="text-decoration:none;color:black;"
   >
     <div class="RecommendVideoCardTotalWrapper">
       <div class="cookVideoCardRecommend" v-if="cookVideoDetail">
-        <q-img id="ytplayerRecommend" :src="cookVideoDetail.thumbnail" :ratio="16/9"></q-img>
+        <q-img
+          id="ytplayerRecommend"
+          :src="cookVideoDetail.thumbnail"
+          :ratio="16 / 9"
+        ></q-img>
       </div>
       <div class="videoWrapperRecommend column">
         <div style="margin-top:auto;margin-bottom:auto;">
-          <div class="videoTitleCookPage2Recommend">{{ cookVideoDetail.videoTitle}}</div>
-          <div class="videoChannelRecommend">{{ cookVideoDetail.channelTitle }}</div>
+          <div class="videoTitleCookPage2Recommend">
+            {{ cookVideoDetail.videoTitle }}
+          </div>
+          <div class="videoChannelRecommend">
+            {{ cookVideoDetail.channelTitle }}
+          </div>
           <star-rating
             :read-only="true"
             v-model="starAverageNumber"
@@ -26,7 +34,6 @@
     </div>
   </router-link>
 </template>
-
 
 <script>
 import { mapState } from "vuex";
@@ -118,10 +125,6 @@ export default {
     font-size: 15px;
     margin-bottom: 9px;
   }
-  .vue-star-rating {
-    margin-top: -1.5px;
-    margin-right: 3px;
-  }
 }
 @media screen and (max-width: 999px) {
   .cookVideoCardRecommend {
@@ -152,14 +155,8 @@ export default {
   }
 }
 @media screen and (min-width: 500px) and (max-width: 599px) {
-  .vue-star-rating-star {
-    width: 18px;
-  }
 }
 /* スマホの設定 */
 @media screen and (min-width: 350px) and (max-width: 499px) {
-  .vue-star-rating-star {
-    width: 10px;
-  }
 }
 </style>

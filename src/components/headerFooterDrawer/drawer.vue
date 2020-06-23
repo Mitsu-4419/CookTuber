@@ -1,5 +1,5 @@
 <template>
-  <q-drawer v-model="drawer" show-if-above :width="190" :breakpoint="768">
+  <q-drawer v-model="drawer" show-if-above :width="190" :breakpoint="810">
     <q-scroll-area class="fit">
       <q-list padding class="menu-list">
         <q-item clickable v-ripple flat to="/" exact class="drawerIcon">
@@ -126,33 +126,3 @@ export default {
   color: #f7ac51;
 }
 </style>
-
-<!-- アカウント情報のドロア -->
-<!-- <div
-          v-if="
-              $route.path == '/account' ||
-                $route.path == '/contact' ||
-                $route.path == '/withdrawal'
-            "
-        >
-          <router-link
-            :to="{
-                name: 'account',
-                query: { id: Object.values(userInfo)[0].id }
-              }"
-            class="routerDec"
-          >
-            <q-item clickable v-ripple flat exact class="drawerIcon">
-              <q-item-section avatar>
-                <q-icon name="assignment" />
-              </q-item-section>
-              <q-item-section>アカウント情報</q-item-section>
-            </q-item>
-          </router-link>
-          <q-item clickable v-ripple flat to="/contact" exact class="drawerIcon">
-            <q-item-section avatar>
-              <q-icon name="drafts" />
-            </q-item-section>
-            <q-item-section>お問い合わせ</q-item-section>
-          </q-item>
-        </div> -->
