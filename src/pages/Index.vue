@@ -33,9 +33,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="restaurant" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >ジャンルで選ぶ</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">ジャンルで選ぶ</span>
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -100,16 +98,12 @@
             :key="key"
             :id="key"
             :cookVideoDetail="cookVideoDetail"
+            from="topPage"
           />
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/genreCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/genreCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Menuで料理を選ぶところ -->
@@ -117,14 +111,8 @@
       <div class="cookImageWrapperTopPage">
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
-            <q-icon
-              name="fas fa-book-open"
-              size="sm"
-              class="topPageIcon"
-            ></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >メニューで選ぶ</span
-            >
+            <q-icon name="fas fa-book-open" size="sm" class="topPageIcon"></q-icon>
+            <span class="cookImageWrapperTopPage-title-span">メニューで選ぶ</span>
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -214,16 +202,12 @@
             :key="key"
             :id="key"
             :cookVideoDetail="cookVideoDetail"
+            from="topPage"
           />
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/menuCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/menuCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Materialのタグを選ぶ -->
@@ -343,16 +327,12 @@
             :key="key"
             :id="key"
             :cookVideoDetail="cookVideoDetail"
+            from="topPage"
           />
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/materialCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/materialCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Youtuberのところ -->
@@ -361,9 +341,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="live_tv" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >高評価の多い料理チャンネル</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">高評価の多い料理チャンネル</span>
           </div>
         </div>
         <div class="cookImageTopPageWrapper">
@@ -374,17 +352,13 @@
               :id="key"
               :channelId="key"
               :channelInfo="channelInfo"
+              from='topPage'
             />
           </div>
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/youtubers"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Reviewrのところ -->
@@ -393,9 +367,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="fas fa-users" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >高評価の多いReviewer</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">高評価の多いReviewer</span>
           </div>
         </div>
         <div class="cookImageTopPageWrapper row">
@@ -405,17 +377,13 @@
               v-for="(usersInfo, key) in getTop5Reviewer"
               :key="key"
               :id="key"
+              from="topPage"
             />
           </div>
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/youtubers"
-          class="moreButton moreButton-bottom"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/youtubers" class="moreButton moreButton-bottom" label="もっとみる"></q-btn>
       </div>
     </q-page>
 
@@ -429,15 +397,7 @@
     </q-dialog>
     <!-- 同じ動画は投稿できませんModal -->
     <q-dialog v-model="doubleRegistAlert" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="warning" color="red" text-color="white" size="sm" />
-          <span class="q-ml-sm">同じ動画は２回登録できません</span>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="black" v-close-popup />
-        </q-card-actions>
-      </q-card>
+      <doubleRegistered />
     </q-dialog>
     <!-- 料理動画以外は投稿できません -->
     <q-dialog v-model="genreAlert" persistent>
@@ -601,7 +561,9 @@ export default {
     ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
       .default,
     ChipComponent: require("components/Chip/ChipComponent.vue").default,
-    NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default
+    NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default,
+    doubleRegistered: require("components/doubleRegisterd/doubleRegistered.vue")
+      .default
   }
 };
 </script>

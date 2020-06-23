@@ -5,14 +5,10 @@
     <!-- ------- -->
     <q-card class="my-ReviewrCard" v-if="usersInfo">
       <router-link
-        :to="{ name: 'mypage', query: { id: usersInfo.id } }"
+        :to="{ name: 'mypage', query: { id: usersInfo.id, from:from } }"
         class="myCardWrapper"
       >
-        <q-img
-          v-if="rankInfo == 1"
-          class="reviewerrankIcon"
-          src="statics/rankIcon/crown_gold.png"
-        ></q-img>
+        <q-img v-if="rankInfo == 1" class="reviewerrankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
         <q-img
           v-else-if="rankInfo == 2"
           class="reviewerrankIcon"
@@ -29,23 +25,17 @@
           </q-avatar>
         </div>
         <div class="row">
-          <q-btn rounded class="channelName" no-caps>
-            {{ usersInfo.nickName }}
-          </q-btn>
+          <q-btn rounded class="channelName" no-caps>{{ usersInfo.nickName }}</q-btn>
         </div>
         <q-card-section class="card_description">
           <!-- <div>登録日:{{ channelInfo.register_date }}</div> -->
           <div>
             レビュー投稿数:
-            <span class="channelRegiNum">
-              {{ usersInfo.reviewNum }}
-            </span>
+            <span class="channelRegiNum">{{ usersInfo.reviewNum }}</span>
           </div>
           <div class="YoutuberReviewNumWrapper">
             参考になった数:
-            <span class="channelRegiNum">
-              {{ usersInfo.LikeNumber }}
-            </span>
+            <span class="channelRegiNum">{{ usersInfo.LikeNumber }}</span>
           </div>
         </q-card-section>
       </router-link>
@@ -57,7 +47,7 @@
 import { SessionStorage } from "quasar";
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
-  props: ["usersInfo", "id"],
+  props: ["usersInfo", "id", "from"],
   data() {
     return {
       rankInfo: Number(this.id) + 1

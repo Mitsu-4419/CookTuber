@@ -1,9 +1,25 @@
 <template>
   <q-page padding>
     <div class="back_button row">
-      <router-link to="/cookvideos">
+      <router-link v-if="from == 'genrePage'" to="/genreCookvideos">
         <q-icon name="chevron_left" size="xl" color="black" />
         <span class="text-h6 text-grey-7 vertical-middle">料理動画一覧</span>
+      </router-link>
+      <router-link v-else-if="from == 'menuPage'" to="/menuCookvideos">
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle">料理動画一覧</span>
+      </router-link>
+      <router-link v-else-if="from == 'materialPage'" to="/materialCookvideos">
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle">料理動画一覧</span>
+      </router-link>
+      <router-link v-else-if="from == 'mypage'" :to="{ name: 'mypage', query: { id: pageUid } }">
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle">マイページへ</span>
+      </router-link>
+      <router-link v-else-if="from == 'topPage'" to="/">
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle">トップページへ</span>
       </router-link>
     </div>
     <!-- ーーーーーーーーーーー -->
@@ -16,30 +32,21 @@
           style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
           class="avatorLarge"
         >
-          <img
-            :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl"
-            style="width:100%"
-          />
+          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
         </q-avatar>
         <q-avatar
           size="lg"
           style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
           class="avatorMedium"
         >
-          <img
-            :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl"
-            style="width:100%"
-          />
+          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
         </q-avatar>
         <q-avatar
           size="md"
           style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
           class="avatorSmall"
         >
-          <img
-            :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl"
-            style="width:100%"
-          />
+          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
         </q-avatar>
         <div class="videoTitleAndName column">
           <div>
@@ -68,13 +75,7 @@
         </div>
       </div>
       <div class="CookVideoWrapperUpper">
-        <q-video
-          id="ytplayer"
-          type="text/html"
-          :src="videoURL"
-          frameborder="0"
-          :ratio="16 / 9"
-        ></q-video>
+        <q-video id="ytplayer" type="text/html" :src="videoURL" frameborder="0" :ratio="16 / 9"></q-video>
       </div>
     </div>
     <div
@@ -82,20 +83,11 @@
     >
       <div class="CookVideoWrapperDownLeft">
         <div class="receipeWrapper shadow-3">
-          <q-scroll-area
-            class="price-buy-detailMaterial"
-            v-if="cookVideos[key].materials"
-          >
+          <q-scroll-area class="price-buy-detailMaterial" v-if="cookVideos[key].materials">
             <q-list dense bordered padding class="recepieDetailWrapper">
-              <div
-                v-for="item in Object.keys(cookVideos[key].materials)"
-                :key="item"
-              >
+              <div v-for="item in Object.keys(cookVideos[key].materials)" :key="item">
                 <span style="font-weight:bold;margin-left:5px">{{ item }}</span>
-                <div
-                  v-for="(volume, key) in cookVideos[key].materials[item]"
-                  :key="key"
-                >
+                <div v-for="(volume, key) in cookVideos[key].materials[item]" :key="key">
                   <q-item clickable v-ripple>
                     <q-checkbox
                       class="materialcheck"
@@ -104,12 +96,16 @@
                       v-model="val"
                       size="xs"
                     />
-                    <q-item-section class="materialItem">{{
+                    <q-item-section class="materialItem">
+                      {{
                       key
-                    }}</q-item-section>
-                    <q-item-section class="materialItem">{{
+                      }}
+                    </q-item-section>
+                    <q-item-section class="materialItem">
+                      {{
                       volume
-                    }}</q-item-section>
+                      }}
+                    </q-item-section>
                   </q-item>
                 </div>
               </div>
@@ -125,27 +121,24 @@
       </div>
       <div class="CookVideoWrapperDownRight">
         <div class="CookVideoDetail shadow-3">
-          <q-scroll-area
-            class="price-buy-detail"
-            v-if="cookVideos[key].videoSummary"
-          >
+          <q-scroll-area class="price-buy-detail" v-if="cookVideos[key].videoSummary">
             <q-list dense padding class="rounded-borders">
-              <div
-                v-for="(howto, key) in cookVideos[key].videoSummary"
-                :key="key"
-              >
+              <div v-for="(howto, key) in cookVideos[key].videoSummary" :key="key">
                 <q-item v-ripple>
                   <q-item-section
                     style="z-index:100;cursor:pointer;color:blue"
                     @click.prevent="changeURL(Number(key))"
                     class="howtoLeft"
-                    >{{ Math.floor(Number(key) / 60) }}:{{
-                      Number(key) % 60
-                    }}</q-item-section
                   >
-                  <q-item-section class="howtoRight">{{
+                    {{ Math.floor(Number(key) / 60) }}:{{
+                    Number(key) % 60
+                    }}
+                  </q-item-section>
+                  <q-item-section class="howtoRight">
+                    {{
                     howto
-                  }}</q-item-section>
+                    }}
+                  </q-item-section>
                 </q-item>
               </div>
             </q-list>
@@ -171,9 +164,9 @@
         </div>
         <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
         <router-link
-          :to="{ name: 'mypage', query: { id: key } }"
-          v-for="(review, key) in userReviews"
-          :key="key"
+          :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
+          v-for="(review, userkey) in userReviews"
+          :key="userkey"
           class="routerDec"
         >
           <userReviewList :id="key" :review="review" />
@@ -204,9 +197,9 @@
         </div>
         <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
         <router-link
-          :to="{ name: 'mypage', query: { id: key } }"
-          v-for="(review, key) in userReviews"
-          :key="key"
+          :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
+          v-for="(review, userkey) in userReviews"
+          :key="userkey"
           class="routerDec"
         >
           <userReviewList :id="key" :review="review" />
@@ -240,10 +233,7 @@
     </q-dialog>
     <!-- レビューをかく促すDialog -->
     <q-dialog v-model="reviewSubmit">
-      <registerReviewFromCard
-        :videoId="key"
-        :channelId="cookVideos[key].channelId"
-      />
+      <registerReviewFromCard :videoId="key" :channelId="cookVideos[key].channelId" />
     </q-dialog>
   </q-page>
 </template>
@@ -271,12 +261,13 @@ export default {
       val: false,
       Seconds: 0,
       videoURL: "",
-      reviewUserUidArray: []
+      reviewUserUidArray: [],
+      from: "",
+      pageUid: ""
     };
   },
   computed: {
     ...mapState("usersPublic", ["usersPublicInfo"]),
-    ...mapState("tags", ["allTags"]),
     ...mapState("videos", ["cookVideos"]),
     ...mapGetters("usersPublic", [
       "getYoutuberReview",
@@ -349,8 +340,6 @@ export default {
       }
     },
     changeURL(value) {
-      console.log("hoge");
-      console.log(value);
       this.videoURL =
         "https://www.youtube.com/embed/" +
         this.key +
@@ -378,6 +367,8 @@ export default {
   },
   created() {
     this.key = getParam("key");
+    this.from = getParam("from");
+    this.pageUid = getParam("pageUid");
     this.videoURL = "https://www.youtube.com/embed/" + getParam("key");
     if (this.cookVideos[this.key] && this.starPoint > 0) {
       this.starPoint =

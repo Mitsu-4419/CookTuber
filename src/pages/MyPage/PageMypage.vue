@@ -1,5 +1,27 @@
 <template>
   <q-page padding>
+    <div class="row">
+      <router-link
+        v-if="from == 'reviewersPage'"
+        to="/reviewtotal"
+        style="text-decoration:none;color:black"
+      >
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle">Reviewer一覧へ</span>
+      </router-link>
+      <router-link v-else-if="from == 'topPage'" to="/" style="text-decoration:none;color:black">
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle">Reviewer一覧へ</span>
+      </router-link>
+      <router-link
+        v-else-if="from == 'videoDetail'"
+        :to="{ name: 'video', query: { key:videoId, from: 'topPage' } }"
+        style="text-decoration:none;color:black"
+      >
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle">動画詳細ページへ</span>
+      </router-link>
+    </div>
     <div class="ctlLayout" v-if="usersPublicInfo[pageUserId]">
       <!-- ユーザープロフィール情報 -->
       <div class="row profileWrapper">
@@ -8,32 +30,16 @@
         </q-avatar>
         <div class="column userProfile">
           <div class="userName">{{ usersPublicInfo[pageUserId].nickName }}</div>
-          <div class="introduction">
-            {{ usersPublicInfo[pageUserId].introduction }}
-          </div>
+          <div class="introduction">{{ usersPublicInfo[pageUserId].introduction }}</div>
         </div>
       </div>
       <!-- つくったかこれからつくるのかのTAB -->
       <q-tabs v-model="tab" inline-label style="margin-top:30px;">
-        <q-tab
-          name="cooked"
-          class="cookedTab"
-          icon="fas fa-utensils"
-          label="料理済み"
-        ></q-tab>
-        <q-tab
-          name="NotCooked"
-          class="cookedTab"
-          icon="fas fa-carrot"
-          label="後で作る"
-        />
+        <q-tab name="cooked" class="cookedTab" icon="fas fa-utensils" label="料理済み"></q-tab>
+        <q-tab name="NotCooked" class="cookedTab" icon="fas fa-carrot" label="後で作る" />
       </q-tabs>
       <div class="row cookVideoReview" v-if="tab == 'cooked'">
-        <transition-group
-          appear
-          enter-active-class="animated fadeInLeft"
-          class="row"
-        >
+        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
           <MyPageCookVideoReviewCard
             v-for="(reviewInfo, key) in getfavoriteCookedObject(
               pageUserId,
@@ -43,15 +49,13 @@
             :docId="key"
             :reviewInfo="reviewInfo"
             :userOrNot="userOrNot"
+            :pageUserId="pageUserId"
+            from="mypage"
           />
         </transition-group>
       </div>
       <div class="NonCookVideoReview" v-else-if="tab == 'NotCooked'">
-        <transition-group
-          appear
-          enter-active-class="animated fadeInLeft"
-          class="row"
-        >
+        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
           <MyPageNonCookVideoCard
             v-for="(reviewInfo, key) in getfavoriteCookedObject(
               pageUserId,
@@ -61,6 +65,8 @@
             :docId="key"
             :reviewInfo="reviewInfo"
             :userOrNot="userOrNot"
+            :pageUserId="pageUserId"
+            from="mypage"
           />
         </transition-group>
       </div>
@@ -80,7 +86,9 @@ export default {
       nickName: "",
       current: 1,
       userOrNot: false,
-      tab: "cooked"
+      tab: "cooked",
+      from: "",
+      videoId: ""
     };
   },
   computed: {
@@ -97,6 +105,8 @@ export default {
   },
   mounted() {
     this.pageUserId = getParam("id");
+    this.from = getParam("from");
+    this.videoId = getParam("videoId");
     if (this.userId == this.pageUserId) {
       this.userOrNot = true;
     }
