@@ -2,14 +2,10 @@
   <div>
     <q-card class="videoReviewCard q-pa-sm">
       <router-link
-        :to="{ name: 'video', query: { key: reviewInfo.videoId } }"
+        :to="{ name: 'video', query: { key: reviewInfo.videoId, pageUid:pageUserId, from:from} }"
         class="myCardWrapper"
       >
-        <div
-          class="row"
-          style="width:100%;height:138px;"
-          v-if="cookVideos[reviewInfo.videoId]"
-        >
+        <div class="row" style="width:100%;height:138px;" v-if="cookVideos[reviewInfo.videoId]">
           <div class="MyPageThumbnailWrapper">
             <q-img
               class="MyPageThumbnail"
@@ -20,15 +16,19 @@
           <div class="videoTitleWrapperWrapperMypageCooked column">
             <div style="margin-top:auto;margin-bottom:auto;">
               <div class="videoTitleWrapper">
-                <span class="videoTitle-mypage">{{
+                <span class="videoTitle-mypage">
+                  {{
                   cookVideos[reviewInfo.videoId].videoTitle
-                }}</span>
+                  }}
+                </span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
-                <span class="videoChannelName-Mypage">{{
+                <span class="videoChannelName-Mypage">
+                  {{
                   cookVideos[reviewInfo.videoId].channelTitle
-                }}</span>
+                  }}
+                </span>
               </div>
               <div class="StarWrapperMypage mypage-starRating-large">
                 <star-rating
@@ -61,9 +61,11 @@
                     :class="cooked == true ? 'cookActive' : 'cookNonActive'"
                     @click.prevent="ShowReviewMakeModal()"
                   />
-                  <span class="favoriteLikeNumber">{{
+                  <span class="favoriteLikeNumber">
+                    {{
                     cookVideos[reviewInfo.videoId].registerCount
-                  }}</span>
+                    }}
+                  </span>
                 </div>
                 <div class="likeCountWrapper row">
                   <q-icon
@@ -72,9 +74,11 @@
                     :class="userLike == true ? 'likeActive' : 'likeNonActive'"
                     @click.prevent="addDecreaseLike()"
                   />
-                  <span class="favoriteLikeNumber">{{
+                  <span class="favoriteLikeNumber">
+                    {{
                     reviewInfo.LikeArray.length
-                  }}</span>
+                    }}
+                  </span>
                 </div>
                 <div class="editButtontWrapper" v-show="userOrNot">
                   <q-icon
@@ -116,14 +120,15 @@
     </q-dialog>
     <!-- レビューをかく促すDialog -->
     <q-dialog v-model="reviewSubmit">
-      <registerReviewFromCard
-        :videoId="reviewInfo.videoId"
-        :channelId="reviewInfo.channelId"
-      />
+      <registerReviewFromCard :videoId="reviewInfo.videoId" :channelId="reviewInfo.channelId" />
     </q-dialog>
     <!-- ユーザー登録をする様に促すDialog -->
     <q-dialog v-model="alertToSignUp">
       <ToLoginAlert />
+    </q-dialog>
+    <!-- 登録すみのビデオであることの通知 -->
+    <q-dialog v-model="noticeRegistered">
+      <doubleRegistered />
     </q-dialog>
   </div>
 </template>
@@ -132,7 +137,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { getdiffTimeNonCook } from "src/functions/getdiffTimeNonCook";
 export default {
-  props: ["docId", "reviewInfo", "userOrNot"],
+  props: ["docId", "reviewInfo", "userOrNot", "pageUserId", "from"],
   data() {
     return {
       starPoint: 0,
@@ -143,13 +148,15 @@ export default {
       SETMadeOrNot: false,
       reviewSubmit: false,
       alertToSignUp: false,
-      timeBehind: ""
+      timeBehind: "",
+      noticeRegistered: false
     };
   },
   computed: {
     ...mapState("videos", ["cookVideos"]),
     ...mapState("tags", ["allTags"]),
-    ...mapState("auth", ["userId", "loggedIn"])
+    ...mapState("auth", ["userId", "loggedIn"]),
+    ...mapState("usersPublic", ["usersPublicInfo"])
   },
   methods: {
     ...mapActions("usersPublic", [
@@ -207,7 +214,7 @@ export default {
       if (!this.loggedIn) {
         // ログインしていなかったらユーザー登録する様にDialogをだす
         this.alertToSignUp = true;
-      } else {
+      } else if (this.loggedIn && !this.cooked) {
         this.cookedOrWillCook = true;
       }
     },
@@ -215,19 +222,32 @@ export default {
     SetMadeOrNot(value) {
       this.SETMadeOrNot = value;
       this.cookedOrWillCook = false;
-      if (value == true) {
-        this.reviewSubmit = true;
+      console.log(this.usersPublicInfo[this.userId].favoriteVTRObj);
+      let usersRegisteredVideoArray = Object.values(
+        this.usersPublicInfo[this.userId].favoriteVTRObj
+      );
+      let registeredOrNot = false;
+      for (let i in usersRegisteredVideoArray) {
+        usersRegisteredVideoArray[i].videoId == this.reviewInfo.videoId;
+        registeredOrNot = true;
+      }
+      if ((registeredOrNot = true)) {
+        this.noticeRegistered = true;
       } else {
-        this.addFavoriteVTRFromCard({
-          uid: this.userId,
-          review: "",
-          favoriteVTRvideoID: this.reviewInfo.videoId,
-          selectedTags: [],
-          star_number: 0,
-          channelId: this.reviewInfo.channelId,
-          cooked: false,
-          docId: this.docId
-        });
+        if (value == true) {
+          this.reviewSubmit = true;
+        } else {
+          this.addFavoriteVTRFromCard({
+            uid: this.userId,
+            review: "",
+            favoriteVTRvideoID: this.reviewInfo.videoId,
+            selectedTags: [],
+            star_number: 0,
+            channelId: this.reviewInfo.channelId,
+            cooked: false,
+            docId: this.docId
+          });
+        }
       }
     }
   },
@@ -244,6 +264,8 @@ export default {
     CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
       .default,
     registerReviewFromCard: require("components/RegisterReviewModal/registerReviewFromCard.vue")
+      .default,
+    doubleRegistered: require("components/doubleRegisterd/doubleRegistered.vue")
       .default
   }
 };
@@ -317,7 +339,8 @@ export default {
   margin-left: auto;
 }
 .likeCountWrapper {
-  width: 22%;
+  width: 23%;
+  margin-left: 3px;
 }
 .editButtontWrapper {
   margin-left: -4px;

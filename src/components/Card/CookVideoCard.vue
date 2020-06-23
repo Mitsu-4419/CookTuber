@@ -1,43 +1,23 @@
 <template>
   <div class="cookVideoCard" v-if="cookVideoDetail">
     <router-link
-      :to="{ name: 'video', query: { key: cookVideoDetail.videoId } }"
+      :to="{ name: 'video', query: { key: cookVideoDetail.videoId, from: from } }"
       style="text-decoration:none;color:black;"
     >
-      <q-img
-        v-if="rankInfo == 1"
-        class="rankIcon"
-        src="statics/rankIcon/crown_gold.png"
-      ></q-img>
-      <q-img
-        v-else-if="rankInfo == 2"
-        class="rankIcon"
-        src="statics/rankIcon/crown_silver.png"
-      ></q-img>
-      <q-img
-        v-else-if="rankInfo == 3"
-        class="rankIcon"
-        src="statics/rankIcon/crown_copper.png"
-      ></q-img>
-      <q-img
-        id="ytplayer"
-        :src="cookVideoDetail.thumbnail"
-        :ratio="16 / 9"
-      ></q-img>
+      <q-img v-if="rankInfo == 1" class="rankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
+      <q-img v-else-if="rankInfo == 2" class="rankIcon" src="statics/rankIcon/crown_silver.png"></q-img>
+      <q-img v-else-if="rankInfo == 3" class="rankIcon" src="statics/rankIcon/crown_copper.png"></q-img>
+      <q-img id="ytplayer" :src="cookVideoDetail.thumbnail" :ratio="16 / 9"></q-img>
       <div class="videoDetail">
         <q-avatar
           size="md"
           style="margin-right:10px"
           v-if="YoutubersChannel_info[cookVideoDetail.channelId]"
         >
-          <img
-            :src="YoutubersChannel_info[cookVideoDetail.channelId].iconUrl"
-          />
+          <img :src="YoutubersChannel_info[cookVideoDetail.channelId].iconUrl" />
         </q-avatar>
         <div class="videoWrapper">
-          <div class="videoTitleCookPage2">
-            {{ cookVideoDetail.videoTitle }}
-          </div>
+          <div class="videoTitleCookPage2">{{ cookVideoDetail.videoTitle }}</div>
           <div class="videoChannel">{{ cookVideoDetail.channelTitle }}</div>
           <div class="starRatingLarge">
             <star-rating
@@ -70,7 +50,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  props: ["cookVideoDetail", "id"],
+  props: ["cookVideoDetail", "id", "from"],
   data() {
     return {
       starAverageNumber: 0,

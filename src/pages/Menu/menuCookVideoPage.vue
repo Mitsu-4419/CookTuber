@@ -4,12 +4,7 @@
       <!-- ソートと検索のところSelect -->
       <div class="row q-mr-md">
         <div class="videoTitleCookPage row">
-          <q-icon
-            name="fas fa-book-open"
-            color="grey-14"
-            size="md"
-            class="q-mr-md q-ml-sm"
-          ></q-icon>
+          <q-icon name="fas fa-book-open" color="grey-14" size="md" class="q-mr-md q-ml-sm"></q-icon>
           <div class="cookVideoTitle">メニューで選ぶ</div>
         </div>
         <q-select
@@ -108,6 +103,7 @@
         :key="key"
         :id="key"
         :cookVideoDetail="cookVideoDetail"
+        from="menuPage"
       />
     </div>
   </q-page>
@@ -129,18 +125,14 @@ export default {
   },
   computed: {
     ...mapState("menuTag", ["menuTag", "allmenuTags"]),
-    ...mapState("tags", ["allTags"]),
-    ...mapGetters("videos", ["CookVideoStarOrder", "sortByTagOfCookVideos"]),
-    ...mapGetters("tags", ["sortedTag"]),
+    ...mapGetters("videos", ["CookVideoStarOrder"]),
     ...mapState("timeTag", ["timeTag"]),
     ...mapGetters("menuTag", ["menuSelectedVideo", "sortedMenuTag"])
   },
   methods: {},
   components: {
     CookVideoCard: require("components/Card/CookVideoCard.vue").default,
-    ChipComponent: require("components/Chip/ChipComponent.vue").default,
-    ChooseTagModal: require("components/ChooseTagModal/ChooseTagModal.vue")
-      .default
+    ChipComponent: require("components/Chip/ChipComponent.vue").default
   }
 };
 </script>
