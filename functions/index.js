@@ -70,3 +70,61 @@ exports.appendSpreadSheet = functions
         });
       });
   });
+
+const admin = require("firebase-admin");
+if (admin.apps.length < 1) {
+  admin.initializeApp();
+}
+
+// // ユーザーのアカウントが作成された時に運営側が保持しておくメールアドレスなど
+// フロントからは読み書きできない
+exports.registerUsersPrivateData = functions
+  .region("asia-northeast1")
+  .auth.user()
+  .onCreate(async user => {
+    // const admin = await getAdmin();
+    const db = await admin.firestore();
+    var dt = new Date();
+    // console.log(db);
+    try {
+      db.collection("userPrivateInfo")
+        .doc(user.uid)
+        .set({
+          createdAt: dt,
+          email: user.email,
+          googleName: user.displayName,
+          uesrId: user.uid
+        });
+    } catch (e) {
+      db.collection("functions-Error-Log").add({
+        detail: "ユーザー新規作成の際に何らかのエラーが発生しました。",
+        createdAt: dt,
+        payment: 0,
+        userId: user.uid
+      });
+    }
+  });
+// authの情報削除
+exports.registerUsersWithdrawl = functions
+  .region("asia-northeast1")
+  .auth.user()
+  .onDelete(async user => {
+    const db = await admin.firestore();
+    var dt = new Date();
+    try {
+      db.collection("userPublicInfo")
+        .doc(user.uid)
+        .delete();
+      db.collection("userPrivateInfo")
+        .doc(user.uid)
+        .update({
+          deleted_at: dt
+        });
+    } catch (e) {
+      db.collection("functions-Error-Log").add({
+        detail: "ユーザー登録削除の際に何らかのエラーが発生しました。",
+        createdAt: dt,
+        userId: user.uid
+      });
+    }
+  });

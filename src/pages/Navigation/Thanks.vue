@@ -4,11 +4,11 @@
       <q-card-section>
         <h6 class="text-bold q-mt-lg" style="margin-bottom:18px;">ご利用ありがとうございました！</h6>
 
-        <q-img src="statics/headerLogo/logo2.png"></q-img>
+        <q-img src="statics/Logo/CookTuberLogo.png"></q-img>
       </q-card-section>
       <q-card-section>
         <div>
-          「ゲームライブ！」をご利用頂き、誠にありがとうございました。
+          「CookTuber」をご利用頂き、誠にありがとうございました。
           <br />またのご利用を心よりお待ちしております！
           <br />こちらのページはそのまま閉じるか、ホームボタンを押してトップページへご移動ください。
         </div>

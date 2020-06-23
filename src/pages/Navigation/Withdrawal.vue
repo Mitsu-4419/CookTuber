@@ -9,7 +9,7 @@
         <p class="withdrawlDetail">
           「退会する」ボタンをクリックすると、退会手続きが完了致します。
           <br />登録情報の復旧は弊社サービスのシステムの都合上、お受け致しかねます。予めご了承下さい。
-          <br />「ゲームライブ！」をご利用頂き、誠にありがとうございました！
+          <br />「CookTuber」をご利用頂き、誠にありがとうございました！
         </p>
       </q-card-section>
       <q-card-actions class="withdrawl-wrapper">
