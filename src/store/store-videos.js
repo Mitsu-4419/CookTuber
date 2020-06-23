@@ -206,15 +206,34 @@ const getters = {
   // ==============================
   // YoutuberDetailの人気VideoをGETする関数
   // ===============================
-  cookVideoYoutuberSort: (state, getters) => youtuberId => {
+  cookVideoYoutuberSort: (state, getters) => (youtuberId, model) => {
     let videoObj = getters.CookVideoStarOrder;
-    let returnObj = {};
+    let array = [];
     Object.keys(videoObj).forEach(key => {
       if (videoObj[key].channelId == youtuberId) {
-        returnObj[key] = videoObj[key];
+        array.push(videoObj[key]);
       }
     });
-    return returnObj;
+    if (model == "星の数順") {
+      array.sort(function(a, b) {
+        if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
+        if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
+        return 0;
+      });
+    } else if (model == "再生回数順") {
+      array.sort(function(a, b) {
+        if (Number(a.viewCount) < Number(b.viewCount)) return 1;
+        if (Number(a.viewCount) > Number(b.viewCount)) return -1;
+        return 0;
+      });
+    } else if (model == "レビュー数多い順") {
+      array.sort(function(a, b) {
+        if (Number(a.registerCount) < Number(b.registerCount)) return 1;
+        if (Number(a.registerCount) > Number(b.registerCount)) return -1;
+        return 0;
+      });
+    }
+    return array;
   },
   // ==============================
   // TopPggeでビデオを表示する関数

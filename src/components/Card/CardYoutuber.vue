@@ -4,8 +4,15 @@
     <!-- TopPage -->
     <!-- ------- -->
     <q-card class="my-cardYoutuber" v-if="channelInfo">
-      <router-link :to="{ name: 'show', query: { key: channelInfo.id } }" class="myCardWrapper">
-        <q-img v-if="rankInfo == 1" class="YoutuberrankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
+      <router-link
+        :to="{ name: 'show', query: { key: channelInfo.id } }"
+        class="myCardWrapper"
+      >
+        <q-img
+          v-if="rankInfo == 1"
+          class="YoutuberrankIcon"
+          src="statics/rankIcon/crown_gold.png"
+        ></q-img>
         <q-img
           v-else-if="rankInfo == 2"
           class="YoutuberrankIcon"
@@ -17,36 +24,29 @@
           src="statics/rankIcon/crown_copper.png"
         ></q-img>
         <div class="iconWrapper">
-          <q-avatar size="160px">
+          <q-avatar class="YoutuberIconImage">
             <img :src="channelInfo.iconUrl" alt />
           </q-avatar>
         </div>
         <div class="row">
-          <q-btn rounded class="channelName" no-caps>
-            {{
-            channelInfo.name
-            }}
+          <q-btn rounded class="channelNameYoutuberCard" no-caps>
+            {{ channelInfo.name }}
           </q-btn>
         </div>
         <q-card-section class="card_description">
-          <!-- <div>登録日:{{ channelInfo.register_date }}</div> -->
           <div>
             チャンネル登録者数:
             <span class="channelRegiNum">
-              {{
-              channelInfo.subscriberCounts
-              }}
+              {{ channelInfo.subscriberCounts }}
             </span>
           </div>
           <div class="YoutuberReviewNumWrapper">
             Review投稿数:
             <span class="channelRegiNum">
-              {{
-              channelInfo.reviewCount
-              }}
+              {{ channelInfo.reviewCount }}
             </span>
           </div>
-          <div class="YoutuberStarWrapper">
+          <div class="YoutuberStarWrapperLarge">
             <star-rating
               :read-only="true"
               v-model="starYoutuberGot"
@@ -55,6 +55,17 @@
               :padding="4"
               active-color="#ffd400"
               text-class="custom-Text"
+            ></star-rating>
+          </div>
+          <div class="YoutuberStarWrapperSmall">
+            <star-rating
+              :read-only="true"
+              v-model="starYoutuberGot"
+              :star-size="15"
+              :increment="0.1"
+              :padding="3"
+              active-color="#ffd400"
+              text-class="custom-TextSmall"
             ></star-rating>
           </div>
         </q-card-section>
@@ -156,7 +167,7 @@ export default {
   height: 200px;
   padding: 10px;
 }
-.channelName {
+.channelNameYoutuberCard {
   font-size: 11px;
   margin: -25px auto 0 auto;
   width: 178px;
@@ -192,12 +203,15 @@ export default {
   /* background: red; */
   z-index: 10;
 }
-
+.YoutuberIconImage {
+  width: 160px;
+  height: 160px;
+}
 .YoutuberReviewNumWrapper {
   margin-top: 4px;
 }
 /* Card内の星のところ */
-.YoutuberStarWrapper {
+.YoutuberStarWrapperLarge {
   margin-top: 5px;
   width: 100%;
   display: flex;
@@ -208,12 +222,30 @@ export default {
   font-size: 15px;
   margin-bottom: 9px;
 }
-@media screen and (min-width: 360px) and (max-width: 499px) {
+@media screen and (min-width: 500px) {
+  .YoutuberStarWrapperSmall {
+    display: none;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 499px) {
   .my-cardYoutuber {
     height: 270px;
     width: 168px;
     margin-right: 0px;
     margin-left: 8px;
+  }
+  .YoutuberStarWrapperLarge {
+    display: none;
+  }
+  .custom-TextSmall {
+    color: black;
+    font-size: 13px;
+    margin-bottom: 9px;
+  }
+  .YoutuberStarWrapperSmall {
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
   .channelName {
     font-size: 9px;
@@ -229,12 +261,58 @@ export default {
     font-size: 11px;
     color: black;
     padding-top: 5px;
-
     padding-left: 7px;
     padding-right: 7px;
   }
   .card_description {
     height: 50px;
+  }
+  .YoutuberrankIcon {
+    width: 30px;
+    height: 30px;
+    margin-left: -80px;
+    margin-top: -6px;
+    z-index: 10;
+    position: absolute;
+  }
+  .channelNameYoutuberCard {
+    font-size: 10px;
+    margin: -25px auto 0 auto;
+    width: 178px;
+    height: 27px;
+    background-color: white;
+    z-index: 1;
+    overflow: hidden;
+    border: 0.5px solid black;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
+  .my-cardYoutuber {
+    height: 270px;
+    width: 164px;
+    margin-right: 0px;
+    margin-left: 4px;
+  }
+  .YoutuberIconImage {
+    width: 120px;
+    height: 120px;
+  }
+  .iconWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 160px;
+    padding: 10px;
+  }
+  .channelNameYoutuberCard {
+    font-size: 10px;
+    margin: -25px auto 0 auto;
+    width: 178px;
+    height: 27px;
+    background-color: white;
+    z-index: 1;
+    overflow: hidden;
+    border: 0.5px solid black;
   }
 }
 </style>

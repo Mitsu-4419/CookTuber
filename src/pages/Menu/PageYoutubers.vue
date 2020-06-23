@@ -4,8 +4,13 @@
       <!-- ソートのSelect　登録者が多い順or登録者が少ない順 -->
       <div class="row PageYoutubers-topContainer">
         <div class="videoTitleCookPage row">
-          <q-icon name="live_tv" color="grey-14" size="md" class="q-mr-md q-ml-sm"></q-icon>
-          <div class="cookVideoTitle">料理チャンネル一覧</div>
+          <q-icon
+            name="live_tv"
+            color="grey-14"
+            size="md"
+            class="q-mr-md q-ml-sm"
+          ></q-icon>
+          <div class="cookVideoTitleYoutuber">料理チャンネル一覧</div>
         </div>
         <q-select
           outlined
@@ -13,11 +18,15 @@
           :options="options"
           dense
           color="black"
-          class="q-mr-md q-ml-md"
+          class="youtuberSelectBox"
         />
       </div>
       <div class="row YouTuberCardWrapper widthAdjust" name="youtubers">
-        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
+        <transition-group
+          appear
+          enter-active-class="animated fadeInLeft"
+          class="row"
+        >
           <YoutuberCard
             :channelInfo="channelInfo"
             v-for="(channelInfo, key) in getSortedYoutubers(model)"
@@ -81,6 +90,11 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-top: 40px;
+}
+.cookVideoTitleYoutuber {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 5px;
 }
 /* 画面のサイズが1600以上の時は横にCard6枚並べる */
 @media screen and (min-width: 1780px) {
@@ -170,6 +184,17 @@ export default {
   .gameImgMobile {
     width: 20px;
     height: 12px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 499px) {
+  .PageYoutubers-topContainer {
+    margin-top: 5px;
+  }
+  .YouTuberCardWrapper {
+    margin-top: 5px;
+  }
+  .youtuberSelectBox {
+    margin-left: 200px;
   }
 }
 </style>

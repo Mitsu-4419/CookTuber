@@ -1,29 +1,46 @@
 <template>
   <div>
     <q-card class="videoNonCookedReviewCard q-pa-sm">
-      <router-link :to="{ name: 'video', query: { key: videoKey} }" class="myCardWrapper">
+      <router-link
+        :to="{ name: 'video', query: { key: videoKey } }"
+        class="myCardWrapper"
+      >
         <div class="row">
           <div class="column NonCookedCard">
-            <q-img class="MyPageThumbnail" :src="cookVideos[videoKey].thumbnail"></q-img>
+            <q-img
+              class="MyPageThumbnail"
+              :src="cookVideos[videoKey].thumbnail"
+            ></q-img>
             <div class="videoTitleWrapperWrapper">
               <div class="videoTitleWrapper">
-                <span class="videoTitle">{{cookVideos[videoKey].videoTitle}}</span>
+                <span class="videoTitle">{{
+                  cookVideos[videoKey].videoTitle
+                }}</span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
-                <span class="videoChannelName">{{cookVideos[videoKey].channelTitle}}</span>
+                <span class="videoChannelName">{{
+                  cookVideos[videoKey].channelTitle
+                }}</span>
               </div>
             </div>
           </div>
         </div>
         <div class="row" style="margin-top:10px;">
-          <span class="timeDisplayNonCook">{{timeBehind}}</span>
+          <span class="timeDisplayNonCook">{{ timeBehind }}</span>
           <q-space></q-space>
           <q-icon
             v-show="userOrNot"
             name="edit"
             size="1.9em"
-            class="editIcon"
+            class="editIconLarge"
+            @click.prevent="EditReviewModal = true"
+          ></q-icon>
+          <q-icon
+            v-show="userOrNot"
+            name="edit"
+            size="1.5em"
+            class="editIconSmall"
             @click.prevent="EditReviewModal = true"
           ></q-icon>
         </div>
@@ -42,7 +59,6 @@
     </q-dialog>
   </div>
 </template>
-
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
@@ -116,9 +132,11 @@ export default {
   font-size: 11px;
   font-weight: bold;
 }
-
-.editIcon {
+.editIconLarge {
   margin-left: 4px;
+  color: #5091eb;
+}
+.editIconSmall {
   color: #5091eb;
 }
 .badgeCSS {
@@ -149,9 +167,49 @@ export default {
   color: rgb(109, 108, 108);
   margin-left: 10px;
 }
+@media screen and (min-width: 500px) {
+  .editIconSmall {
+    display: none;
+  }
+}
+@media screen and (max-width: 499px) {
+  .editIconLarge {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 500px) and (max-width: 839px) {
   .videoNonCookedReviewCard {
     width: 230px;
+  }
+}
+
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .videoNonCookedReviewCard {
+    width: 188px;
+  }
+  .videoTitle {
+    font-size: 11px;
+  }
+  .videoChannelName {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+}
+@media screen and (min-width: 375px) and (max-width: 413px) {
+  .videoNonCookedReviewCard {
+    width: 169px;
+  }
+  .videoTitle {
+    font-size: 11px;
+  }
+  .videoChannelName {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+  .timeDisplayNonCook {
+    margin-left: 5px;
+    font-size: 12px;
   }
 }
 </style>

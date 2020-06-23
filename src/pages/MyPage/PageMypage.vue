@@ -6,20 +6,39 @@
         <q-avatar class="myPageAvator">
           <img :src="usersPublicInfo[pageUserId].photoURL" />
         </q-avatar>
-        <div class="column">
+        <div class="column userProfile">
           <div class="userName">{{ usersPublicInfo[pageUserId].nickName }}</div>
-          <div class="introduction">{{ usersPublicInfo[pageUserId].introduction }}</div>
+          <div class="introduction">
+            {{ usersPublicInfo[pageUserId].introduction }}
+          </div>
         </div>
       </div>
       <!-- つくったかこれからつくるのかのTAB -->
       <q-tabs v-model="tab" inline-label style="margin-top:30px;">
-        <q-tab name="cooked" class="cookedTab" icon="fas fa-utensils" label="料理済み"></q-tab>
-        <q-tab name="NotCooked" class="cookedTab" icon="fas fa-carrot" label="後で作る" />
+        <q-tab
+          name="cooked"
+          class="cookedTab"
+          icon="fas fa-utensils"
+          label="料理済み"
+        ></q-tab>
+        <q-tab
+          name="NotCooked"
+          class="cookedTab"
+          icon="fas fa-carrot"
+          label="後で作る"
+        />
       </q-tabs>
-      <div class="row cookVideoReview" v-if="tab=='cooked'">
-        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
+      <div class="row cookVideoReview" v-if="tab == 'cooked'">
+        <transition-group
+          appear
+          enter-active-class="animated fadeInLeft"
+          class="row"
+        >
           <MyPageCookVideoReviewCard
-            v-for="(reviewInfo, key) in getfavoriteCookedObject(pageUserId, tab)"
+            v-for="(reviewInfo, key) in getfavoriteCookedObject(
+              pageUserId,
+              tab
+            )"
             :key="key"
             :docId="key"
             :reviewInfo="reviewInfo"
@@ -27,10 +46,17 @@
           />
         </transition-group>
       </div>
-      <div class="NonCookVideoReview" v-else-if="tab=='NotCooked'">
-        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
+      <div class="NonCookVideoReview" v-else-if="tab == 'NotCooked'">
+        <transition-group
+          appear
+          enter-active-class="animated fadeInLeft"
+          class="row"
+        >
           <MyPageNonCookVideoCard
-            v-for="(reviewInfo, key) in getfavoriteCookedObject(pageUserId, tab)"
+            v-for="(reviewInfo, key) in getfavoriteCookedObject(
+              pageUserId,
+              tab
+            )"
             :key="key"
             :docId="key"
             :reviewInfo="reviewInfo"
@@ -69,7 +95,6 @@ export default {
     MyPageNonCookVideoCard: require("components/MyPageVideoCard/MyPageNonCookVideoCard.vue")
       .default
   },
-  created() {},
   mounted() {
     this.pageUserId = getParam("id");
     if (this.userId == this.pageUserId) {
@@ -221,6 +246,30 @@ Cardコンポーネントでカードの大きさを指定 */
     margin-right: auto;
     margin-left: auto;
     margin-top: 25px;
+  }
+}
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .myPageAvator {
+    width: 70px;
+    height: 70px;
+  }
+  .userProfile {
+    width: 250px;
+  }
+  .userName {
+    padding-top: 0px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
+  .myPageAvator {
+    width: 50px;
+    height: 50px;
+  }
+  .userProfile {
+    width: 250px;
+  }
+  .userName {
+    padding-top: 0px;
   }
 }
 </style>

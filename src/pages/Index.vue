@@ -33,7 +33,9 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="restaurant" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">ジャンル別高評価の多い料理動画</span>
+            <span class="cookImageWrapperTopPage-title-span"
+              >ジャンルで選ぶ</span
+            >
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -91,8 +93,10 @@
         </div>
         <div class="cookImageTopPageWrapper row">
           <CookVideoCardTopPage
-            v-for="(cookVideoDetail, key) in sortByTagOfCookVideosTop5({genreArray:tagGenreArray,
-            timeArray:tagTimeArray}, model)"
+            v-for="(cookVideoDetail, key) in sortByTagOfCookVideosTop5(
+              { genreArray: tagGenreArray, timeArray: tagTimeArray },
+              model
+            )"
             :key="key"
             :id="key"
             :cookVideoDetail="cookVideoDetail"
@@ -100,7 +104,12 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/genreCookvideos" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/genreCookvideos"
+          class="moreButton"
+          label="もっとみる"
+        ></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Menuで料理を選ぶところ -->
@@ -108,8 +117,14 @@
       <div class="cookImageWrapperTopPage">
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
-            <q-icon name="fas fa-book-open" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">メニューで選ぶ</span>
+            <q-icon
+              name="fas fa-book-open"
+              size="sm"
+              class="topPageIcon"
+            ></q-icon>
+            <span class="cookImageWrapperTopPage-title-span"
+              >メニューで選ぶ</span
+            >
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -192,7 +207,10 @@
         </div>
         <div class="cookImageTopPageWrapper row">
           <CookVideoCardTopPage
-            v-for="(cookVideoDetail, key) in sortByMenuOfCookVideosTop5({menuArray:tagMenuArray, timeMenuArray:tagMenuTimeArray}, menuModel)"
+            v-for="(cookVideoDetail, key) in sortByMenuOfCookVideosTop5(
+              { menuArray: tagMenuArray, timeMenuArray: tagMenuTimeArray },
+              menuModel
+            )"
             :key="key"
             :id="key"
             :cookVideoDetail="cookVideoDetail"
@@ -200,7 +218,12 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/menuCookvideos" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/menuCookvideos"
+          class="moreButton"
+          label="もっとみる"
+        ></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Materialのタグを選ぶ -->
@@ -236,7 +259,7 @@
           </div>
           <div class="row">
             <ChipComponent
-              v-for="tag in Object.keys( sortedMaterialTag('meat'))"
+              v-for="tag in Object.keys(sortedMaterialTag('meat'))"
               :key="tag"
               :tagName="materialTag[tag].name"
               :id="tag"
@@ -247,7 +270,7 @@
           </div>
           <div class="row">
             <ChipComponent
-              v-for="tag in Object.keys( sortedMaterialTag('rice'))"
+              v-for="tag in Object.keys(sortedMaterialTag('rice'))"
               :key="tag"
               :tagName="materialTag[tag].name"
               :id="tag"
@@ -256,18 +279,7 @@
               ref="menuchip"
             />
             <ChipComponent
-              v-for="tag in Object.keys( sortedMaterialTag('noodle'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys( sortedMaterialTag('fish'))"
+              v-for="tag in Object.keys(sortedMaterialTag('noodle'))"
               :key="tag"
               :tagName="materialTag[tag].name"
               :id="tag"
@@ -278,16 +290,7 @@
           </div>
           <div class="row">
             <ChipComponent
-              v-for="tag in Object.keys( sortedMaterialTag('alcohol'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-            <ChipComponent
-              v-for="tag in Object.keys( sortedMaterialTag('wheat'))"
+              v-for="tag in Object.keys(sortedMaterialTag('fish'))"
               :key="tag"
               :tagName="materialTag[tag].name"
               :id="tag"
@@ -298,7 +301,27 @@
           </div>
           <div class="row">
             <ChipComponent
-              v-for="tag in Object.keys( sortedMaterialTag('seasoning'))"
+              v-for="tag in Object.keys(sortedMaterialTag('alcohol'))"
+              :key="tag"
+              :tagName="materialTag[tag].name"
+              :id="tag"
+              @setActivatedTag="setMaterialTag"
+              flag="topPage"
+              ref="menuchip"
+            />
+            <ChipComponent
+              v-for="tag in Object.keys(sortedMaterialTag('wheat'))"
+              :key="tag"
+              :tagName="materialTag[tag].name"
+              :id="tag"
+              @setActivatedTag="setMaterialTag"
+              flag="topPage"
+              ref="menuchip"
+            />
+          </div>
+          <div class="row">
+            <ChipComponent
+              v-for="tag in Object.keys(sortedMaterialTag('seasoning'))"
               :key="tag"
               :tagName="materialTag[tag].name"
               :id="tag"
@@ -310,7 +333,13 @@
         </div>
         <div class="cookImageTopPageWrapper row">
           <CookVideoCardTopPage
-            v-for="(cookVideoDetail, key) in getTop5MaterialVideo({materialArray:tagMaterialArray, timeArray:tagMaterialTimeArray}, materialModel)"
+            v-for="(cookVideoDetail, key) in getTop5MaterialVideo(
+              {
+                materialArray: tagMaterialArray,
+                timeArray: tagMaterialTimeArray
+              },
+              materialModel
+            )"
             :key="key"
             :id="key"
             :cookVideoDetail="cookVideoDetail"
@@ -318,7 +347,12 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/materialCookvideos" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/materialCookvideos"
+          class="moreButton"
+          label="もっとみる"
+        ></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Youtuberのところ -->
@@ -327,7 +361,9 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="live_tv" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">高評価の多い料理チャンネル</span>
+            <span class="cookImageWrapperTopPage-title-span"
+              >高評価の多い料理チャンネル</span
+            >
           </div>
         </div>
         <div class="cookImageTopPageWrapper">
@@ -343,7 +379,12 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/youtubers"
+          class="moreButton"
+          label="もっとみる"
+        ></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Reviewrのところ -->
@@ -352,7 +393,9 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="fas fa-users" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">高評価の多いReviewer</span>
+            <span class="cookImageWrapperTopPage-title-span"
+              >高評価の多いReviewer</span
+            >
           </div>
         </div>
         <div class="cookImageTopPageWrapper row">
@@ -367,7 +410,12 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/youtubers" class="moreButton moreButton-bottom" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/youtubers"
+          class="moreButton moreButton-bottom"
+          label="もっとみる"
+        ></q-btn>
       </div>
     </q-page>
 
@@ -558,7 +606,7 @@ export default {
 };
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .topPageImageWrapper {
   width: 100%;
   height: 350px;
@@ -716,6 +764,38 @@ export default {
     width: 130px;
     font-size: 12px;
     margin-left: 10px;
+  }
+}
+
+@media screen and (min-width: 300px) and (max-width: 499px) {
+  .topPageImageWrapper {
+    height: 260px;
+  }
+  .registerWrapper {
+    margin-top: 74px;
+  }
+  .cookImageWrapperTopPage {
+    margin-top: 4px;
+  }
+  .cookImageWrapperTopPage-title-span {
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 15px;
+  }
+  .topPageFirstSelect {
+    width: 150px;
+    margin-left: 15px;
+  }
+  .topPageIcon {
+    margin-left: 10px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
+  .registerURLInput {
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 10px;
   }
 }
 </style>

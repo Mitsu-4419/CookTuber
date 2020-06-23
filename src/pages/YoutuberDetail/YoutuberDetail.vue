@@ -12,15 +12,18 @@
     <div class="row YoutuberDetailcard-holder">
       <div class="YoutuberDetailcard-wrapperLEFT">
         <div class="YoutuberDetailcard-imgWrapper">
-          <q-img class="YoutuberDetailcard-img" :src="YoutubersChannel_info[key].iconUrl"></q-img>
+          <q-img
+            class="YoutuberDetailcard-img"
+            :src="YoutubersChannel_info[key].iconUrl"
+          ></q-img>
         </div>
         <div class="YoutuberDetail-reviewNumberWrapper">
           <span style="font-size:15px;margin-top:4px;">レビュー投稿数</span>
-          <span
-            style="font-size:20px;font-weight:bold;margin-left:10px"
-          >{{YoutubersChannel_info[key].averageStar}}</span>
+          <span style="font-size:20px;font-weight:bold;margin-left:10px">{{
+            YoutubersChannel_info[key].reviewCount
+          }}</span>
         </div>
-        <div class="YoutuberDetail-starWrapper">
+        <div class="YoutuberDetail-starWrapperLarge">
           <star-rating
             :read-only="true"
             v-model="starYoutuberDetail"
@@ -31,14 +34,29 @@
             text-class="custom-Text"
           ></star-rating>
         </div>
+        <div class="YoutuberDetail-starWrapperSmall">
+          <star-rating
+            :read-only="true"
+            v-model="starYoutuberDetail"
+            :star-size="25"
+            :increment="0.1"
+            :padding="8"
+            active-color="#ffd400"
+            text-class="custom-Text"
+          ></star-rating>
+        </div>
       </div>
       <div class="YoutuberDetailcard-wrapperRIGHT">
         <div class="row">
-          <div class="YoutuberDetail-name">{{ YoutubersChannel_info[key].name }}</div>
+          <div class="YoutuberDetail-name">
+            {{ YoutubersChannel_info[key].name }}
+          </div>
         </div>
         <div class="q-mt-lg">
           <q-scroll-area style="height: 250px; max-width: 450px;">
-            <div class="text-body1 text-grey-7">{{ YoutubersChannel_info[key].description }}</div>
+            <div class="text-body1 text-grey-7">
+              {{ YoutubersChannel_info[key].description }}
+            </div>
           </q-scroll-area>
         </div>
         <div class="infoWrapper">
@@ -46,23 +64,22 @@
           <div class="registerDateWrapper">
             <span>チャンネル登録日：</span>
             <span class="text-bold">
-              {{
-              YoutubersChannel_info[key].register_date
-              }}
+              {{ YoutubersChannel_info[key].register_date }}
             </span>
           </div>
           <!-- 現時点でのチャンネル登録者数 -->
           <div class="subscriberCountsWrapper">
             <span>現チャンネル登録者数：</span>
             <span class="text-bold">
-              {{
-              YoutubersChannel_info[key].subscriberCounts
-              }}
+              {{ YoutubersChannel_info[key].subscriberCounts }}
             </span>
           </div>
           <!-- Twitterアカウント -->
           <div class="iconsWrapper" v-if="YoutubersChannel_info[key].twitterId">
-            <a v-bind:href="YoutubersChannel_info[key].twitterId" target="_blank">
+            <a
+              v-bind:href="YoutubersChannel_info[key].twitterId"
+              target="_blank"
+            >
               <img src="../../statics/socialIcons/twitter.png" width="40px" />
             </a>
           </div>
@@ -70,8 +87,18 @@
       </div>
     </div>
     <div class="YoutubeDetail_popularVideowrapper">
-      <div class="review_title_wrapper">
+      <div class="review_title_wrapper row">
         <span>人気の料理動画</span>
+        <q-select
+          class="YoutuberDetailSelect"
+          dense
+          rounded
+          outlined
+          v-model="model"
+          :options="options"
+          bg-color="white"
+          color="grey-5"
+        />
       </div>
       <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
       <div class="YoutuberDetailpopularVideoWrapper">
@@ -81,7 +108,7 @@
           class="row YoutuberDetailpopularVideoWrapper"
         >
           <CookVideoCard
-            v-for="(cookVideoDetail, id) in cookVideoYoutuberSort(key)"
+            v-for="(cookVideoDetail, id) in cookVideoYoutuberSort(key, model)"
             :key="id"
             :videoId="id"
             :cookVideoDetail="cookVideoDetail"
@@ -112,7 +139,9 @@ export default {
       ratingColors: ["yellow-12"],
       userReviews: {},
       documentId: "",
-      starYoutuberDetail: 0
+      starYoutuberDetail: 0,
+      model: "星の数順",
+      options: ["星の数順", "再生回数順", "レビュー数多い順"]
     };
   },
   computed: {
@@ -120,13 +149,8 @@ export default {
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapGetters("videos", ["cookVideoYoutuberSort"])
-    // ...mapGetters("usersPublic", ["getNumberArray", "getYoutuberReview"])
   },
   methods: {
-    // setYoutuberKey(value) {
-    //   SessionStorage.set("YoutuberKey", value);
-    // },
-    // // URLのパラメーターからChannelIdを取る関数
     getParam(name, url) {
       if (!url) url = window.location.href;
       name = name.replace(/[\[\]]/g, "\\$&");
@@ -136,25 +160,6 @@ export default {
       if (!results[2]) return "";
       return decodeURIComponent(results[2].replace(/\+/g, " "));
     },
-    // // DetailPageをmountした時にユーザーのsubCollectionからYoutuberのIdに合致したレビューなどを引っ張ってくる
-    // // KeyをUidにしてUserの情報も一緒にしてStateに入れている。
-    // async getUserReviews() {
-    //   const ChannelId = this.getParam("key");
-    //   let obj = this.getYoutuberReview(ChannelId);
-    //   Object.keys(obj).forEach(documentId => {
-    //     const uid = obj[documentId].uid;
-    //     let payload = {
-    //       uid: uid,
-    //       review: obj[documentId].review,
-    //       nickName: this.usersPublicInfo[uid].nickName,
-    //       photoURL: this.usersPublicInfo[uid].photoURL,
-    //       createdAt: this.usersPublicInfo[uid].createdAt,
-    //       LikeArray: obj[documentId].LikeArray,
-    //       docId: documentId
-    //     };
-    //     Vue.set(this.userReviews, uid, payload);
-    //   });
-    // },
     switchFav() {
       if (this.loggedIn == false) {
         // ログインしていなかったらユーザー登録する様にDialogをだす
@@ -165,59 +170,14 @@ export default {
         console.log("nothing");
       }
     }
-    // // ユーザーがこのYoutuberを登録しているかどうかのチェック
-    // checkIfFavorite() {
-    //   if (this.loggedIn == false) {
-    //     this.ratingModel = 1;
-    //   } else if (this.loggedIn == true) {
-    //     const p = this.getParam("key");
-    //     let object = Object.values(this.userInfo)[0].favoriteYoutuberObj;
-    //     let array = [];
-    //     for (let j = 0; j < Object.values(object).length; j++) {
-    //       array.push(Object.values(object)[j].channelId);
-    //     }
-    //     if (array.includes(p)) {
-    //       this.ratingModel = 1;
-    //     } else {
-    //       this.ratingModel = 0;
-    //     }
-    //   } else {
-    //     console.log("何らかのエラーが発生しました。");
-    //   }
-    // },
-    // checkWritedReview() {
-    //   let getReview = this.getYoutuberReview(this.key);
-    //   let userReview;
-    //   if (this.loggedIn) {
-    //     Object.keys(getReview).forEach(key => {
-    //       if (getReview[key].uid == Object.values(this.userInfo)[0].id) {
-    //         userReview = getReview[key].review;
-    //         // DocumentId をStateに入れる
-    //         this.documentId = key;
-    //       }
-    //     });
-    //     this.writedReview = userReview;
-    //     // this.ratingModel = 0;
-    //   }
-    // },
-    // closeReviewSubmi() {
-    //   (this.writeReview = false), (this.ratingModel = 0);
-    // },
-    // addstar() {
-    //   this.ratingModal = 1;
-    // }
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
     CookVideoCard: require("components/Card/CookVideoCard.vue").default
   },
-  mounted() {
-    // this.getUserReviews();
-    // this.checkIfFavorite();
-  },
+  mounted() {},
   created() {
     this.key = this.getParam("key");
-    // this.checkWritedReview();
     this.starYoutuberDetail = this.YoutubersChannel_info[this.key].averageStar;
   }
 };
@@ -229,7 +189,7 @@ export default {
   display: flex;
   align-items: center;
   width: 80%;
-  /* margin: 0 auto; */
+  margin-top: 20px;
 }
 .back_button a {
   text-decoration: none;
@@ -245,7 +205,7 @@ export default {
   /* margin-right: 48px;
   padding-top: 40px; */
 }
-.YoutuberDetail-starWrapper {
+.YoutuberDetail-starWrapperLarge {
   display: flex;
   justify-content: center;
   /* background-color: rgb(164, 163, 163); */
@@ -323,7 +283,7 @@ export default {
   width: 96%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 50px;
+  margin-top: 70px;
 }
 .YoutuberDetailpopularVideoWrapper {
   width: 96%;
@@ -338,25 +298,12 @@ export default {
   color: rgb(254, 254, 191);
   margin-left: 10px;
 }
-
-/* @media screen and (min-width: 1445px) {
-  #ytplayer {
-    width: 496px;
-    height: 306px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.YoutuberDetailSelect {
+  width: 180px;
+  margin-left: 15px;
+  margin-top: -8px;
 }
 
-@media screen and (min-width: 821px) and (max-width: 1444px) {
-  #ytplayer {
-    width: 100%;
-    height: 300px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-} */
-/* */
 @media screen and (min-width: 770px) and (max-width: 820px) {
   .q-layout-padding {
     padding: 8px;
@@ -380,6 +327,19 @@ export default {
     margin-top: 8px;
   }
 }
+@media screen and (min-width: 500px) {
+  .YoutuberDetail-starWrapperSmall {
+    display: none;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 499px) {
+  .YoutuberDetail-starWrapperSmall {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+}
+
 @media screen and (min-width: 500px) and (max-width: 769px) {
   .q-layout-padding {
     padding: 8px;
@@ -408,9 +368,6 @@ export default {
 }
 
 @media screen and (min-width: 320px) and (max-width: 499px) {
-  .back_button {
-    display: none;
-  }
   .cardDetailWrapper {
     height: 320px;
     margin: 24px;
@@ -434,7 +391,7 @@ export default {
     max-width: 100%;
   }
   .q-img {
-    width: 75%;
+    width: 100%;
     height: 340px;
     margin: 0px;
     padding-top: 0px;
@@ -448,6 +405,9 @@ export default {
   }
   .text-body1 {
     overflow-wrap: break-word;
+  }
+  .YoutuberDetail-starWrapperLarge {
+    display: none;
   }
 }
 </style>

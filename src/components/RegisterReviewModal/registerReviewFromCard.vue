@@ -6,7 +6,7 @@
           <div>お気に入り料理登録</div>
         </q-card-section>
       </div>
-      <div class="starWrapper">
+      <div class="SubmitStarWrapperLarge">
         <star-rating
           v-model="ratingModel"
           :star-size="33"
@@ -15,6 +15,17 @@
           :glow="1"
           active-color="yellow"
           text-class="custom-text"
+        ></star-rating>
+      </div>
+      <div class="SubmitStarWrapperSmall">
+        <star-rating
+          v-model="ratingModel"
+          :star-size="23"
+          :increment="0.1"
+          :padding="10"
+          :glow="1"
+          active-color="yellow"
+          text-class="custom-textSmall"
         ></star-rating>
       </div>
       <q-form @submit="submitReviewFromCard">
@@ -26,100 +37,9 @@
             :rules="[val => !!val || '* 料理のReviewを入力してください']"
           />
         </div>
-        <!-- <div class="tagInputWrapper">
-          <div class="tagSelectBox" clickable @click="tagSelectModal=true">
-            <span>タグを選んでください（複数可）</span>
-            <div class="row">
-              <ChipTopPageModal v-for="tag in tagArray" :key="tag.tagName" :tag="tag" :id="tag" />
-            </div>
-            <q-popup-proxy :offset="[10, 10]">
-              <q-card class="tagSelectPopUp">
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('countryLarge')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('materialLarge')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('specialGenre')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('time')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('meatSmall')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('fishSmall')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('riceSmall')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('vegetableSmall')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-                <div class="row">
-                  <ChipTopPageModal
-                    v-for="(tag, key) in sortedTag('noodleSmall')"
-                    :key="key"
-                    :tag="tag"
-                    :id="key"
-                    @setActivatedTag="setTagArray"
-                  />
-                </div>
-              </q-card>
-            </q-popup-proxy>
-          </div>
-        </div>-->
-        <q-card-section class>投稿したレビューはマイページで確認できます</q-card-section>
+        <q-card-section class
+          >投稿したレビューはマイページで確認できます</q-card-section
+        >
         <q-card-actions align="right" class="q-mt-md">
           <q-btn flat label="キャンセル" color="black" v-close-popup />
           <q-btn
@@ -144,8 +64,6 @@ export default {
       writeReview: false,
       text: "",
       ratingModel: 1
-      // tagArray: [],
-      // tagSelectModal: false
     };
   },
   computed: {
@@ -157,28 +75,7 @@ export default {
     ...mapActions("usersPublic", ["addFavoriteVTRFromCard"]),
     ...mapActions("videos", ["addVideoData"]),
     ...mapActions("youtubers", ["addYoutuberInfoFromCard"]),
-    // ...mapActions("youtubers", ["incrementFavorite"]),
-    // setTagArray(value) {
-    //   // すでに配列内にある場合はその要素を外す
-    //   if (this.tagArray.includes(value)) {
-    //     let idx = this.tagArray.indexOf(value);
-    //     this.tagArray.splice(idx, 1);
-    //   } else {
-    //     this.tagArray.push(value);
-    //   }
-    // },
     submitReviewFromCard() {
-      // // tagのValueを再びKeyに変更する
-      // let TagArray = [];
-      // for (let j = 0; j < this.tagArray.length; j++) {
-      //   Object.keys(this.allTags).forEach(key => {
-      //     if (this.tagArray[j] == this.allTags[key].tagName) {
-      //       TagArray.push(key);
-      //     }
-      //   });
-      // }
-      // console.log(TagArray);
-      // VideoId をURLから取り出す
       this.addFavoriteVTRFromCard({
         uid: this.userId,
         review: this.text,
@@ -205,13 +102,7 @@ export default {
       // this.$router.push({ name: "mypage", query: { id: this.userId } });
     }
   },
-  mounted() {
-    // if (this.allTags) {
-    //   Object.keys(this.allTags).forEach(key => {
-    //     this.options.push(this.allTags[key].tagName);
-    //   });
-    // }
-  },
+  mounted() {},
   components: {
     ChipTopPageModal: require("components/Chip/ChipTopPageModal.vue").default
   }
@@ -231,7 +122,7 @@ export default {
   font-size: 21px;
   font-weight: bold;
 }
-.starWrapper {
+.SubmitStarWrapperLarge {
   display: flex;
   justify-content: center;
   background: rgb(109, 109, 109);
@@ -254,5 +145,24 @@ export default {
 }
 .optionSelected {
   color: blue;
+}
+@media screen and (min-width: 500px) {
+  .SubmitStarWrapperSmall {
+    display: none;
+  }
+}
+@media screen and (max-width: 499px) {
+  .SubmitStarWrapperLarge {
+    display: none;
+  }
+}
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .reviewSubmitTitleCard {
+    width: 300px;
+  }
+  .custom-textSmall {
+    color: yellow;
+    font-size: 18px;
+  }
 }
 </style>

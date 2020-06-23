@@ -39,15 +39,28 @@
             {{ cookVideoDetail.videoTitle }}
           </div>
           <div class="videoChannel">{{ cookVideoDetail.channelTitle }}</div>
-          <star-rating
-            :read-only="true"
-            v-model="starAverageNumber"
-            :star-size="20"
-            :increment="0.1"
-            :padding="7"
-            active-color="#ffd400"
-            text-class="custom-Text"
-          ></star-rating>
+          <div class="starRatingLarge">
+            <star-rating
+              :read-only="true"
+              v-model="starAverageNumber"
+              :star-size="20"
+              :increment="0.1"
+              :padding="7"
+              active-color="#ffd400"
+              text-class="custom-Text"
+            ></star-rating>
+          </div>
+          <div class="starRatingSmall">
+            <star-rating
+              :read-only="true"
+              v-model="starAverageNumber"
+              :star-size="13"
+              :increment="0.1"
+              :padding="4"
+              active-color="#ffd400"
+              text-class="custom-TextSmall"
+            ></star-rating>
+          </div>
         </div>
       </div>
     </router-link>
@@ -127,10 +140,6 @@ export default {
     font-size: 15px;
     margin-bottom: 9px;
   }
-  .vue-star-rating {
-    margin-top: -1.5px;
-    margin-right: 3px;
-  }
 }
 @media screen and (min-width: 1600px) {
   #ytplayer {
@@ -207,25 +216,43 @@ export default {
     white-space: nowrap; */
     overflow: hidden;
   }
-  /* 星の大きさ */
-  .vue-star-rating-star {
-    width: 18px;
+}
+
+@media screen and (min-width: 500px) {
+  .starRatingSmall {
+    display: none;
   }
 }
+
 /* スマホの設定 */
-@media screen and (min-width: 350px) and (max-width: 499px) {
+@media screen and (min-width: 300px) and (max-width: 499px) {
   .videoChannel,
   .videoTitleCookPage2 {
     font-size: 8px;
     max-width: 110px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    height: 25px;
+    /* text-overflow: ellipsis;
+    white-space: nowrap; */
     overflow: hidden;
   }
-
-  /* 星の大きさ */
-  .vue-star-rating-star {
-    width: 10px;
+  .starRatingLarge {
+    display: none;
+  }
+  .starRatingSmall {
+    margin-top: -8px;
+  }
+  .rankIcon {
+    width: 25px;
+    height: 25px;
+    margin-left: 3px;
+    margin-top: -25px;
+    z-index: 10;
+    position: absolute;
+  }
+  .custom-TextSmall {
+    color: black;
+    font-size: 12px;
+    margin-bottom: 9px;
   }
 }
 @media screen and (min-width: 1670px) {
@@ -249,11 +276,18 @@ export default {
     margin-bottom: 7px;
   }
 }
-@media screen and (min-width: 500px) and (max-width: 879px) {
+@media screen and (min-width: 414px) and (max-width: 879px) {
   .cookVideoCard {
     width: 48%;
     margin-right: 7px;
     margin-bottom: 7px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
+  .cookVideoCard {
+    width: 48%;
+    margin-right: 4px;
+    margin-bottom: 4px;
   }
 }
 </style>

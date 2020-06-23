@@ -5,8 +5,8 @@
         <div class="row">
           <q-btn flat to="/" class="headerTitleIcon">
             <q-img
-              src="/statics/Logo/CookTuberLogo.png"
-              style="width:45px;height:38px;"
+              src="../../statics/Logo/cookTuberNew.png"
+              class="cooktuberLogoIcon"
             ></q-img>
             <q-toolbar-title>
               <span class="headerTitle">Cook Tuber</span>
@@ -71,14 +71,26 @@
             icon-right="account_circle"
             to="/auth/sign_in"
           ></q-btn>
-          <!-- <q-btn
+          <q-btn-dropdown
             class="loginButtonSmall"
-            push
-            color="indigo-10"
             flat
+            color="black"
             icon-right="account_circle"
-            to="/auth/sign_in"
-          ></q-btn>-->
+            style="margin-left:7px;"
+          >
+            <q-list>
+              <q-item clickable v-close-popup to="/auth/sign_in">
+                <q-item-section>
+                  <q-item-label>ログイン</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup to="/others">
+                <q-item-section>
+                  <q-item-label>その他</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
         </div>
         <!-- 未ログインEND -->
         <!-- ログイン時の表示 -->
@@ -88,6 +100,7 @@
               <img :src="LoginUserPublicData['photoURL']" />
             </q-avatar>
             <q-btn-dropdown
+              class="qBtnDropdownLarge"
               color="black"
               flat
               :label="LoginUserPublicData['nickName']"
@@ -130,6 +143,60 @@
                 <q-item clickable v-close-popup @click="logoutUser">
                   <q-item-section>
                     <q-item-label>ログアウト</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup to="/others">
+                  <q-item-section>
+                    <q-item-label>その他</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+            <!-- 携帯サイズの時の表示 -->
+            <q-btn-dropdown class="qBtnDropdownSmall" color="black" flat>
+              <q-list>
+                <router-link
+                  class="routerDec"
+                  :to="{
+                    name: 'mypage',
+                    query: { id: userId }
+                  }"
+                  exact
+                  replace
+                >
+                  <q-item clickable v-close-popup class="text-black">
+                    <q-item-section>
+                      <q-item-label>マイページ</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </router-link>
+                <router-link
+                  :to="{
+                    name: 'account'
+                  }"
+                  class="routerDec"
+                >
+                  <q-item clickable v-close-popup class="text-black">
+                    <q-item-section>
+                      <q-item-label>アカウント情報</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </router-link>
+                <router-link to="/contact" class="routerDec">
+                  <q-item clickable v-close-popup class="text-black">
+                    <q-item-section>
+                      <q-item-label>お問い合わせ</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </router-link>
+                <q-item clickable v-close-popup @click="logoutUser">
+                  <q-item-section>
+                    <q-item-label>ログアウト</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup to="/others">
+                  <q-item-section>
+                    <q-item-label>その他</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -184,6 +251,10 @@ export default {
 }
 .headerTitleIcon {
   width: 220px;
+}
+.cooktuberLogoIcon {
+  width: 45px;
+  height: 38px;
 }
 .menuIcon {
   color: #767194;
@@ -242,12 +313,25 @@ export default {
   .loginButtonSmall {
     display: none;
   }
+  .qBtnDropdownSmall {
+    display: none;
+  }
 }
 @media screen and (min-width: 835px) {
   .searchIcon {
     display: none;
   }
 }
+
+@media screen and (max-width: 499px) {
+  .headerTitle {
+    font-size: 13px;
+  }
+  .qBtnDropdownLarge {
+    display: none;
+  }
+}
+
 /* スマホのみ適用の設定 */
 /* iPhoneXR, XS  */
 @media screen and (min-width: 414px) and (max-width: 499px) {
@@ -255,9 +339,16 @@ export default {
   .newRegisterButton {
     display: none;
   }
+  .loginButtonLarge {
+    display: none;
+  }
   .headerTop {
     position: initial;
-    min-height: 70px;
+    min-height: 90px;
+  }
+  .cooktuberLogoIcon {
+    width: 38px;
+    height: 24px;
   }
   .headerTitleIcon {
     width: 170px;
@@ -284,9 +375,12 @@ export default {
   .newRegisterButton {
     display: none;
   }
+  .loginButtonLarge {
+    display: none;
+  }
   .headerTop {
     position: initial;
-    min-height: 70px;
+    min-height: 90px;
   }
   .headerTitleIcon {
     width: 170px;
@@ -318,7 +412,7 @@ export default {
   }
   .headerTop {
     position: initial;
-    min-height: 70px;
+    min-height: 90px;
   }
   .headerTitleIcon {
     width: 170px;
