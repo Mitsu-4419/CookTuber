@@ -4,11 +4,8 @@
       <q-card class="auth-tabs absolute-center">
         <q-card-section>
           <h6 class="text-bold q-mt-sm" style="margin-bottom:24px;">新規会員登録</h6>
-          <p>
-            Googleアカウント認証による会員登録をすることで、お気に入りのYouTuberを登録、紹介文の投稿が出来ます。
-            「CookTuber」をご利用になる場合は以下の利用規約とプライバシーポリシーをご覧になり、同意していただく必要があります。
-          </p>
-          <p class="q-mt-lg q-mb-lg">
+          <p>「CookTuber」をご利用になるには以下の利用規約とプライバシーポリシーをご覧になり、同意していただく必要があります。</p>
+          <p class="q-mt-lg">
             •
             <span class="text-blue-9 cursor-pointer" @click="TermsOfService = true">「CookTuber」利用規約</span>
           </p>
@@ -40,6 +37,7 @@
 
 <script>
 import { uiConfig, ui } from "src/boot/firebase";
+import "firebaseui-ja/dist/firebaseui.css";
 export default {
   data() {
     return {

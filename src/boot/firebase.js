@@ -34,9 +34,12 @@ let firestorebase = firebase.firestore;
 
 const uiConfig = {
   signInFlow: "redirect",
-  signInSuccessUrl: "cooktuber.com",
-  // signInSuccessUrl: "http://127.0.0.1:8081/",
-  signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+  // signInSuccessUrl: "cooktuber.com",
+  signInSuccessUrl: "http://127.0.0.1:8080/",
+  signInOptions: [
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+  ],
   customParameters: {
     // Forces account selection even when one account
     // is available.
@@ -44,21 +47,55 @@ const uiConfig = {
   },
   callbacks: {
     signInSuccessWithAuthResult: result => {
-      if (result.additionalUserInfo.isNewUser == true) {
-        localStorage.setItem("isNewUser", true);
-        firestoreDb
-          .collection("userPublicInfo")
-          .doc(result.user.uid)
-          .set({
-            nickName: result.user.displayName,
-            photoURL: result.user.photoURL,
-            introduction: "",
-            created_at: firebase.firestore.FieldValue.serverTimestamp(),
-            updated_at: firebase.firestore.FieldValue.serverTimestamp(),
-            photoName: ""
-          });
+      if (result.additionalUserInfo.providerId === "google.com") {
+        if (result.additionalUserInfo.isNewUser == true) {
+          localStorage.setItem("isNewUser", true);
+          firestoreDb
+            .collection("userPublicInfo")
+            .doc(result.user.uid)
+            .set({
+              nickName: result.user.displayName,
+              photoURL: result.user.photoURL,
+              introduction: "",
+              created_at: firebase.firestore.FieldValue.serverTimestamp(),
+              updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+              photoName: ""
+            });
+        } else {
+          localStorage.setItem("isNewUser", false);
+        }
       } else {
-        localStorage.setItem("isNewUser", false);
+        // 確認メールの有無
+        const mailFlag = result.user.emailVerified;
+        if (mailFlag === false) {
+          // 確認メール未時に確認メール送信
+          firebase
+            .auth()
+            .currentUser.sendEmailVerification({
+              url: "https://cooktuber.com/",
+              handleCodeInApp: false
+            })
+            .then(function() {
+              localStorage.setItem("isMailUser", true);
+              firestoreDb
+                .collection("userPublicInfo")
+                .doc(result.user.uid)
+                .set({
+                  nickName: "メール承認中のアカウント",
+                  photoURL:
+                    "https://cooktuber.com/statics/icons/favicon-128x128.png",
+                  introduction: "",
+                  created_at: firebase.firestore.FieldValue.serverTimestamp(),
+                  updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+                  photoName: ""
+                });
+              alert("登録メールを送信しました。ご確認ください。");
+              // console.log(result);
+            })
+            .catch(function(error) {});
+        } else {
+          localStorage.setItem("isMailUser", false);
+        }
       }
     }
   }
