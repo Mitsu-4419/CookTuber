@@ -3,27 +3,44 @@
     <q-page>
       <div class="topPageImageWrapper">
         <div class="column registerWrapper">
-          <q-input
-            ref="VTRurl"
-            bg-color="white"
-            class="registerURLInput"
-            rounded
-            outlined
-            v-model="registerURL"
-            label="好きな料理Youtube動画のURLを貼ってください"
-            label-color="black"
-            :rules="[
-              val =>
-                val.includes('https://www.youtube.com/watch?v=') ||
-                '登録できるのはYoutube動画のみです'
-            ]"
-          />
-          <q-btn
-            class="registerButton shadow-5"
-            label="登録"
-            style="font-weight:bold; background-color:#ff9933;color:white;"
-            @click="showReviewMakeModal"
-          ></q-btn>
+          <form
+            @submit.prevent="showReviewMakeModal"
+            class="urlInputForm column"
+            name="urlSubmitForm"
+          >
+            <input
+              type="text"
+              id="youtubeURLInput"
+              name="registerURL"
+              v-model="registerURL"
+              placeholder="好きな料理Youtube動画のURLを貼ってください"
+            />
+            <!-- <form name="URLForm">
+            <q-input
+              name="URLForm2"
+              ref="VTRurl"
+              bg-color="white"
+              class="registerURLInput"
+              id="youtubeURLInput"
+              rounded
+              outlined
+              v-model="registerURL"
+              label="好きな料理Youtube動画のURLを貼ってください"
+              label-color="black"
+              :rules="[
+                val =>
+                  val.includes('https://www.youtube.com/watch?v=') ||
+                  '登録できるのはYoutube動画のみです'
+              ]"
+            ></q-input>
+            </form>-->
+            <q-btn
+              class="registerButton shadow-5"
+              label="登録"
+              style="font-weight:bold; background-color:#ff9933;color:white;"
+              type="submit"
+            ></q-btn>
+          </form>
         </div>
       </div>
       <!-- --------------------------- -->
@@ -33,7 +50,9 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="restaurant" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">ジャンルで選ぶ</span>
+            <span class="cookImageWrapperTopPage-title-span"
+              >ジャンルで選ぶ</span
+            >
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -103,7 +122,12 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/genreCookvideos" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/genreCookvideos"
+          class="moreButton"
+          label="もっとみる"
+        ></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Menuで料理を選ぶところ -->
@@ -111,8 +135,14 @@
       <div class="cookImageWrapperTopPage">
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
-            <q-icon name="fas fa-book-open" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">メニューで選ぶ</span>
+            <q-icon
+              name="fas fa-book-open"
+              size="sm"
+              class="topPageIcon"
+            ></q-icon>
+            <span class="cookImageWrapperTopPage-title-span"
+              >メニューで選ぶ</span
+            >
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -207,7 +237,12 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/menuCookvideos" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/menuCookvideos"
+          class="moreButton"
+          label="もっとみる"
+        ></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Materialのタグを選ぶ -->
@@ -332,7 +367,12 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/materialCookvideos" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/materialCookvideos"
+          class="moreButton"
+          label="もっとみる"
+        ></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Youtuberのところ -->
@@ -341,7 +381,9 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="live_tv" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">高評価の多い料理チャンネル</span>
+            <span class="cookImageWrapperTopPage-title-span"
+              >高評価の多い料理チャンネル</span
+            >
           </div>
         </div>
         <div class="cookImageTopPageWrapper">
@@ -352,13 +394,18 @@
               :id="key"
               :channelId="key"
               :channelInfo="channelInfo"
-              from='topPage'
+              from="topPage"
             />
           </div>
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/youtubers"
+          class="moreButton"
+          label="もっとみる"
+        ></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Reviewrのところ -->
@@ -367,7 +414,9 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="fas fa-users" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">高評価の多いReviewer</span>
+            <span class="cookImageWrapperTopPage-title-span"
+              >高評価の多いReviewer</span
+            >
           </div>
         </div>
         <div class="cookImageTopPageWrapper row">
@@ -383,8 +432,14 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn flat to="/youtubers" class="moreButton moreButton-bottom" label="もっとみる"></q-btn>
+        <q-btn
+          flat
+          to="/youtubers"
+          class="moreButton moreButton-bottom"
+          label="もっとみる"
+        ></q-btn>
       </div>
+      <span class="youtuberURL">ホゲホゲ</span>
     </q-page>
 
     <!-- ユーザー登録をする様に促すDialog -->
@@ -466,19 +521,35 @@ export default {
     ...mapGetters("usersPublic", ["getTop5Reviewer"]),
     ...mapGetters("genreTag", ["sortedGenreTag", "sortByTagOfCookVideosTop5"]),
     ...mapGetters("menuTag", ["sortByMenuOfCookVideosTop5", "sortedMenuTag"]),
-    ...mapGetters("materialTag", ["sortedMaterialTag", "getTop5MaterialVideo"])
+    ...mapGetters("materialTag", ["sortedMaterialTag", "getTop5MaterialVideo"]),
+    getYoutubeURL() {
+      console.log(
+        document.getElementsByClassName("youtuberURL").item(0).textContent
+      );
+      return document.getElementsByClassName("youtuberURL").item(0).textContent;
+    }
   },
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTR"]),
     ...mapActions("videos", ["addNewVideoData"]),
     ...mapActions("youtubers", ["addNewYoutuberInfo"]),
     async showReviewMakeModal() {
-      if (!this.loggedIn) {
+      console.log(document.urlSubmitForm.registerURL.value);
+      const RegisterURL = document.urlSubmitForm.registerURL.value;
+      console.log(this.registerURL);
+      if (
+        !RegisterURL.includes("https://www.youtube.com/watch?v=") ||
+        RegisterURL == ""
+      ) {
+        alert("有効なURLを入れてください");
+        this.registerURL = "";
+      } else if (!this.loggedIn) {
         // ログインしていなかったらユーザー登録する様にDialogをだす
         this.alertToSignUp = true;
-      } else if (this.loggedIn && this.$refs.VTRurl.validate()) {
+        this.registerURL = "";
+      } else if (this.loggedIn) {
         // VideoId をURLから取り出す
-        let splicedURL1 = this.registerURL.split("&")[0];
+        let splicedURL1 = RegisterURL.split("&")[0];
         let videoId = splicedURL1.split("v=")[1];
         this.VideoId = videoId;
         // videoIdのsnippetを取ってきて、Categoryが明らかに違うものは弾くようにする。
@@ -569,6 +640,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+#youtubeURLInput {
+  width: 350px;
+  background: white;
+  height: 50px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 15px;
+}
 .topPageImageWrapper {
   width: 100%;
   height: 350px;
@@ -587,6 +666,12 @@ export default {
 .registerWrapper {
   width: 360px;
   margin-top: 131px;
+}
+.urlInputForm {
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  justify-content: center;
 }
 .registerButton {
   margin-top: 10px;

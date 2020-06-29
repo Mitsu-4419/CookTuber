@@ -57,7 +57,7 @@
 import { SessionStorage } from "quasar";
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
-  props: ["review", "starPoint", "videoId", "docId", "flag"],
+  props: ["review", "starPoint", "videoId", "docId", "flag", "channelId"],
   data() {
     return {
       Review: this.review,
@@ -72,12 +72,19 @@ export default {
   methods: {
     ...mapActions("usersPublic", ["updateFavoriteVTR", "deleteFavoriteVTR"]),
     ...mapActions("videos", ["updateVideoData", "deleteVideoData"]),
+    ...mapActions("youtubers", [
+      "reduceYoutuberData",
+      "addYoutuberInfoFromCard"
+    ]),
     deleteReview() {
-      console.log(this.videoId);
       if (this.flag == "cooked") {
         this.deleteVideoData({
           favoriteVTRvideoID: this.videoId,
-          star_number: this.RatingModel
+          star_number: this.starPoint
+        });
+        this.reduceYoutuberData({
+          star_number: this.starPoint,
+          channelId: this.channelId
         });
       }
       this.deleteFavoriteVTR({
@@ -98,6 +105,10 @@ export default {
         favoriteVTRvideoID: this.videoId,
         star_number: this.RatingModel,
         beforeStarNumber: this.starPoint
+      });
+      this.addYoutuberInfoFromCard({
+        star_number: this.RatingModel,
+        channelId: this.channelId
       });
       this.$emit("closeModal");
     }

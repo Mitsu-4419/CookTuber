@@ -5,7 +5,7 @@
     <!-- ------- -->
     <q-card class="my-cardYoutuber" v-if="channelInfo">
       <router-link
-        :to="{ name: 'show', query: { key: channelInfo.id } }"
+        :to="{ name: 'show', query: { key: channelInfo.id, from: from } }"
         class="myCardWrapper"
       >
         <q-img
@@ -78,7 +78,7 @@
 import { SessionStorage } from "quasar";
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
-  props: ["channelInfo", "id"],
+  props: ["channelInfo", "id", "from"],
   data() {
     return {
       starYoutuberGot: 0,

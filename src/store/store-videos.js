@@ -77,7 +77,6 @@ const actions = {
           registerCount: 1,
           // 星の点数を加算していく
           starPoint: Number(payload.star_number),
-          // tagMap: tagMap,
           videoId: payload.favoriteVTRvideoID
         });
       let PAYLOAD = {
@@ -89,7 +88,6 @@ const actions = {
         thumbnail: snippet.thumbnails.medium.url,
         registerCount: 1,
         starPoint: Number(payload.star_number),
-        // tagMap: tagMap,
         videoId: payload.favoriteVTRvideoID
       };
       commit("addVideoInfoMutate", PAYLOAD);
@@ -131,7 +129,6 @@ const actions = {
           registerCount: 0,
           // 星の点数を加算していく
           starPoint: 0,
-          tagMap: {},
           videoId: payload.favoriteVTRvideoID
         });
       let PAYLOAD = {
@@ -143,7 +140,6 @@ const actions = {
         thumbnail: snippet.thumbnails.medium.url,
         registerCount: 1,
         starPoint: Number(payload.star_number),
-        tagMap: {},
         videoId: payload.favoriteVTRvideoID
       };
       commit("addVideoInfoMutate", PAYLOAD);

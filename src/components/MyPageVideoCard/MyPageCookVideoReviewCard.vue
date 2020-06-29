@@ -2,10 +2,17 @@
   <div>
     <q-card class="videoReviewCard q-pa-sm">
       <router-link
-        :to="{ name: 'video', query: { key: reviewInfo.videoId, pageUid:pageUserId, from:from} }"
+        :to="{
+          name: 'video',
+          query: { key: reviewInfo.videoId, pageUid: pageUserId, from: from }
+        }"
         class="myCardWrapper"
       >
-        <div class="row" style="width:100%;height:138px;" v-if="cookVideos[reviewInfo.videoId]">
+        <div
+          class="row"
+          style="width:100%;height:138px;"
+          v-if="cookVideos[reviewInfo.videoId]"
+        >
           <div class="MyPageThumbnailWrapper">
             <q-img
               class="MyPageThumbnail"
@@ -17,17 +24,13 @@
             <div style="margin-top:auto;margin-bottom:auto;">
               <div class="videoTitleWrapper">
                 <span class="videoTitle-mypage">
-                  {{
-                  cookVideos[reviewInfo.videoId].videoTitle
-                  }}
+                  {{ cookVideos[reviewInfo.videoId].videoTitle }}
                 </span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
                 <span class="videoChannelName-Mypage">
-                  {{
-                  cookVideos[reviewInfo.videoId].channelTitle
-                  }}
+                  {{ cookVideos[reviewInfo.videoId].channelTitle }}
                 </span>
               </div>
               <div class="StarWrapperMypage mypage-starRating-large">
@@ -62,9 +65,7 @@
                     @click.prevent="ShowReviewMakeModal()"
                   />
                   <span class="favoriteLikeNumber">
-                    {{
-                    cookVideos[reviewInfo.videoId].registerCount
-                    }}
+                    {{ cookVideos[reviewInfo.videoId].registerCount }}
                   </span>
                 </div>
                 <div class="likeCountWrapper row">
@@ -75,9 +76,7 @@
                     @click.prevent="addDecreaseLike()"
                   />
                   <span class="favoriteLikeNumber">
-                    {{
-                    reviewInfo.LikeArray.length
-                    }}
+                    {{ reviewInfo.LikeArray.length }}
                   </span>
                 </div>
                 <div class="editButtontWrapper" v-show="userOrNot">
@@ -106,7 +105,7 @@
     <q-dialog v-model="editReviewModal">
       <editReviewInfoModal
         :review="reviewInfo.review"
-        :tagArray="reviewInfo.tagArray"
+        :channelId="reviewInfo.channelId"
         :starPoint="Number(reviewInfo.star_number)"
         :videoId="reviewInfo.videoId"
         @closeModal="editReviewModal = false"
@@ -120,7 +119,10 @@
     </q-dialog>
     <!-- レビューをかく促すDialog -->
     <q-dialog v-model="reviewSubmit">
-      <registerReviewFromCard :videoId="reviewInfo.videoId" :channelId="reviewInfo.channelId" />
+      <registerReviewFromCard
+        :videoId="reviewInfo.videoId"
+        :channelId="reviewInfo.channelId"
+      />
     </q-dialog>
     <!-- ユーザー登録をする様に促すDialog -->
     <q-dialog v-model="alertToSignUp">
@@ -255,7 +257,7 @@ export default {
     this.starPoint = Number(this.reviewInfo.star_number);
     this.checkIfUserLikeOrNot();
     this.checkIfUserWroteReviewOrNot();
-    this.timeBehind = getdiffTimeNonCook(this.reviewInfo.updatedAt);
+    this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
@@ -278,7 +280,7 @@ export default {
 }
 .videoReviewCard {
   height: 245px;
-  /* max-width: 600px; */
+  width: 434px;
   margin-right: 5px;
   margin-bottom: 5px;
 }
