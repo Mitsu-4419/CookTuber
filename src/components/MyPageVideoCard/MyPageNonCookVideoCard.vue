@@ -2,26 +2,28 @@
   <div>
     <q-card class="videoNonCookedReviewCard q-pa-sm">
       <router-link
-        :to="{ name: 'video', query: { key: videoKey, pageUid:pageUserId, from:from} }"
+        :to="{
+          name: 'video',
+          query: { key: videoKey, pageUid: pageUserId, from: from }
+        }"
         class="myCardWrapper"
       >
         <div class="row">
           <div class="column NonCookedCard">
-            <q-img class="MyPageThumbnail" :src="cookVideos[videoKey].thumbnail"></q-img>
+            <q-img
+              class="MyPageThumbnail"
+              :src="cookVideos[videoKey].thumbnail"
+            ></q-img>
             <div class="videoTitleWrapperWrapper">
               <div class="videoTitleWrapper">
                 <span class="videoTitle">
-                  {{
-                  cookVideos[videoKey].videoTitle
-                  }}
+                  {{ cookVideos[videoKey].videoTitle }}
                 </span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
                 <span class="videoChannelName">
-                  {{
-                  cookVideos[videoKey].channelTitle
-                  }}
+                  {{ cookVideos[videoKey].channelTitle }}
                 </span>
               </div>
             </div>
@@ -52,6 +54,7 @@
       <editReviewInfoModal
         :review="reviewInfo.review"
         :starPoint="Number(reviewInfo.star_number)"
+        :channelId="reviewInfo.channelId"
         :videoId="reviewInfo.videoId"
         @closeModal="EditReviewModal = false"
         :docId="docId"
@@ -65,7 +68,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import { getdiffTimeNonCook } from "src/functions/getdiffTimeNonCook";
 export default {
-  props: ["docId", "reviewInfo", "userOrNot", "pageUserId", 'from'],
+  props: ["docId", "reviewInfo", "userOrNot", "pageUserId", "from"],
   data() {
     return {
       starPoint: 0,

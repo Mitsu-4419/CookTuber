@@ -4,17 +4,35 @@
       <q-space></q-space>
       <q-icon name="close" v-close-popup size="22px" style="margin-left:5px;"></q-icon>
     </div>-->
-    <q-card-section class="row items-center" style="font-size:18px;font-weight:bold">
-      <span class="q-ml-sm">作った料理ですか？それとも後で作りたい料理ですか？</span>
+    <q-card-section
+      class="row items-center"
+      style="font-size:18px;font-weight:bold"
+    >
+      <span class="q-ml-sm cookOrNotTitleLarge"
+        >作った料理ですか？それとも後で作りたい料理ですか？</span
+      >
+      <span class="q-ml-sm cookOrNotTitleSmall"
+        >作った料理ですか？<br />それとも後で作りたい料理ですか？</span
+      >
     </q-card-section>
     <div class="containerWrapper">
       <div class="Container column">
         <q-img class="ContainerImg" src="statics/dish/dish.png"></q-img>
-        <q-btn class="btnLeft" label="料理済み" v-close-popup @click="$emit('setMadeOrNot',true)" />
+        <q-btn
+          class="btnLeft"
+          label="料理済み"
+          v-close-popup
+          @click="$emit('setMadeOrNot', true)"
+        />
       </div>
       <div class="Container column">
         <q-img class="ContainerImg" src="statics/dish/vegetables.png"></q-img>
-        <q-btn class="btnRight" label="後でつくる" v-close-popup @click="$emit('setMadeOrNot',false)" />
+        <q-btn
+          class="btnRight"
+          label="後でつくる"
+          v-close-popup
+          @click="$emit('setMadeOrNot', false)"
+        />
       </div>
     </div>
     <div
@@ -27,8 +45,7 @@
   </q-card>
 </template>
 
-<script>
-</script>
+<script></script>
 
 <style>
 .Container {
@@ -67,5 +84,15 @@
   border-radius: 10px;
   color: white;
   font-weight: bold;
+}
+@media screen and (min-width: 500px) {
+  .cookOrNotTitleSmall {
+    display: none;
+  }
+}
+@media screen and (max-width: 499px) {
+  .cookOrNotTitleLarge {
+    display: none;
+  }
 }
 </style>

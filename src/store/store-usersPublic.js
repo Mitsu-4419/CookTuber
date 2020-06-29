@@ -51,11 +51,6 @@ const mutations = {
       "star_number",
       payload.obj.star_number
     );
-    Vue.set(
-      state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
-      "tagArray",
-      payload.obj.tagArray
-    );
     console.log(payload.obj.updatedAt);
     Vue.set(
       state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
@@ -169,11 +164,6 @@ const actions = {
   //ユーザー情報にお気に入りのVideoを登録
   // ------------------------------
   async addFavoriteVTR({ commit, state }, payload) {
-    // -----------------------------------
-    // userPublicにタグの情報を入れるときはtagArrayで入れている。
-    // videoにタグ情報を入れている時はtagMApにして入れている。（個数をカウントするため）
-    // ----------------------------------
-    // ユーザーのSubCollectionにデータを入れる
     await firestoreDb
       .collection("userPublicInfo")
       .doc(payload.uid)
@@ -186,10 +176,14 @@ const actions = {
         channelId: payload.snippet.channelId,
         LikeArray: [],
         star_number: payload.star_number,
-        tagArray: payload.selectedTags,
         videoId: payload.favoriteVTRvideoID,
         cooked: payload.cooked
       });
+    // 現在時刻の秒数をオブジェクト にしていれる
+    let nowSeconds = Number(new Date().getTime()) / 1000;
+    let regiSeconds = {
+      seconds: Math.floor(nowSeconds)
+    };
     // DocumentId を取ってきてStateに登録
     const sp = await firestoreDb
       .collection("userPublicInfo")
@@ -206,12 +200,11 @@ const actions = {
       docId: getKey,
       uid: payload.uid,
       obj: {
-        createdAt: firestorebase.FieldValue.serverTimestamp(),
+        createdAt: regiSeconds,
         review: payload.review,
         uid: payload.uid,
         videoId: payload.favoriteVTRvideoID,
         star_number: payload.star_number,
-        tagArray: payload.selectedTags,
         LikeArray: [],
         cooked: payload.cooked
       }
@@ -233,7 +226,6 @@ const actions = {
         updatedAt: updateObject,
         review: payload.review,
         star_number: payload.star_number,
-        tagArray: payload.selectedTags,
         cooked: true
       }
     };
@@ -246,7 +238,6 @@ const actions = {
       .update({
         review: payload.review,
         star_number: payload.star_number,
-        tagArray: payload.selectedTags,
         updatedAt: firestorebase.FieldValue.serverTimestamp(),
         cooked: true
       });

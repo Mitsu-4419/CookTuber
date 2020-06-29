@@ -17,12 +17,12 @@
     "cordova-plugin-browsertab": "^0.2.0",
     "cordova-plugin-buildinfo": "^4.0.0",
     "cordova-plugin-compat": "^1.2.0",
-    "cordova-plugin-customurlscheme": "5.0.1",
+    "cordova-plugin-customurlscheme": "^5.0.1",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-inappbrowser": "^4.0.0",
     "cordova-plugin-media": "^5.0.3",
-    "cordova-plugin-splashscreen": "^5.0.4",
+    "cordova-plugin-openwith-ios": "^2.0.0",
     "cordova-plugin-wkwebview-engine": "^1.2.1",
     "cordova-universal-links-plugin": "^1.2.1"
   },
@@ -32,12 +32,12 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-inappbrowser": {},
       "cordova-plugin-browsertab": {},
       "cordova-plugin-buildinfo": {},
       "cordova-plugin-compat": {},
       "cordova-plugin-device": {},
       "cordova-plugin-file": {},
+      "cordova-plugin-inappbrowser": {},
       "cordova-plugin-media": {
         "KEEP_AVAUDIOSESSION_ALWAYS_ACTIVE": "NO"
       },
@@ -46,7 +46,9 @@
       "cordova-plugin-customurlscheme": {
         "URL_SCHEME": "com.cooktuber.20200621"
       },
-      "cordova-plugin-splashscreen": {}
+      "cordova-plugin-openwith-ios": {
+        "IOS_URL_SCHEME": "cordovaopenwithdemo"
+      }
     },
     "platforms": [
       "ios"

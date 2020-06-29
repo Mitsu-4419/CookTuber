@@ -34,6 +34,24 @@ const mutations = {
       "starPoint",
       newStarNumber
     );
+  },
+  reduceYoutuberDataMutate(state, payload) {
+    let newRevieweCount = Number(
+      state.YoutubersChannel_info[payload.channelId].reviewCount
+    );
+    Vue.set(
+      state.YoutubersChannel_info[payload.channelId],
+      "reviewCount",
+      newRevieweCount--
+    );
+    const oldStarPoint = Number(
+      state.YoutubersChannel_info[payload.channelId].starPoint
+    );
+    Vue.set(
+      state.YoutubersChannel_info[payload.channelId],
+      "starPoint",
+      Number(oldStarPoint - payload.star_number)
+    );
   }
 };
 
@@ -185,6 +203,19 @@ const actions = {
   //検索バーから文字列を渡す
   setSearch({ commit }, value) {
     commit("setSearch", value);
+  },
+  // Youtuberの投稿数ポイントを減らす
+  reduceYoutuberData({ commit }, payload) {
+    commit("reduceYoutuberDataMutate", payload),
+      firestoreDb
+        .collection("YouTubers_basic_info")
+        .doc(payload.channelId)
+        .update({
+          reviewCount: firestorebase.FieldValue.increment(-1),
+          starPoint: firestorebase.FieldValue.increment(
+            -Number(payload.star_number)
+          )
+        });
   }
 };
 

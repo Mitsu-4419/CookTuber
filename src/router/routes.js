@@ -88,6 +88,10 @@ const routes = [
       {
         path: "/termsOfService",
         component: () => import("pages/Others/TermsOfServicePage.vue")
+      },
+      {
+        path: "/others",
+        component: () => import("pages/Others/Others.vue")
       }
     ]
   }
