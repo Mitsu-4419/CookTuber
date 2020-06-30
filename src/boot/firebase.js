@@ -5,7 +5,7 @@ import "firebase/database";
 import "firebase/firestore";
 import "firebase/storage";
 
-var firebaseui = require("firebaseui-ja");
+var firebaseui = require("firebaseui");
 
 var firebaseConfig = {
   apiKey: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
@@ -32,21 +32,31 @@ let storageRef = storage.ref();
 
 let firestorebase = firebase.firestore;
 
+//Apple認証Id
+const providerApple = new firebase.auth.OAuthProvider("apple.com");
+
 const uiConfig = {
   signInFlow: "redirect",
-  // signInSuccessUrl: "cooktuber.com",
-  signInSuccessUrl: "http://127.0.0.1:8080/",
+  signInSuccessUrl: "cooktuber.com",
+  // signInSuccessUrl: "http://127.0.0.1:8080/",
   signInOptions: [
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    //apple,Microsoft,Yahooは以下のように呼び出し。日本語（firebaseui-ja）はまだ未対応
+    {
+      provider: providerApple.providerId
+    }
   ],
+
   customParameters: {
     // Forces account selection even when one account
     // is available.
     prompt: "select_account"
   },
+  //Appleのログインは特殊でここのcallbackで値が返却されない
   callbacks: {
     signInSuccessWithAuthResult: result => {
+      console.log(result);
       if (result.additionalUserInfo.providerId === "google.com") {
         if (result.additionalUserInfo.isNewUser == true) {
           localStorage.setItem("isNewUser", true);
@@ -56,6 +66,24 @@ const uiConfig = {
             .set({
               nickName: result.user.displayName,
               photoURL: result.user.photoURL,
+              introduction: "",
+              created_at: firebase.firestore.FieldValue.serverTimestamp(),
+              updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+              photoName: ""
+            });
+        } else {
+          localStorage.setItem("isNewUser", false);
+        }
+      } else if (result.additionalUserInfo.providerId === "apple.com") {
+        if (result.additionalUserInfo.isNewUser == true) {
+          localStorage.setItem("isNewUser", true);
+          firestoreDb
+            .collection("userPublicInfo")
+            .doc(result.user.uid)
+            .set({
+              nickName: "Apple承認中のアカウント",
+              photoURL:
+                "https://cooktuber.com/statics/icons/favicon-128x128.png",
               introduction: "",
               created_at: firebase.firestore.FieldValue.serverTimestamp(),
               updated_at: firebase.firestore.FieldValue.serverTimestamp(),
