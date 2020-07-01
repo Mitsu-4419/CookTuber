@@ -36,7 +36,8 @@ let firestorebase = firebase.firestore;
 const providerApple = new firebase.auth.OAuthProvider("apple.com");
 
 const uiConfig = {
-  signInFlow: "redirect",
+  // signInFlow: "redirect",
+  signInFlow: "popup",
   signInSuccessUrl: "cooktuber.com",
   // signInSuccessUrl: "http://127.0.0.1:8080/",
   signInOptions: [
@@ -53,10 +54,8 @@ const uiConfig = {
     // is available.
     prompt: "select_account"
   },
-  //Appleのログインは特殊でここのcallbackで値が返却されない
   callbacks: {
     signInSuccessWithAuthResult: result => {
-      console.log(result);
       if (result.additionalUserInfo.providerId === "google.com") {
         if (result.additionalUserInfo.isNewUser == true) {
           localStorage.setItem("isNewUser", true);

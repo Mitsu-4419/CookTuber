@@ -352,7 +352,7 @@
               :id="key"
               :channelId="key"
               :channelInfo="channelInfo"
-              from='topPage'
+              from="topPage"
             />
           </div>
         </div>
