@@ -36,8 +36,7 @@ let firestorebase = firebase.firestore;
 const providerApple = new firebase.auth.OAuthProvider("apple.com");
 
 const uiConfig = {
-  // signInFlow: "redirect",
-  signInFlow: "popup",
+  signInFlow: "redirect",
   signInSuccessUrl: "cooktuber.com",
   // signInSuccessUrl: "http://127.0.0.1:8080/",
   signInOptions: [
