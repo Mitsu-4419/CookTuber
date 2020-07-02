@@ -2,30 +2,22 @@
   <div>
     <q-page padding class="bg-grey-1">
       <q-card class="auth-tabs absolute-center">
-        <q-card-section>
-          <h6 class="text-bold q-mt-sm" style="margin-bottom:24px;">新規会員登録</h6>
-          <p>
-            Googleアカウント認証による会員登録をすることで、お気に入りのYouTuberを登録、紹介文の投稿が出来ます。
-            「CookTuber」をご利用になる場合は以下の利用規約とプライバシーポリシーをご覧になり、同意していただく必要があります。
-          </p>
-          <p class="q-mt-lg q-mb-lg">
-            •
-            <span class="text-blue-9 cursor-pointer" @click="TermsOfService = true">「CookTuber」利用規約</span>
-          </p>
-          <p class="q-mt-lg">
-            •
-            <span
-              class="text-blue-9 cursor-pointer"
-              @click="PrivacyPolicy = true"
-            >「CookTuber」プライバシーポリシー</span>
-          </p>
-        </q-card-section>
+        <h6 class="text-bold q-mt-lg" style="margin-bottom:16px;">新規会員登録</h6>
+        <p class="text-subtitle2" style="font-weight:bold">
+          「CookTuber」をご利用になるには
+          <span
+            class="text-blue-9 cursor-pointer"
+            @click="TermsOfService = true"
+          >利用規約</span>と
+          <span class="text-blue-9 cursor-pointer" @click="PrivacyPolicy = true">プライバシーポリシー</span>に同意して頂く必要があります。
+        </p>
         <div class="signup-wrapper">
           <div id="firebaseui-auth-container"></div>
         </div>
-        <div class="SignUp-wrapper">
+        <!-- FirebaseUI(CSS外部指定、変更不可)に押しやられる -->
+        <!-- <div class="SignUp-wrapper">
           <p class="text-blue-9 cursor-pointer SingnUp" @click="ToLoginPage()">ログインはこちら</p>
-        </div>
+        </div>-->
       </q-card>
     </q-page>
 
@@ -40,6 +32,7 @@
 
 <script>
 import { uiConfig, ui } from "src/boot/firebase";
+import "firebaseui-ja/dist/firebaseui.css";
 export default {
   data() {
     return {
@@ -48,9 +41,9 @@ export default {
     };
   },
   methods: {
-    ToLoginPage() {
-      this.$router.push("/auth/sign_in");
-    }
+    // ToLoginPage() {
+    //   this.$router.push("/auth/sign_in");
+    // }
   },
   mounted() {
     ui.start("#firebaseui-auth-container", uiConfig);
@@ -65,14 +58,14 @@ export default {
 <style scoped>
 .auth-tabs {
   width: 450px;
-  height: 450px;
+  height: 505px;
   border-radius: 10px;
   margin: auto;
-  padding: 10px 30px;
-  font-size: 15px;
+  padding: 16px 24px;
+  font-size: 12px;
   font-weight: bold;
 }
-/* Twitterログインのボタン */
+/*ログインのボタン */
 #firebaseui-auth-container {
   display: flex;
   justify-content: center;
@@ -91,20 +84,20 @@ export default {
 .SingnUp {
   margin-right: auto;
   margin-left: auto;
-  margin-top: 15px;
+  margin-top: 8px;
 }
 .q-mb-lg {
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 @media screen and (min-width: 360px) and (max-width: 499px) {
   .auth-tabs {
     width: 300px;
-    height: 400px;
+    height: 480px;
     border-radius: 10px;
     margin: auto;
-    padding: 5px 10px;
-    font-size: 12px;
+    padding: 15px 30px;
+    margin-top: -55px;
   }
   .signup-wrapper {
     margin-top: -15px;

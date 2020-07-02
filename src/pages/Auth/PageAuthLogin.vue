@@ -2,14 +2,9 @@
   <div>
     <q-page padding class="bg-grey-1">
       <q-card class="auth-tabs absolute-center">
-        <h6 class="text-bold q-mt-lg" style="margin-bottom:18px;">ログイン</h6>
-        <p
-          class="text-subtitle2"
-          style="font-weight:bold"
-        >既に会員登録がお済みの方は「Googleアカウントでログイン」ボタンを押してログインを進めてください</p>
-        <div class="googleAuthButton">
-          <div id="firebaseui-auth-container"></div>
-        </div>
+        <h6 class="text-bold q-mt-lg" style="margin-bottom:16px;">ログイン</h6>
+        <p class="text-subtitle2" style="font-weight:bold">既に会員登録がお済みの方はこちらからログインを進めてください</p>
+        <div id="firebaseui-auth-container"></div>
         <div class="SignUp-wrapper">
           <p
             class="text-blue-9 text-subtitle2 cursor-pointer SingnUp"
@@ -27,7 +22,7 @@
 
 <script>
 import { uiConfig, ui } from "src/boot/firebase";
-
+import "firebaseui-ja/dist/firebaseui.css";
 export default {
   data() {
     return {
@@ -51,10 +46,12 @@ export default {
 <style scoped>
 .auth-tabs {
   width: 450px;
-  height: 380px;
+  height: 505px;
   border-radius: 10px;
   margin: auto;
-  padding: 15px 30px;
+  padding: 16px 24px;
+  font-size: 12px;
+  font-weight: bold;
 }
 .googleAuthButton {
   margin-top: 48px;
@@ -82,10 +79,11 @@ export default {
 @media screen and (min-width: 360px) and (max-width: 499px) {
   .auth-tabs {
     width: 300px;
-    height: 380px;
+    height: 480px;
     border-radius: 10px;
     margin: auto;
     padding: 15px 30px;
+    margin-top: -55px;
   }
 }
 </style>

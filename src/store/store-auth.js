@@ -22,6 +22,8 @@ const actions = {
     firebaseAuth.onAuthStateChanged(async user => {
       Loading.hide();
       let isNewUser = localStorage.getItem("isNewUser");
+      let isMailUser = localStorage.getItem("isMailUser");
+      console.log(user);
       if (user) {
         commit("setLoggedIn", true);
         commit("setUserInfo", user.uid);
@@ -33,6 +35,9 @@ const actions = {
           dispatch("usersPublic/setNewUserProfile", user.uid, { root: true });
         } else if (isNewUser == "false") {
           this.$router.push("/").catch(err => {});
+        } else if (isMailUser == "true" && user.emailVerified == true) {
+          this.$router.push("/registerDisplayName").catch(err => {});
+          dispatch("usersPublic/setNewUserProfile", user.uid, { root: true });
         }
       } else {
         commit("setLoggedIn", false);
