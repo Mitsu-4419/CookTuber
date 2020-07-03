@@ -50,9 +50,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="restaurant" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >ジャンルで選ぶ</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">ジャンルで選ぶ</span>
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -122,12 +120,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/genreCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/genreCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Menuで料理を選ぶところ -->
@@ -135,14 +128,8 @@
       <div class="cookImageWrapperTopPage">
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
-            <q-icon
-              name="fas fa-book-open"
-              size="sm"
-              class="topPageIcon"
-            ></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >メニューで選ぶ</span
-            >
+            <q-icon name="fas fa-book-open" size="sm" class="topPageIcon"></q-icon>
+            <span class="cookImageWrapperTopPage-title-span">メニューで選ぶ</span>
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -237,12 +224,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/menuCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/menuCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Materialのタグを選ぶ -->
@@ -367,12 +349,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/materialCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/materialCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Youtuberのところ -->
@@ -381,9 +358,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="live_tv" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >高評価の多い料理チャンネル</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">高評価の多い料理チャンネル</span>
           </div>
         </div>
         <div class="cookImageTopPageWrapper">
@@ -400,12 +375,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/youtubers"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Reviewrのところ -->
@@ -414,9 +384,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="fas fa-users" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >高評価の多いReviewer</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">高評価の多いReviewer</span>
           </div>
         </div>
         <div class="cookImageTopPageWrapper row">
@@ -432,14 +400,9 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/youtubers"
-          class="moreButton moreButton-bottom"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/reviewtotal" class="moreButton moreButton-bottom" label="もっとみる"></q-btn>
       </div>
-      <span class="youtuberURL">ホゲホゲ</span>
+      <span class="youtuberURL"></span>
     </q-page>
 
     <!-- ユーザー登録をする様に促すDialog -->

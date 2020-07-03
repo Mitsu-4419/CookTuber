@@ -5,7 +5,6 @@ import { arrayElementIncludeOrNot } from "src/functions/arrayElementIncludeOrNot
 const state = {
   materialTag: {}
 };
-
 const mutations = {
   getAllMaterialTagsMutate(state, payload) {
     // console.log(payload);

@@ -23,7 +23,7 @@ const actions = {
       Loading.hide();
       let isNewUser = localStorage.getItem("isNewUser");
       let isMailUser = localStorage.getItem("isMailUser");
-      console.log(user);
+      // console.log(user);
       if (user) {
         commit("setLoggedIn", true);
         commit("setUserInfo", user.uid);
