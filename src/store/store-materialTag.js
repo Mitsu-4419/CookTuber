@@ -120,6 +120,14 @@ const getters = {
           if (Number(a.registerCount) > Number(b.registerCount)) return -1;
           return 0;
         });
+      } else if (model == "投稿日が最近順") {
+        array.sort(function(a, b) {
+          if (Number(new Date(a.publishedAt)) < Number(new Date(b.publishedAt)))
+            return 1;
+          if (Number(new Date(a.publishedAt)) > Number(new Date(b.publishedAt)))
+            return -1;
+          return 0;
+        });
       }
       return array;
     } else if (
@@ -150,6 +158,14 @@ const getters = {
         array.sort(function(a, b) {
           if (Number(a.registerCount) < Number(b.registerCount)) return 1;
           if (Number(a.registerCount) > Number(b.registerCount)) return -1;
+          return 0;
+        });
+      } else if (model == "投稿日が最近順") {
+        array.sort(function(a, b) {
+          if (Number(new Date(a.publishedAt)) < Number(new Date(b.publishedAt)))
+            return 1;
+          if (Number(new Date(a.publishedAt)) > Number(new Date(b.publishedAt)))
+            return -1;
           return 0;
         });
       }
@@ -186,6 +202,18 @@ const getters = {
             return 0;
           });
           return array;
+        } else if (model == "投稿日が最近順") {
+          array.sort(function(a, b) {
+            if (
+              Number(new Date(a.publishedAt)) < Number(new Date(b.publishedAt))
+            )
+              return 1;
+            if (
+              Number(new Date(a.publishedAt)) > Number(new Date(b.publishedAt))
+            )
+              return -1;
+            return 0;
+          });
         }
       } else {
         let MArray = [];
@@ -222,6 +250,14 @@ const getters = {
           return 0;
         });
         return array;
+      } else if (model == "投稿日が最近順") {
+        array.sort(function(a, b) {
+          if (Number(new Date(a.publishedAt)) < Number(new Date(b.publishedAt)))
+            return 1;
+          if (Number(new Date(a.publishedAt)) > Number(new Date(b.publishedAt)))
+            return -1;
+          return 0;
+        });
       }
     }
   },

@@ -37,9 +37,7 @@
             :rules="[val => !!val || '* 料理のReviewを入力してください']"
           />
         </div>
-        <q-card-section class
-          >投稿したレビューはマイページで確認できます</q-card-section
-        >
+        <q-card-section class>投稿したレビューはマイページで確認できます</q-card-section>
         <q-card-actions align="right" class="q-mt-md">
           <q-btn flat label="キャンセル" color="black" v-close-popup />
           <q-btn
@@ -61,7 +59,6 @@ export default {
   props: ["videoId", "channelId"],
   data() {
     return {
-      writeReview: false,
       text: "",
       ratingModel: 1
     };
@@ -98,7 +95,7 @@ export default {
         star_number: this.ratingModel,
         channelId: this.channelId
       });
-      this.writeReview = false;
+      this.$emit("closeRegiModal");
       // this.$router.push({ name: "mypage", query: { id: this.userId } });
     }
   },

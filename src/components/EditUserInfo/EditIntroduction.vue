@@ -18,6 +18,7 @@
         autofocus
         @input="$emit('update:userIntroduction', $event)"
         v-model="editIntroduction"
+        label-color="black"
       />
       <div class="editIntroductionCardButtonWrapper" align="right">
         <q-space />

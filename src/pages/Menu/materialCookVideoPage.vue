@@ -134,7 +134,12 @@ export default {
       tagMaterialTimeArray: [],
       chooseTag: false,
       materialModel: "星の数順",
-      optionsMaterial: ["星の数順", "再生回数順", "レビュー数多い順"]
+      optionsMaterial: [
+        "星の数順",
+        "再生回数順",
+        "レビュー数多い順",
+        "投稿日が最近順"
+      ]
     };
   },
   computed: {

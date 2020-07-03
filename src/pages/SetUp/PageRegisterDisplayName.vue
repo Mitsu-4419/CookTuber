@@ -12,7 +12,9 @@
           label="ニックネーム"
           :rules="[val => !!val || 'ニックネームを入れてください']"
           class="nickNameField"
+          label-color="black"
           ref="nickNameInput"
+          color="grey-8"
         />
         <q-input
           outlined
@@ -20,8 +22,10 @@
           label="簡単な自己紹介をしてください（※空欄可）"
           :rules="[val => val.length <= 30 || '３０字以内です']"
           ref="introduceInput"
+          label-color="black"
           type="textarea"
           class="introductionField"
+          color="grey-8"
         />
       </q-card-section>
       <q-card-actions align="right">
@@ -76,7 +80,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang='scss'>
 .registerNickName {
   width: 410px;
   z-index: 10px;

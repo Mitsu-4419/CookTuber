@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card class="reviewSubmitTitleCard">
+    <q-card class="reviewSubmitTitleCardFromCard">
       <div class="reviewSubmitTitle">
         <q-card-section class="row reviewSubmitTitleCardSection">
           <div>お気に入り料理登録</div>
@@ -14,7 +14,7 @@
           class="clearButtonReviewCard"
         />
       </div>
-      <div class="starWrapper">
+      <div class="starWrapperLarge">
         <star-rating
           v-model="RatingModel"
           :star-size="33"
@@ -25,8 +25,19 @@
           text-class="custom-text"
         ></star-rating>
       </div>
+      <div class="starWrapperSmall">
+        <star-rating
+          v-model="RatingModel"
+          :star-size="25"
+          :increment="0.1"
+          :padding="10"
+          :glow="1"
+          active-color="yellow"
+          text-class="custom-textSmall"
+        ></star-rating>
+      </div>
       <q-form @submit="submitEdittedReview">
-        <div class="q-pa-sm">
+        <div class="q-pa-sm reviewTextfield">
           <q-input
             v-model="Review"
             outlined
@@ -122,8 +133,8 @@ export default {
 };
 </script>
 
-<style>
-.reviewSubmitTitleCard {
+<style lang="scss">
+.reviewSubmitTitleCardFromCard {
   width: 500px;
 }
 .reviewSubmitTitle {
@@ -141,7 +152,12 @@ export default {
   font-size: 21px;
   font-weight: bold;
 }
-.starWrapper {
+.starWrapperLarge {
+  display: flex;
+  justify-content: center;
+  background: rgb(109, 109, 109);
+}
+.starWrapperSmall {
   display: flex;
   justify-content: center;
   background: rgb(109, 109, 109);
@@ -149,6 +165,11 @@ export default {
 .custom-text {
   color: yellow;
   font-size: 21px;
+}
+.custom-textSmall {
+  color: yellow;
+  font-size: 18px;
+  margin-bottom: 3px;
 }
 .q-textarea .q-field__native {
   min-height: 220px;
@@ -159,10 +180,47 @@ export default {
   margin-left: auto;
   margin-top: -7px;
 }
-.tagSelectBox {
-  min-width: 490px;
+@media screen and (min-width: 500px) and (max-width: 580px) {
+  .reviewSubmitTitleCardFromCard {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
-.optionSelected {
-  color: blue;
+@media screen and (max-width: 499px) {
+  .starWrapperLarge {
+    display: none;
+  }
+  .clearButtonReviewCard {
+    position: absolute;
+    top: 15px;
+    right: 0px;
+  }
+}
+@media screen and (min-width: 500px) {
+  .starWrapperSmall {
+    display: none;
+  }
+}
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .reviewSubmitTitleCardFromCard {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media screen and (min-width: 375px) and (max-width: 414px) {
+  .reviewSubmitTitleCardFromCard {
+    width: 330px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 374px) {
+  .reviewSubmitTitleCardFromCard {
+    width: 272px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 </style>

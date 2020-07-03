@@ -2,22 +2,29 @@
   <div>
     <q-page padding class="bg-grey-1">
       <q-card class="auth-tabs absolute-center">
-        <h6 class="text-bold q-mt-lg" style="margin-bottom:16px;">新規会員登録</h6>
+        <h6 class="text-bold q-mt-lg" style="margin-bottom:16px;">
+          新規会員登録
+        </h6>
         <p class="text-subtitle2" style="font-weight:bold">
           「CookTuber」をご利用になるには
           <span
             class="text-blue-9 cursor-pointer"
             @click="TermsOfService = true"
-          >利用規約</span>と
-          <span class="text-blue-9 cursor-pointer" @click="PrivacyPolicy = true">プライバシーポリシー</span>に同意して頂く必要があります。
+            >利用規約</span
+          >と
+          <span class="text-blue-9 cursor-pointer" @click="PrivacyPolicy = true"
+            >プライバシーポリシー</span
+          >に同意して頂く必要があります。
         </p>
         <div class="signup-wrapper">
           <div id="firebaseui-auth-container"></div>
         </div>
         <!-- FirebaseUI(CSS外部指定、変更不可)に押しやられる -->
-        <!-- <div class="SignUp-wrapper">
-          <p class="text-blue-9 cursor-pointer SingnUp" @click="ToLoginPage()">ログインはこちら</p>
-        </div>-->
+        <div class="SignUp-wrapper">
+          <p class="text-blue-9 cursor-pointer SingnUp" @click="ToLoginPage()">
+            ログインはこちら
+          </p>
+        </div>
       </q-card>
     </q-page>
 
@@ -41,9 +48,9 @@ export default {
     };
   },
   methods: {
-    // ToLoginPage() {
-    //   this.$router.push("/auth/sign_in");
-    // }
+    ToLoginPage() {
+      this.$router.push("/auth/sign_in");
+    }
   },
   mounted() {
     ui.start("#firebaseui-auth-container", uiConfig);
@@ -58,7 +65,7 @@ export default {
 <style scoped>
 .auth-tabs {
   width: 450px;
-  height: 505px;
+  height: 415px;
   border-radius: 10px;
   margin: auto;
   padding: 16px 24px;
@@ -80,11 +87,13 @@ export default {
   margin-left: auto;
   display: flex;
   justify-content: center;
+  font-size: 15px;
 }
 .SingnUp {
   margin-right: auto;
   margin-left: auto;
   margin-top: 8px;
+  margin-top: 10px;
 }
 .q-mb-lg {
   margin-top: 8px;
@@ -93,7 +102,7 @@ export default {
 @media screen and (min-width: 360px) and (max-width: 499px) {
   .auth-tabs {
     width: 300px;
-    height: 480px;
+    height: 415px;
     border-radius: 10px;
     margin: auto;
     padding: 15px 30px;

@@ -1,35 +1,41 @@
 <template>
-  <q-item class="reviewList">
-    <q-item-section top avatar>
-      <q-avatar rounded>
-        <img :src="review.photoURL" />
-      </q-avatar>
-    </q-item-section>
-    <q-item-section>
-      <q-item-label class="listNickName">{{ review.nickName }}</q-item-label>
-      <q-item-label class="listReview">{{ review.review }}</q-item-label>
-      <q-item-label class="row reviewLikeWrapper">
-        <div class="likeButton">
-          <q-icon
-            name="fas fa-thumbs-up"
-            size="1.5em"
-            :class="userLike == true ? 'likeActive' : 'likeNonActive'"
-            @click.prevent="addDecreaseLike()"
-          ></q-icon>
-        </div>
-        <section class="likeNumber">{{ LikeNumbers }}</section>
-        <star-rating
-          :read-only="true"
-          v-model="starUserReview"
-          :star-size="20"
-          :increment="0.1"
-          :padding="2"
-          active-color="#ffd400"
-          text-class="custom-Text"
-        ></star-rating>
-      </q-item-label>
-    </q-item-section>
-  </q-item>
+  <div>
+    <q-item class="reviewList">
+      <q-item-section top avatar>
+        <q-avatar rounded>
+          <img :src="review.photoURL" />
+        </q-avatar>
+      </q-item-section>
+      <q-item-section>
+        <q-item-label class="listNickName">{{ review.nickName }}</q-item-label>
+        <q-item-label class="listReview">{{ review.review }}</q-item-label>
+        <q-item-label class="row reviewLikeWrapper">
+          <star-rating
+            :read-only="true"
+            v-model="starUserReview"
+            :star-size="20"
+            :increment="0.1"
+            :padding="2"
+            active-color="#ffd400"
+            text-class="custom-Text"
+          ></star-rating>
+          <div class="likeButton">
+            <q-icon
+              name="fas fa-thumbs-up"
+              size="1.5em"
+              :class="userLike == true ? 'likeActive' : 'likeNonActive'"
+              @click.prevent="addDecreaseLike()"
+            ></q-icon>
+          </div>
+          <section class="likeNumber">{{ LikeNumbers }}</section>
+        </q-item-label>
+      </q-item-section>
+    </q-item>
+    <!-- ユーザー登録をする様に促すDialog -->
+    <q-dialog v-model="alertToSignUp">
+      <ToLoginAlert />
+    </q-dialog>
+  </div>
 </template>
 
 <script>
@@ -40,12 +46,13 @@ export default {
     return {
       routerUserId: "",
       userLike: false,
+      alertToSignUp: false,
       LikeNumbers: "",
       starUserReview: 0
     };
   },
   computed: {
-    ...mapState("auth", ["userId"])
+    ...mapState("auth", ["userId", "loggedIn"])
   },
   methods: {
     ...mapActions("usersPublic", ["increaseLike", "decreaseLike"]),
@@ -60,19 +67,21 @@ export default {
     // いいねの数の増減をする
     addDecreaseLike() {
       // ここのUidはレビューを書いた人のId
-      if (this.userLike == true) {
+      if (this.loggedIn == false) {
+        this.alertToSignUp = true;
+      } else if (this.loggedIn == true && this.userLike == true) {
         let payload = {
           docId: this.review.docId,
-          reviewerUID: this.id,
+          reviewerUID: this.review.uid,
           loginUID: this.userId
         };
         this.userLike = false;
         this.LikeNumbers--;
         this.decreaseLike(payload);
-      } else if (this.userLike == false) {
+      } else if (this.loggedIn == true && this.userLike == false) {
         let payload = {
           docId: this.review.docId,
-          reviewerUID: this.id,
+          reviewerUID: this.review.uid,
           loginUID: this.userId
         };
         this.userLike = true;
@@ -88,6 +97,9 @@ export default {
     this.routerUserId = this.review.uid;
     this.starUserReview = this.review.star_number;
     this.checkIfUserLikeOrNot();
+  },
+  components: {
+    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default
   }
 };
 </script>
@@ -105,13 +117,15 @@ export default {
     font-size: 14px;
   }
   .likeButton {
-    margin-left: 12px;
+    margin-left: 18px;
+    margin-top: 5px;
   }
   //   星の数字と合わせている
   .likeNumber {
     margin-left: 6px;
-    margin-top: 5px;
-    font-size: 15px;
+    margin-right: 10px;
+    margin-top: 8px;
+    font-size: 13px;
   }
   .reviewLikeWrapper {
     margin-top: 21px;
