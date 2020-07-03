@@ -64,7 +64,7 @@
           <div class="StarWrapperVideoDetailPage">
             <star-rating
               :read-only="true"
-              v-model="starPoint"
+              :rating="cookVideos[key].AverageStar"
               :star-size="20"
               :increment="0.1"
               :padding="6"
@@ -142,7 +142,6 @@
                 </q-item>
               </div>
             </q-list>
-            <!-- <div v-else>{{ cookVideos[key].videoDescription }}</div> -->
           </q-scroll-area>
           <q-scroll-area class="noDetail column" v-else>
             <div class="no-detail-icon">
@@ -163,14 +162,16 @@
           <span>ファンからのオススメ</span>
         </div>
         <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
-        <router-link
-          :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
-          v-for="(review, userkey) in userReviews"
-          :key="userkey"
-          class="routerDec"
-        >
-          <userReviewList :id="key" :review="review" />
-        </router-link>
+        <q-scroll-area class="userRecommendVideoScroll">
+          <router-link
+            :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
+            v-for="(review, userkey) in userReviews"
+            :key="userkey"
+            class="routerDec"
+          >
+            <userReviewList :id="key" :review="review" />
+          </router-link>
+        </q-scroll-area>
       </div>
       <div class="userRecommendVideoWrapper">
         <div class="otherRecommendedVideos">
@@ -179,7 +180,6 @@
         <q-scroll-area class="userRecommendVideoScroll">
           <CookRecommendVideo
             v-for="videoId in getReviewersFavoriteVideos(
-              reviewUserUidArray,
               key
             )"
             :key="videoId"
@@ -212,7 +212,6 @@
         <q-scroll-area class="userRecommendVideoScroll">
           <CookRecommendVideo
             v-for="videoId in getReviewersFavoriteVideos(
-              reviewUserUidArray,
               key
             )"
             :key="videoId"
@@ -233,7 +232,11 @@
     </q-dialog>
     <!-- レビューをかく促すDialog -->
     <q-dialog v-model="reviewSubmit">
-      <registerReviewFromCard :videoId="key" :channelId="cookVideos[key].channelId" />
+      <registerReviewFromCard
+        :videoId="key"
+        :channelId="cookVideos[key].channelId"
+        @closeRegiModal="reviewMaded"
+      />
     </q-dialog>
   </q-page>
 </template>
@@ -254,7 +257,6 @@ export default {
       cookedOrWillCook: false,
       reviewSubmit: false,
       cooked: false,
-      starPoint: 0,
       userReviews: {},
       documentId: "",
       teal: false,
@@ -269,10 +271,8 @@ export default {
   computed: {
     ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapState("videos", ["cookVideos"]),
-    ...mapGetters("usersPublic", [
-      "getYoutuberReview",
-      "getReviewersFavoriteVideos"
-    ]),
+    ...mapGetters("videos", ["getReviewersFavoriteVideos"]),
+    ...mapGetters("usersPublic", ["getYoutuberReview"]),
     ...mapState("auth", ["userId", "loggedIn"]),
     ...mapState("youtubers", ["YoutubersChannel_info"]),
     ...mapState("timeTag", ["timeTag"]),
@@ -313,11 +313,10 @@ export default {
       }
     },
     ShowReviewMakeModal() {
-      console.log("hoge");
       if (!this.loggedIn) {
         // ログインしていなかったらユーザー登録する様にDialogをだす
         this.alertToSignUp = true;
-      } else {
+      } else if (this.loggedIn && this.cooked == false) {
         this.cookedOrWillCook = true;
       }
     },
@@ -346,6 +345,10 @@ export default {
         "?start=" +
         value +
         "&autoplay=1";
+    },
+    reviewMaded() {
+      this.reviewSubmit = false;
+      this.cooked = true;
     }
   },
   components: {
@@ -370,24 +373,28 @@ export default {
     this.from = getParam("from");
     this.pageUid = getParam("pageUid");
     this.videoURL = "https://www.youtube.com/embed/" + getParam("key");
-    if (this.cookVideos[this.key] && this.starPoint > 0) {
-      this.starPoint =
-        Number(this.cookVideos[this.key].starPoint) /
-        Number(this.cookVideos[this.key].registerCount);
-    } else {
-      this.starPoint = 0;
+    const userInfo = this.usersPublicInfo;
+    const userFavObj = userInfo[this.userId].favoriteVTRObj;
+    let array = [];
+    Object.keys(userFavObj).forEach(key => {
+      array.push(userFavObj[key].videoId);
+    });
+    if (array.includes(this.key)) {
+      this.cooked = true;
     }
   },
   watch: {
     $route(to, from) {
       this.key = getParam("key");
       this.videoURL = "https://www.youtube.com/embed/" + getParam("key");
-      if (this.cookVideos[this.key] && this.starPoint > 0) {
-        this.starPoint =
-          Number(this.cookVideos[this.key].starPoint) /
-          Number(this.cookVideos[this.key].registerCount);
-      } else {
-        this.starPoint = 0;
+      const userInfo = this.usersPublicInfo;
+      const userFavObj = userInfo[this.userId].favoriteVTRObj;
+      let array = [];
+      Object.keys(userFavObj).forEach(key => {
+        array.push(userFavObj[key].videoId);
+      });
+      if (array.includes(this.key)) {
+        this.cooked = true;
       }
     }
   }
@@ -470,6 +477,7 @@ export default {
 .cookDetailPageVideoTitleWrapper {
   padding: 5px;
   width: 100%;
+  margin-top: 10px;
 }
 .StarWrapperVideoDetailPage {
   margin-top: 1px;
@@ -540,6 +548,7 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 .userRecommendVideoWrapper {
   width: 40%;
@@ -548,7 +557,7 @@ export default {
 }
 .userRecommendVideoScroll {
   width: 100%;
-  height: 290px;
+  height: 330px;
 }
 .review_title_wrapper {
   font-size: 19px;
@@ -557,7 +566,7 @@ export default {
   width: 60%;
 }
 .cookActive {
-  color: #babdc2;
+  color: #fea545;
 }
 .cookNonActive {
   color: #5d5e61;

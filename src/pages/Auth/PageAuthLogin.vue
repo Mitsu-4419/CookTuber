@@ -3,13 +3,17 @@
     <q-page padding class="bg-grey-1">
       <q-card class="auth-tabs absolute-center">
         <h6 class="text-bold q-mt-lg" style="margin-bottom:16px;">ログイン</h6>
-        <p class="text-subtitle2" style="font-weight:bold">既に会員登録がお済みの方はこちらからログインを進めてください</p>
+        <p class="text-subtitle2" style="font-weight:bold">
+          既に会員登録がお済みの方はこちらからログインを進めてください
+        </p>
         <div id="firebaseui-auth-container"></div>
         <div class="SignUp-wrapper">
           <p
-            class="text-blue-9 text-subtitle2 cursor-pointer SingnUp"
+            class="text-blue-9 text-subtitle2 text-bold cursor-pointer SingnUp"
             @click="ToSignUpPage()"
-          >新規ユーザー登録はこちらから</p>
+          >
+            新規ユーザー登録はこちらから
+          </p>
         </div>
       </q-card>
     </q-page>
@@ -46,7 +50,7 @@ export default {
 <style scoped>
 .auth-tabs {
   width: 450px;
-  height: 505px;
+  height: 415px;
   border-radius: 10px;
   margin: auto;
   padding: 16px 24px;
@@ -79,7 +83,7 @@ export default {
 @media screen and (min-width: 360px) and (max-width: 499px) {
   .auth-tabs {
     width: 300px;
-    height: 480px;
+    height: 415px;
     border-radius: 10px;
     margin: auto;
     padding: 15px 30px;

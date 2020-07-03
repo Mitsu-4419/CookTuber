@@ -22,7 +22,7 @@
           <div class="starRatingLarge">
             <star-rating
               :read-only="true"
-              v-model="starAverageNumber"
+              :rating="cookVideoDetail.AverageStar"
               :star-size="20"
               :increment="0.1"
               :padding="7"
@@ -33,7 +33,7 @@
           <div class="starRatingSmall">
             <star-rating
               :read-only="true"
-              v-model="starAverageNumber"
+              :rating="cookVideoDetail.AverageStar"
               :star-size="13"
               :increment="0.1"
               :padding="4"
@@ -53,19 +53,11 @@ export default {
   props: ["cookVideoDetail", "id", "from"],
   data() {
     return {
-      starAverageNumber: 0,
       rankInfo: this.id + 1
     };
   },
   computed: {
     ...mapState("youtubers", ["YoutubersChannel_info"])
-  },
-  created() {
-    if (this.cookVideoDetail) {
-      this.starAverageNumber =
-        Number(this.cookVideoDetail.starPoint) /
-        Number(this.cookVideoDetail.registerCount);
-    }
   }
 };
 </script>

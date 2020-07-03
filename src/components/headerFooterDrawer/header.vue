@@ -5,12 +5,12 @@
         <div class="row">
           <q-btn flat to="/" class="headerTitleIcon">
             <q-img
-              src="../../statics/Logo/cookTuberNew.png"
+              src="../../statics/Logo/CookTuber_LOGO.png"
               class="cooktuberLogoIcon"
             ></q-img>
-            <q-toolbar-title>
+            <!-- <q-toolbar-title>
               <span class="headerTitle">Cook Tuber</span>
-            </q-toolbar-title>
+            </q-toolbar-title>-->
           </q-btn>
           <!-- 検索バー -->
           <router-link
@@ -253,7 +253,7 @@ export default {
   width: 220px;
 }
 .cooktuberLogoIcon {
-  width: 45px;
+  width: 200px;
   height: 38px;
 }
 .menuIcon {
@@ -346,12 +346,8 @@ export default {
     position: initial;
     min-height: 90px;
   }
-  .cooktuberLogoIcon {
-    width: 38px;
-    height: 24px;
-  }
   .headerTitleIcon {
-    width: 170px;
+    width: 200px;
     margin-top: 30px;
     margin-left: 0px;
   }
@@ -383,7 +379,7 @@ export default {
     min-height: 90px;
   }
   .headerTitleIcon {
-    width: 170px;
+    width: 200px;
     margin-top: 30px;
     margin-left: 0px;
   }
@@ -415,7 +411,7 @@ export default {
     min-height: 90px;
   }
   .headerTitleIcon {
-    width: 170px;
+    width: 200px;
     margin-top: 30px;
     margin-left: 0px;
   }

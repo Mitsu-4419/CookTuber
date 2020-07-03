@@ -5,29 +5,33 @@
   >
     <div class="RecommendVideoCardTotalWrapper">
       <div class="cookVideoCardRecommend" v-if="cookVideoDetail">
-        <q-img
-          id="ytplayerRecommend"
-          :src="cookVideoDetail.thumbnail"
-          :ratio="16 / 9"
-        ></q-img>
+        <q-img id="ytplayerRecommend" :src="cookVideoDetail.thumbnail" :ratio="16 / 9"></q-img>
       </div>
       <div class="videoWrapperRecommend column">
         <div style="margin-top:auto;margin-bottom:auto;">
-          <div class="videoTitleCookPage2Recommend">
-            {{ cookVideoDetail.videoTitle }}
-          </div>
-          <div class="videoChannelRecommend">
-            {{ cookVideoDetail.channelTitle }}
-          </div>
+          <div class="videoTitleCookPage2Recommend">{{ cookVideoDetail.videoTitle }}</div>
+          <div class="videoChannelRecommend">{{ cookVideoDetail.channelTitle }}</div>
           <star-rating
             :read-only="true"
-            v-model="starAverageNumber"
+            :rating="cookVideoDetail.AverageStar"
             :star-size="11"
             :increment="0.1"
             :padding="7"
             :show-rating="false"
             active-color="#ffd400"
             text-class="custom-Text"
+            class="recommendCardStarLarge"
+          ></star-rating>
+          <star-rating
+            :read-only="true"
+            :rating="cookVideoDetail.AverageStar"
+            :star-size="17"
+            :increment="0.1"
+            :padding="7"
+            :show-rating="false"
+            active-color="#ffd400"
+            text-class="custom-Text"
+            class="recommendCardStarSmall"
           ></star-rating>
         </div>
       </div>
@@ -39,25 +43,13 @@
 import { mapState } from "vuex";
 export default {
   props: ["videoId", "cookVideoDetail"],
-  data() {
-    return {
-      starAverageNumber: 0
-    };
-  },
   computed: {
     ...mapState("youtubers", ["YoutubersChannel_info"])
-  },
-  created() {
-    if (this.cookVideoDetail) {
-      this.starAverageNumber =
-        Number(this.cookVideoDetail.starPoint) /
-        Number(this.cookVideoDetail.registerCount);
-    }
   }
 };
 </script>
 
-<style>
+<style lang='scss'>
 .ytp-large-play-button .ytp-button {
   display: none;
 }
@@ -126,6 +118,16 @@ export default {
     margin-bottom: 9px;
   }
 }
+@media screen and (min-width: 1000px) {
+  .videoWrapperRecommend {
+    width: 60%;
+    overflow: hidden;
+    padding: 3px;
+    .recommendCardStarSmall {
+      display: none;
+    }
+  }
+}
 @media screen and (max-width: 999px) {
   .cookVideoCardRecommend {
     width: 40%;
@@ -136,11 +138,14 @@ export default {
     width: 60%;
     overflow: hidden;
     padding: 3px;
+    .recommendCardStarLarge {
+      display: none;
+    }
   }
   .videoTitleCookPage2Recommend {
-    font-size: 13px;
+    font-size: 15px;
     color: #030303;
-    font-weight: 500;
+    font-weight: 600;
     font-family: Roboto, Arial, sans-serif;
     max-width: 100%;
     overflow: hidden;

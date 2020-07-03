@@ -23,20 +23,20 @@
           <div class="videoTitleWrapperWrapperMypageCooked column">
             <div style="margin-top:auto;margin-bottom:auto;">
               <div class="videoTitleWrapper">
-                <span class="videoTitle-mypage">
-                  {{ cookVideos[reviewInfo.videoId].videoTitle }}
-                </span>
+                <span class="videoTitle-mypage">{{
+                  cookVideos[reviewInfo.videoId].videoTitle
+                }}</span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
-                <span class="videoChannelName-Mypage">
-                  {{ cookVideos[reviewInfo.videoId].channelTitle }}
-                </span>
+                <span class="videoChannelName-Mypage">{{
+                  cookVideos[reviewInfo.videoId].channelTitle
+                }}</span>
               </div>
               <div class="StarWrapperMypage mypage-starRating-large">
                 <star-rating
                   :read-only="true"
-                  v-model="starPoint"
+                  :rating="reviewInfo.star_number"
                   :star-size="21"
                   :increment="0.1"
                   :padding="8"
@@ -47,7 +47,7 @@
               <div class="StarWrapperMypage mypage-starRating-small">
                 <star-rating
                   :read-only="true"
-                  v-model="starPoint"
+                  :rating="reviewInfo.star_number"
                   :star-size="18"
                   :increment="0.1"
                   :padding="4"
@@ -57,16 +57,16 @@
               </div>
               <div class="row bottomsWrapper">
                 <q-space></q-space>
-                <div class="likeCountWrapper">
+                <div class="likeCountWrapper row">
                   <q-icon
                     name="fas fa-utensils"
                     size="1.3em"
                     :class="cooked == true ? 'cookActive' : 'cookNonActive'"
                     @click.prevent="ShowReviewMakeModal()"
                   />
-                  <span class="favoriteLikeNumber">
-                    {{ cookVideos[reviewInfo.videoId].registerCount }}
-                  </span>
+                  <span class="favoriteLikeNumber">{{
+                    cookVideos[reviewInfo.videoId].registerCount
+                  }}</span>
                 </div>
                 <div class="likeCountWrapper row">
                   <q-icon
@@ -75,9 +75,9 @@
                     :class="userLike == true ? 'likeActive' : 'likeNonActive'"
                     @click.prevent="addDecreaseLike()"
                   />
-                  <span class="favoriteLikeNumber">
-                    {{ reviewInfo.LikeArray.length }}
-                  </span>
+                  <span class="favoriteLikeNumber">{{
+                    reviewInfo.LikeArray.length
+                  }}</span>
                 </div>
                 <div class="editButtontWrapper" v-show="userOrNot">
                   <q-icon
@@ -142,7 +142,6 @@ export default {
   props: ["docId", "reviewInfo", "userOrNot", "pageUserId", "from"],
   data() {
     return {
-      starPoint: 0,
       userLike: false,
       cooked: false,
       editReviewModal: false,
@@ -184,7 +183,9 @@ export default {
     // // いいねの数の増減をする
     addDecreaseLike() {
       // ここのUidはレビューを書いた人のId
-      if (this.userLike == true) {
+      if (this.loggedIn == false) {
+        this.alertToSignUp = true;
+      } else if (this.loggedIn == true && this.userLike == true) {
         let payload = {
           docId: this.docId,
           reviewerUID: this.reviewInfo.uid,
@@ -193,7 +194,7 @@ export default {
         this.userLike = false;
         this.LikeNumbers--;
         this.decreaseLike(payload);
-      } else if (this.userLike == false) {
+      } else if (this.loggedIn == true && this.userLike == false) {
         let payload = {
           docId: this.docId,
           reviewerUID: this.reviewInfo.uid,
@@ -254,7 +255,7 @@ export default {
     }
   },
   created() {
-    this.starPoint = Number(this.reviewInfo.star_number);
+    // this.starPoint = Number(this.reviewInfo.star_number);
     this.checkIfUserLikeOrNot();
     this.checkIfUserWroteReviewOrNot();
     this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
@@ -273,7 +274,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .myCardWrapper {
   text-decoration: none;
   color: black;
@@ -312,6 +313,18 @@ export default {
   width: 48%;
   margin-left: auto;
   margin-right: auto;
+  .cookActive {
+    color: #faa851c8;
+  }
+  .cookNonActive {
+    color: #5d5e61;
+  }
+  .likeActive {
+    color: rgb(55, 114, 216);
+  }
+  .likeNonActive {
+    color: rgb(210, 210, 210);
+  }
 }
 .videoTitleWrapper {
   padding: 3px;
@@ -341,8 +354,8 @@ export default {
   margin-left: auto;
 }
 .likeCountWrapper {
-  width: 23%;
-  margin-left: 3px;
+  width: 24%;
+  margin-left: 10px;
 }
 .editButtontWrapper {
   margin-left: -4px;
@@ -396,20 +409,9 @@ export default {
   font-weight: bold;
   margin-left: 5px;
   margin-top: 2px;
-  font-size: 11px;
+  font-size: 12px;
 }
-.cookActive {
-  color: #e54cfcc8;
-}
-.cookNonActive {
-  color: #5d5e61;
-}
-.likeActive {
-  color: rgb(55, 114, 216);
-}
-.likeNonActive {
-  color: rgb(210, 210, 210);
-}
+
 .timeDiplayCookedCard {
   font-size: 12px;
   color: #5d5e61;

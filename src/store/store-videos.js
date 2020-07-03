@@ -77,7 +77,8 @@ const actions = {
           registerCount: 1,
           // 星の点数を加算していく
           starPoint: Number(payload.star_number),
-          videoId: payload.favoriteVTRvideoID
+          videoId: payload.favoriteVTRvideoID,
+          publishedAt: payload.publishedAt
         });
       let PAYLOAD = {
         id: payload.favoriteVTRvideoID,
@@ -88,7 +89,8 @@ const actions = {
         thumbnail: snippet.thumbnails.medium.url,
         registerCount: 1,
         starPoint: Number(payload.star_number),
-        videoId: payload.favoriteVTRvideoID
+        videoId: payload.favoriteVTRvideoID,
+        publishedAt: payload.publishedAt
       };
       commit("addVideoInfoMutate", PAYLOAD);
     } else {
@@ -180,10 +182,13 @@ const getters = {
     // channelIdと星を１対１に対応したObjの配列をつく
     let newVideos = {};
     Object.keys(videos).forEach(key => {
-      if (videos[key].registerCount > 0) {
+      if (Number(videos[key].registerCount) > 0) {
         let averageStar =
           Number(videos[key].starPoint) / Number(videos[key].registerCount);
         videos[key]["AverageStar"] = averageStar;
+        newVideos[key] = videos[key];
+      } else {
+        videos[key]["AverageStar"] = 0;
         newVideos[key] = videos[key];
       }
     });
@@ -226,6 +231,14 @@ const getters = {
       array.sort(function(a, b) {
         if (Number(a.registerCount) < Number(b.registerCount)) return 1;
         if (Number(a.registerCount) > Number(b.registerCount)) return -1;
+        return 0;
+      });
+    } else if (model == "投稿日が最近順") {
+      array.sort(function(a, b) {
+        if (Number(new Date(a.publishedAt)) < Number(new Date(b.publishedAt)))
+          return 1;
+        if (Number(new Date(a.publishedAt)) > Number(new Date(b.publishedAt)))
+          return -1;
         return 0;
       });
     }
@@ -275,6 +288,40 @@ const getters = {
     }
     // console.log(returnObject);
     return returnObject;
+  },
+  // ======================================
+  //  videoDetailページで関連動画のIDArrayを返す
+  // ======================================
+  getReviewersFavoriteVideos: state => key => {
+    console.log(key);
+    const videoInfo = state.cookVideos;
+    console.log(videoInfo[key]);
+    const genreArray = videoInfo[key].genreTag;
+    const menuArray = videoInfo[key].menuTag;
+    let returnArray = [];
+    Object.keys(videoInfo).forEach(kkey => {
+      if (kkey !== key) {
+        for (let i in genreArray) {
+          if (
+            videoInfo[kkey].genreTag &&
+            videoInfo[kkey].genreTag.includes(genreArray[i]) &&
+            !returnArray.includes(kkey)
+          ) {
+            returnArray.push(kkey);
+          }
+        }
+        for (let j in menuArray) {
+          if (
+            videoInfo[kkey].menuTag &&
+            videoInfo[kkey].menuTag.includes(menuArray[j]) &&
+            !returnArray.includes(kkey)
+          ) {
+            returnArray.push(kkey);
+          }
+        }
+      }
+    });
+    return returnArray;
   }
 };
 

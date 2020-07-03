@@ -70,7 +70,7 @@ const mutations = {
     );
   },
   increaseLikeMutate(state, payload) {
-    console.log(payload.docId);
+    console.log(payload);
     if (
       state.usersPublicInfo[payload.reviewerUID].favoriteVTRObj[payload.docId]
         .LikeArray
@@ -327,6 +327,7 @@ const actions = {
   // カードなどからレビューの投稿
   // -----------------------------
   async addFavoriteVTRFromCard({ commit, state }, payload) {
+    console.log("hohohohohohoo");
     await firestoreDb
       .collection("userPublicInfo")
       .doc(payload.uid)
@@ -413,7 +414,13 @@ const getters = {
   },
   getSortedReviewer: (state, getters) => model => {
     const UserInfoTotal = getters.setLikeNumReviewNum;
-    const valArray = Object.values(UserInfoTotal);
+    const valArray0 = Object.values(UserInfoTotal);
+    let valArray = [];
+    for (let j in valArray0) {
+      if (valArray0[j].reviewNum > 0) {
+        valArray.push(valArray0[j]);
+      }
+    }
     if (model == "参考になった数が多い順") {
       valArray.sort(function(a, b) {
         if (Number(a.LikeNumber) < Number(b.LikeNumber)) return 1;
@@ -456,15 +463,21 @@ const getters = {
       userInfoTotal[key]["LikeNumber"] = LikeNum;
     });
     const valArray = Object.values(userInfoTotal);
-    valArray.sort(function(a, b) {
+    let valArray2 = [];
+    for (let i in valArray) {
+      if (valArray[i].reviewNum > 0) {
+        valArray2.push(valArray[i]);
+      }
+    }
+    valArray2.sort(function(a, b) {
       if (Number(a.LikeNumber) < Number(b.LikeNumber)) return 1;
       if (Number(a.LikeNumber) > Number(b.LikeNumber)) return -1;
       return 0;
     });
     let KeyArray = [];
     for (let i = 0; i < 5; i++) {
-      if (valArray[i]) {
-        KeyArray.push(valArray[i]);
+      if (valArray2[i]) {
+        KeyArray.push(valArray2[i]);
       }
     }
     return KeyArray;
@@ -492,25 +505,24 @@ const getters = {
   // ==============================
   // Detailページでレビュー投稿者のFavoriteVideoを取ってくる関数
   // ===============================
-  getReviewersFavoriteVideos: state => (userArray, pageVideoID) => {
-    const userInfo = state.usersPublicInfo;
-    let allVideoArray = [];
-    for (let i in userArray) {
-      const userFavObj = userInfo[userArray[i]].favoriteVTRObj;
-      const objArray = Object.values(userFavObj);
-      for (let j in objArray) {
-        if (
-          !allVideoArray.includes(objArray[j].videoId) &&
-          objArray[j].videoId !== pageVideoID &&
-          objArray[j].cooked == true
-        ) {
-          allVideoArray.push(objArray[j].videoId);
-        }
-      }
-    }
-    return allVideoArray;
-  },
-
+  // getReviewersFavoriteVideos: state => (userArray, pageVideoID) => {
+  //   const userInfo = state.usersPublicInfo;
+  //   let allVideoArray = [];
+  //   for (let i in userArray) {
+  //     const userFavObj = userInfo[userArray[i]].favoriteVTRObj;
+  //     const objArray = Object.values(userFavObj);
+  //     for (let j in objArray) {
+  //       if (
+  //         !allVideoArray.includes(objArray[j].videoId) &&
+  //         objArray[j].videoId !== pageVideoID &&
+  //         objArray[j].cooked == true
+  //       ) {
+  //         allVideoArray.push(objArray[j].videoId);
+  //       }
+  //     }
+  //   }
+  //   return allVideoArray;
+  // },
   // ==============================
   // 検索でユーザーを表示する関数
   // ===============================

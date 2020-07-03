@@ -120,7 +120,7 @@ export default {
       tagMenuTimeArray: ["time1", "time2", "time3"],
       tagMenuArray: [],
       menuModel: "星の数順",
-      options: ["星の数順", "再生回数順", "レビュー数多い順"]
+      options: ["星の数順", "再生回数順", "レビュー数多い順", "投稿日が最近順"]
     };
   },
   computed: {

@@ -434,12 +434,11 @@
       <div class="MoreButton_wrapper">
         <q-btn
           flat
-          to="/youtubers"
+          to="/reviewtotal"
           class="moreButton moreButton-bottom"
           label="もっとみる"
         ></q-btn>
       </div>
-      <span class="youtuberURL">ホゲホゲ</span>
     </q-page>
 
     <!-- ユーザー登録をする様に促すDialog -->
@@ -503,11 +502,21 @@ export default {
       tagMaterialArray: [],
       tagGenreArray: [],
       model: "星の数順",
-      options: ["星の数順", "再生回数順", "レビュー数多い順"],
+      options: ["星の数順", "再生回数順", "レビュー数多い順", "投稿日が最近順"],
       menuModel: "星の数順",
-      optionsMenu: ["星の数順", "再生回数順", "レビュー数多い順"],
+      optionsMenu: [
+        "星の数順",
+        "再生回数順",
+        "レビュー数多い順",
+        "投稿日が最近順"
+      ],
       materialModel: "星の数順",
-      optionsMaterial: ["星の数順", "再生回数順", "レビュー数多い順"]
+      optionsMaterial: [
+        "星の数順",
+        "再生回数順",
+        "レビュー数多い順",
+        "投稿日が最近順"
+      ]
     };
   },
   computed: {
@@ -534,9 +543,7 @@ export default {
     ...mapActions("videos", ["addNewVideoData"]),
     ...mapActions("youtubers", ["addNewYoutuberInfo"]),
     async showReviewMakeModal() {
-      console.log(document.urlSubmitForm.registerURL.value);
       const RegisterURL = document.urlSubmitForm.registerURL.value;
-      console.log(this.registerURL);
       if (
         !RegisterURL.includes("https://www.youtube.com/watch?v=") ||
         RegisterURL == ""
@@ -646,7 +653,7 @@ export default {
   height: 50px;
   margin-right: auto;
   margin-left: auto;
-  border-radius: 15px;
+  border-radius: 25px;
 }
 .topPageImageWrapper {
   width: 100%;
