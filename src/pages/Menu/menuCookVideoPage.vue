@@ -87,7 +87,7 @@
             :key="tag"
             :tagName="timeTag[tag].name"
             :id="tag"
-            @setActivatedTag="setMenuTag(menuModel)"
+            @setActivatedTag="setMenuTag"
             :TAGArray="tagMenuTimeArray"
             flag="topPage"
           />
