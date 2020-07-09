@@ -162,16 +162,21 @@
           <span>ファンからのオススメ</span>
         </div>
         <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
-        <q-scroll-area class="userRecommendVideoScroll">
-          <router-link
-            :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
-            v-for="(review, userkey) in userReviews"
-            :key="userkey"
-            class="routerDec"
-          >
-            <userReviewList :id="key" :review="review" />
-          </router-link>
-        </q-scroll-area>
+        <div v-if="Object.keys(userReviews).length > 0">
+          <q-scroll-area class="userRecommendVideoScroll">
+            <router-link
+              :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
+              v-for="(review, userkey) in userReviews"
+              :key="userkey"
+              class="routerDec"
+            >
+              <userReviewList :id="key" :review="review" />
+            </router-link>
+          </q-scroll-area>
+        </div>
+        <div v-else>
+          <q-card flat class="nonReviewCard">まだレビューはありません</q-card>
+        </div>
       </div>
       <div class="userRecommendVideoWrapper">
         <div class="otherRecommendedVideos">
@@ -196,14 +201,21 @@
           <span>ファンからのオススメ</span>
         </div>
         <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
-        <router-link
-          :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
-          v-for="(review, userkey) in userReviews"
-          :key="userkey"
-          class="routerDec"
-        >
-          <userReviewList :id="key" :review="review" />
-        </router-link>
+        <div v-if="Object.keys(userReviews).length > 0">
+          <q-scroll-area class="userRecommendVideoScroll">
+            <router-link
+              :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
+              v-for="(review, userkey) in userReviews"
+              :key="userkey"
+              class="routerDec"
+            >
+              <userReviewList :id="key" :review="review" />
+            </router-link>
+          </q-scroll-area>
+        </div>
+        <div v-else>
+          <q-card flat class="nonReviewCard">まだレビューはありません</q-card>
+        </div>
       </div>
       <div class="userRecommendVideoWrapper">
         <div class="otherRecommendedVideos">
@@ -281,6 +293,7 @@ export default {
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTRFromCard"]),
     async getUserReviews() {
+      this.userReviews = {};
       const videoId = getParam("key");
       let obj = this.getYoutuberReview(videoId);
       Object.keys(obj).forEach(documentId => {
@@ -386,6 +399,7 @@ export default {
   watch: {
     $route(to, from) {
       this.key = getParam("key");
+      this.getUserReviews();
       this.videoURL = "https://www.youtube.com/embed/" + getParam("key");
       const userInfo = this.usersPublicInfo;
       const userFavObj = userInfo[this.userId].favoriteVTRObj;
@@ -548,16 +562,16 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-top: 50px;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
 }
 .userRecommendVideoWrapper {
   width: 40%;
-  min-height: 300px;
+  min-height: 400px;
   padding: 5px;
 }
 .userRecommendVideoScroll {
   width: 100%;
-  height: 330px;
+  height: 400px;
 }
 .review_title_wrapper {
   font-size: 19px;
@@ -579,7 +593,8 @@ export default {
   width: 100%;
   margin: auto;
   min-width: 200px;
-  max-width: 945px;
+  max-width: 1600px;
+  // max-height: 930px;
 }
 .videoTitleAndName {
   width: 85%;
@@ -604,6 +619,14 @@ export default {
   font-weight: bold;
   margin-bottom: 20px;
   font-size: 15px;
+}
+
+.nonReviewCard {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 30px;
+  color: #5d5e61;
 }
 // 画面サイズ1000pxを境に下のユーザーレビューのところのレイアウトを変更する
 @media screen and (min-width: 1000px) {
@@ -668,6 +691,15 @@ export default {
   }
   .text-body1 {
     overflow-wrap: break-word;
+  }
+}
+@media screen and (max-width: 620px) {
+  .receipeWrapper {
+    .q-item__section--main {
+      width: 90px;
+      height: 25px;
+      flex: none;
+    }
   }
 }
 @media screen and (min-width: 600px) and (max-width: 769px) {

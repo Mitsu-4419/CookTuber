@@ -9,13 +9,15 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "10"
+    "node": "8"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "cors": "^2.8.5",
     "firebase-admin": "^8.12.1",
     "firebase-functions": "^3.7.0",
     "googleapis": "^52.1.0",
+    "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.10"
   },
   "devDependencies": {

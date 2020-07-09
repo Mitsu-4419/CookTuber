@@ -22,9 +22,15 @@ const mutations = {
     Vue.set(state.cookVideos[payload.id], "starPoint", payload.starPoint);
   },
   deleteVideoDataMutate(state, payload) {
-    Number(state.cookVideos[payload.favoriteVTRvideoID].registerCount) - 1;
-    Number(state.cookVideos[payload.favoriteVTRvideoID].starPoint) -
-      Number(payload.star_number);
+    if (
+      Number(state.cookVideos[payload.favoriteVTRvideoID].registerCount) > 0
+    ) {
+      Number(state.cookVideos[payload.favoriteVTRvideoID].registerCount) - 1;
+    }
+    if (Number(state.cookVideos[payload.favoriteVTRvideoID].starPoint)) {
+      Number(state.cookVideos[payload.favoriteVTRvideoID].starPoint) -
+        Number(payload.star_number);
+    }
   }
 };
 
@@ -40,22 +46,6 @@ const actions = {
         obj: doc.data()
       };
       commit("setAllCookingVideosMutation", payload);
-      // const res = await axios.get(
-      //   "https://www.googleapis.com/youtube/v3/videos",
-      //   {
-      //     params: {
-      //       key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
-      //       id: doc.id,
-      //       part: "statistics"
-      //     }
-      //   }
-      // );
-      // firestoreDb
-      //   .collection("video_info")
-      //   .doc(doc.id)
-      //   .update({
-      //     viewCount: res.data.items[0].statistics.viewCount
-      //   });
     });
   },
   // ーーーーーーーーーーー
@@ -293,9 +283,7 @@ const getters = {
   //  videoDetailページで関連動画のIDArrayを返す
   // ======================================
   getReviewersFavoriteVideos: state => key => {
-    console.log(key);
     const videoInfo = state.cookVideos;
-    console.log(videoInfo[key]);
     const genreArray = videoInfo[key].genreTag;
     const menuArray = videoInfo[key].menuTag;
     let returnArray = [];

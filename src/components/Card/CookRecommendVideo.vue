@@ -11,6 +11,7 @@
         <div style="margin-top:auto;margin-bottom:auto;">
           <div class="videoTitleCookPage2Recommend">{{ cookVideoDetail.videoTitle }}</div>
           <div class="videoChannelRecommend">{{ cookVideoDetail.channelTitle }}</div>
+            <div class='recommendCardStarLargeWrapper'>
           <star-rating
             :read-only="true"
             :rating="cookVideoDetail.AverageStar"
@@ -22,6 +23,8 @@
             text-class="custom-Text"
             class="recommendCardStarLarge"
           ></star-rating>
+            </div>
+          <div class='recommendCardStarSmallWrapper'>
           <star-rating
             :read-only="true"
             :rating="cookVideoDetail.AverageStar"
@@ -33,6 +36,7 @@
             text-class="custom-Text"
             class="recommendCardStarSmall"
           ></star-rating>
+          </div>
         </div>
       </div>
     </div>
@@ -119,13 +123,13 @@ export default {
   }
 }
 @media screen and (min-width: 1000px) {
+  .recommendCardStarSmallWrapper {
+    display: none;
+  }
   .videoWrapperRecommend {
     width: 60%;
     overflow: hidden;
     padding: 3px;
-    .recommendCardStarSmall {
-      display: none;
-    }
   }
 }
 @media screen and (max-width: 999px) {
@@ -138,7 +142,7 @@ export default {
     width: 60%;
     overflow: hidden;
     padding: 3px;
-    .recommendCardStarLarge {
+    .recommendCardStarLargeWrapper {
       display: none;
     }
   }

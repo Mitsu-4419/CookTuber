@@ -128,3 +128,33 @@ exports.registerUsersWithdrawl = functions
       });
     }
   });
+
+// 24時間ごとにVideoの再生数を更新する関数
+const axios = require("axios");
+exports.routineUpdateWatchNumber = functions
+  .region("asia-northeast1")
+  .pubsub.topic("testTopic")
+  .onPublish(async message => {
+    const DB = await admin.firestore();
+    const SP = await DB.collection("video_info").get();
+    SP.forEach(async doc => {
+      await axios
+        .get("https://www.googleapis.com/youtube/v3/videos", {
+          params: {
+            key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
+            id: doc.id,
+            part: "statistics"
+          }
+        })
+        .then(res => {
+          DB.collection("video_info")
+            .doc(doc.id)
+            .update({
+              viewCount: res.data.items[0].statistics.viewCount
+            });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+  });

@@ -16,7 +16,7 @@ export default {
     ...mapActions("materialTag", ["getMaterialTag"]),
     ...mapActions("genreTag", ["getGenreTag"]),
     ...mapActions("videos", ["getAllCookingVideos"]),
-    ...mapActions("youtubers", ["getYoutubers_info"]),
+    ...mapActions("youtubers", ["getYoutubers_info", "getLiveYoutubers_info"]),
     ...mapActions("timeTag", ["getTimeTag"])
   },
   created() {
