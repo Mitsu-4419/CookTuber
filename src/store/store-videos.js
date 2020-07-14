@@ -12,14 +12,20 @@ const mutations = {
     Vue.set(state.cookVideos, payload.id, payload);
   },
   uploadVideoMutate(state, payload) {
-    state.cookVideos[payload.id].registerCount =
+    const updatedRegisterCount =
       Number(state.cookVideos[payload.id].registerCount) + 1;
-    state.cookVideos[payload.id].starPoint =
+    const updatedStarPoint =
       Number(state.cookVideos[payload.id].starPoint) +
       Number(payload.starPoint);
+    const updatedAverageStar = updatedStarPoint / updatedRegisterCount;
+    state.cookVideos[payload.id].registerCount = updatedRegisterCount;
+    state.cookVideos[payload.id].starPoint = updatedStarPoint;
+    state.cookVideos[payload.id]["AverageStar"] = updatedAverageStar;
   },
   updateVideoDataMutate(state, payload) {
-    Vue.set(state.cookVideos[payload.id], "starPoint", payload.starPoint);
+    const prevStarPoint = state.cookVideos[payload.id].starPoint;
+    let afterTotalPoint = Number(prevStarPoint) + Number(payload.starPoint);
+    Vue.set(state.cookVideos[payload.id], "starPoint", afterTotalPoint);
   },
   deleteVideoDataMutate(state, payload) {
     if (
@@ -68,7 +74,7 @@ const actions = {
           // 星の点数を加算していく
           starPoint: Number(payload.star_number),
           videoId: payload.favoriteVTRvideoID,
-          publishedAt: payload.publishedAt
+          publishedAt: snippet.publishedAt
         });
       let PAYLOAD = {
         id: payload.favoriteVTRvideoID,
@@ -80,7 +86,7 @@ const actions = {
         registerCount: 1,
         starPoint: Number(payload.star_number),
         videoId: payload.favoriteVTRvideoID,
-        publishedAt: payload.publishedAt
+        publishedAt: snippet.publishedAt
       };
       commit("addVideoInfoMutate", PAYLOAD);
     } else {
@@ -140,20 +146,25 @@ const actions = {
   // ======================================
   //  MyPageからVideoDataの変更をする
   // ======================================
-  async updateVideoData({ commit }, payload) {
-    // 次に星の計算をする
+  async updateVideoData({ commit, state }, payload) {
+    // 次に星の計算して変化量を合計にたす
     let changeAmount =
-      Number(payload.star_number) - Number(payload.beforeStarNumber);
-    let changedStarPoint =
-      state.cookVideos[payload.favoriteVTRvideoID].starPoint + changeAmount;
+      Number(payload.afterStar_number) - Number(payload.beforeStarNumber);
     let payyload = {
-      starPoint: changedStarPoint,
+      starPoint: changeAmount,
       id: payload.favoriteVTRvideoID
     };
     commit("updateVideoDataMutate", payyload);
+    firestoreDb
+      .collection("video_info")
+      .doc(payload.favoriteVTRvideoID)
+      .update({
+        starPoint: firestorebase.FieldValue.increment(Number(changeAmount))
+      });
   },
   async deleteVideoData({ commit }, payload) {
     commit("deleteVideoDataMutate", payload);
+    console.log("hohohohohohohoho");
     firestoreDb
       .collection("video_info")
       .doc(payload.favoriteVTRvideoID)

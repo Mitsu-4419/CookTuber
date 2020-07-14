@@ -51,7 +51,6 @@ const mutations = {
       "star_number",
       payload.obj.star_number
     );
-    console.log(payload.obj.updatedAt);
     Vue.set(
       state.usersPublicInfo[payload.uid].favoriteVTRObj[payload.docId],
       "updatedAt",
@@ -206,7 +205,8 @@ const actions = {
         videoId: payload.favoriteVTRvideoID,
         star_number: payload.star_number,
         LikeArray: [],
-        cooked: payload.cooked
+        cooked: payload.cooked,
+        channelId: payload.snippet.channelId
       }
     };
     commit("addReviewInfoMutate", Payload);
@@ -327,7 +327,6 @@ const actions = {
   // カードなどからレビューの投稿
   // -----------------------------
   async addFavoriteVTRFromCard({ commit, state }, payload) {
-    console.log("hohohohohohoo");
     await firestoreDb
       .collection("userPublicInfo")
       .doc(payload.uid)
@@ -354,17 +353,22 @@ const actions = {
         getKey = doc.id;
       }
     });
+    let nowTime = {
+      seconds: new Date().getTime() / 1000
+    };
+    console.log(nowTime);
     let Payload = {
       docId: getKey,
       uid: payload.uid,
       obj: {
-        createdAt: firestorebase.FieldValue.serverTimestamp(),
+        createdAt: nowTime,
         review: payload.review,
         uid: payload.uid,
         videoId: payload.favoriteVTRvideoID,
         star_number: payload.star_number,
         LikeArray: [],
-        cooked: payload.cooked
+        cooked: payload.cooked,
+        channelId: payload.channelId
       }
     };
     commit("addReviewInfoMutate", Payload);

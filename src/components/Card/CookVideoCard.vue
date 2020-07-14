@@ -1,7 +1,10 @@
 <template>
   <div class="cookVideoCard" v-if="cookVideoDetail">
     <router-link
-      :to="{ name: 'video', query: { key: cookVideoDetail.videoId, from: from } }"
+      :to="{
+        name: 'video',
+        query: { key: cookVideoDetail.videoId, from: from }
+      }"
       style="text-decoration:none;color:black;"
     >
       <q-img v-if="rankInfo == 1" class="rankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
@@ -23,9 +26,9 @@
             <star-rating
               :read-only="true"
               :rating="cookVideoDetail.AverageStar"
-              :star-size="20"
+              :star-size="18"
               :increment="0.1"
-              :padding="7"
+              :padding="5"
               active-color="#ffd400"
               text-class="custom-Text"
             ></star-rating>

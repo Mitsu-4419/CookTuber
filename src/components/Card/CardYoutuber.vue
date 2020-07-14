@@ -8,11 +8,7 @@
         :to="{ name: 'show', query: { key: channelInfo.id, from: from } }"
         class="myCardWrapper"
       >
-        <q-img
-          v-if="rankInfo == 1"
-          class="YoutuberrankIcon"
-          src="statics/rankIcon/crown_gold.png"
-        ></q-img>
+        <q-img v-if="rankInfo == 1" class="YoutuberrankIcon" src="statics/rankIcon/crown_gold.png"></q-img>
         <q-img
           v-else-if="rankInfo == 2"
           class="YoutuberrankIcon"
@@ -29,27 +25,22 @@
           </q-avatar>
         </div>
         <div class="row">
-          <q-btn rounded class="channelNameYoutuberCard" no-caps>
-            {{ channelInfo.name }}
-          </q-btn>
+          <q-btn rounded class="channelNameYoutuberCard" no-caps>{{ channelInfo.name }}</q-btn>
         </div>
         <q-card-section class="card_description">
           <div>
             チャンネル登録者数:
-            <span class="channelRegiNum">
-              {{ channelInfo.subscriberCounts }}
-            </span>
+            <span class="channelRegiNum">{{ channelInfo.subscriberCounts }}</span>
           </div>
           <div class="YoutuberReviewNumWrapper">
             Review投稿数:
-            <span class="channelRegiNum">
-              {{ channelInfo.reviewCount }}
-            </span>
+            <span class="channelRegiNum">{{ channelInfo.reviewCount }}</span>
           </div>
           <div class="YoutuberStarWrapperLarge">
             <star-rating
               :read-only="true"
-              v-model="starYoutuberGot"
+              :rating=" Number(this.channelInfo.starPoint) /
+        Number(this.channelInfo.reviewCount)"
               :star-size="20"
               :increment="0.1"
               :padding="4"
@@ -60,7 +51,8 @@
           <div class="YoutuberStarWrapperSmall">
             <star-rating
               :read-only="true"
-              v-model="starYoutuberGot"
+              :rating=" Number(this.channelInfo.starPoint) /
+        Number(this.channelInfo.reviewCount)"
               :star-size="15"
               :increment="0.1"
               :padding="3"
@@ -81,7 +73,6 @@ export default {
   props: ["channelInfo", "id", "from"],
   data() {
     return {
-      starYoutuberGot: 0,
       rankInfo: Number(this.id) + 1
     };
   },
@@ -111,17 +102,6 @@ export default {
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default
-  },
-  created() {
-    if (this.channelInfo) {
-      if (this.channelInfo.reviewCount > 0) {
-        this.starYoutuberGot = Number(
-          this.channelInfo.starPoint / this.channelInfo.reviewCount
-        );
-      } else {
-        this.starYoutuberGot = 0;
-      }
-    }
   }
 };
 </script>

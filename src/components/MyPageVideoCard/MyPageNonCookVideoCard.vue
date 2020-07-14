@@ -4,27 +4,20 @@
       <router-link
         :to="{
           name: 'video',
-          query: { key: videoKey, pageUid: pageUserId, from: from }
+          query: { key: reviewInfo.videoId, pageUid: pageUserId, from: from }
         }"
         class="myCardWrapper"
       >
         <div class="row">
           <div class="column NonCookedCard">
-            <q-img
-              class="MyPageThumbnail"
-              :src="cookVideos[videoKey].thumbnail"
-            ></q-img>
+            <q-img class="MyPageThumbnail" :src="cookVideos[reviewInfo.videoId].thumbnail"></q-img>
             <div class="videoTitleWrapperWrapper">
               <div class="videoTitleWrapper">
-                <span class="videoTitle">
-                  {{ cookVideos[videoKey].videoTitle }}
-                </span>
+                <span class="videoTitle">{{ cookVideos[reviewInfo.videoId].videoTitle }}</span>
               </div>
               <div class="row videoChannelNameWrapper">
                 <q-space />
-                <span class="videoChannelName">
-                  {{ cookVideos[videoKey].channelTitle }}
-                </span>
+                <span class="videoChannelName">{{ cookVideos[reviewInfo.videoId].channelTitle }}</span>
               </div>
             </div>
           </div>
@@ -53,7 +46,7 @@
     <q-dialog v-model="EditReviewModal">
       <editReviewInfoModal
         :review="reviewInfo.review"
-        :starPoint="Number(reviewInfo.star_number)"
+        :starPoint="0"
         :channelId="reviewInfo.channelId"
         :videoId="reviewInfo.videoId"
         @closeModal="EditReviewModal = false"
@@ -71,11 +64,8 @@ export default {
   props: ["docId", "reviewInfo", "userOrNot", "pageUserId", "from"],
   data() {
     return {
-      starPoint: 0,
-      userLike: false,
       cooked: false,
       EditReviewModal: false,
-      videoKey: "",
       timeBehind: ""
     };
   },
@@ -86,8 +76,6 @@ export default {
     ...mapActions("usersPublic", ["changeReviewInfo"])
   },
   created() {
-    this.starPoint = Number(this.reviewInfo.star_number);
-    this.videoKey = this.reviewInfo.videoId;
     this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
   },
   components: {

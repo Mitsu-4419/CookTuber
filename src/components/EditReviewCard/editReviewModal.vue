@@ -14,18 +14,21 @@
           class="clearButtonReviewCard"
         />
       </div>
-      <div class="starWrapperLarge">
+      <div class="starWrapperLarge column">
+        <q-slider class="starSlider" v-model="RatingModel" :min="0.1" :max="5" :step="0.1" />
         <star-rating
           v-model="RatingModel"
           :star-size="33"
           :increment="0.1"
           :padding="16"
           :glow="1"
+          class="starRating"
           active-color="yellow"
           text-class="custom-text"
         ></star-rating>
       </div>
-      <div class="starWrapperSmall">
+      <div class="starWrapperSmall column">
+        <q-slider class="starSlider" v-model="RatingModel" :min="0.1" :max="5" :step="0.1" />
         <star-rating
           v-model="RatingModel"
           :star-size="25"
@@ -34,6 +37,7 @@
           :glow="1"
           active-color="yellow"
           text-class="custom-textSmall"
+          class="starRating"
         ></star-rating>
       </div>
       <q-form @submit="submitEdittedReview">
@@ -72,7 +76,7 @@ export default {
   data() {
     return {
       Review: this.review,
-      RatingModel: 1
+      RatingModel: 0
     };
   },
   computed: {
@@ -82,9 +86,14 @@ export default {
   },
   methods: {
     ...mapActions("usersPublic", ["updateFavoriteVTR", "deleteFavoriteVTR"]),
-    ...mapActions("videos", ["updateVideoData", "deleteVideoData"]),
+    ...mapActions("videos", [
+      "updateVideoData",
+      "deleteVideoData",
+      "addVideoData"
+    ]),
     ...mapActions("youtubers", [
       "reduceYoutuberData",
+      "updateYoutuberInfoFromCard",
       "addYoutuberInfoFromCard"
     ]),
     deleteReview() {
@@ -112,15 +121,27 @@ export default {
         beforeStarNumber: this.starPoint,
         docId: this.docId
       });
-      this.updateVideoData({
-        favoriteVTRvideoID: this.videoId,
-        star_number: this.RatingModel,
-        beforeStarNumber: this.starPoint
-      });
-      this.addYoutuberInfoFromCard({
-        star_number: this.RatingModel,
-        channelId: this.channelId
-      });
+      if (this.flag == "cooked") {
+        this.updateVideoData({
+          favoriteVTRvideoID: this.videoId,
+          afterStar_number: this.RatingModel,
+          beforeStarNumber: this.starPoint
+        });
+        this.updateYoutuberInfoFromCard({
+          beforeStarNumber: this.starPoint,
+          afterStar_number: this.RatingModel,
+          channelId: this.channelId
+        });
+      } else {
+        this.addVideoData({
+          favoriteVTRvideoID: this.videoId,
+          star_number: this.RatingModel
+        });
+        this.addYoutuberInfoFromCard({
+          star_number: this.RatingModel,
+          channelId: this.channelId
+        });
+      }
       this.$emit("closeModal");
     }
   },
@@ -179,6 +200,15 @@ export default {
   margin-right: auto;
   margin-left: auto;
   margin-top: -7px;
+}
+.starSlider {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.starRating {
+  margin-left: auto;
+  margin-right: auto;
 }
 @media screen and (min-width: 500px) and (max-width: 580px) {
   .reviewSubmitTitleCardFromCard {

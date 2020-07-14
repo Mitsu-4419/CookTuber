@@ -189,7 +189,21 @@ export default {
     height: 12px;
   }
 }
-@media screen and (min-width: 300px) and (max-width: 499px) {
+@media screen and (min-width: 414px) and (max-width: 499px) {
+  .PageYoutubers-topContainer {
+    margin-top: 5px;
+  }
+  .YouTuberCardWrapper {
+    margin-top: 5px;
+  }
+  .youtuberSelectBox {
+    padding-left: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
   .PageYoutubers-topContainer {
     margin-top: 5px;
   }

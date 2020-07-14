@@ -586,16 +586,13 @@ export default {
           this.doubleRegistAlert = true;
           return;
         } else if (
-          !(
-            snippet.categoryId == 24 ||
-            snippet.categoryId == 26 ||
-            snippet.categoryId == 22
-          )
+          snippet.categoryId == 24 ||
+          snippet.categoryId == 26 ||
+          snippet.categoryId == 22
         ) {
-          this.genreAlert = true;
-        } else {
-          // すでに作った動画か、これから作りたい動画かを選ぶ
           this.cookedOrWillCook = true;
+        } else {
+          this.genreAlert = true;
         }
       }
     },
@@ -695,7 +692,7 @@ export default {
 }
 .topPageIcon {
   margin-left: 10px;
-  margin-top: -5px;
+  margin-top: 0px;
 }
 .topPageFirstSelect {
   width: 180px;
