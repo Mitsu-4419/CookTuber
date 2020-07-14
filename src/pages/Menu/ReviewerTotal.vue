@@ -4,7 +4,12 @@
       <!-- ソートのSelect登録者が多い順or登録者が少ない順 -->
       <div class="row ReviewTotal-topContainer">
         <div class="videoTitleCookPage row">
-          <q-icon name="fas fa-users" color="grey-14" size="md" class="q-mr-md q-ml-sm"></q-icon>
+          <q-icon
+            name="fas fa-users"
+            color="grey-14"
+            size="md"
+            class="q-mr-md q-ml-sm"
+          ></q-icon>
           <div class="cookVideoTitleReviewer">Reviewer一覧</div>
         </div>
         <q-select
@@ -17,7 +22,11 @@
         />
       </div>
       <div class="row ReviewrCardWrapper widthAdjust">
-        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
+        <transition-group
+          appear
+          enter-active-class="animated fadeInLeft"
+          class="row"
+        >
           <ReviewerTotalPageCard
             :usersInfo="usersInfo"
             :id="key"
@@ -118,11 +127,21 @@ export default {
     width: 440px;
   }
 }
-@media screen and (min-width: 300px) and (max-width: 499px) {
+@media screen and (min-width: 414px) and (max-width: 499px) {
   .ReviewrCardWrapper {
     width: 352px;
+    margin-top: 0px;
   }
+  .reviewerSelectBox {
+    padding-left: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 413px) {
   .ReviewrCardWrapper {
+    width: 352px;
     margin-top: 0px;
   }
   .reviewerSelectBox {

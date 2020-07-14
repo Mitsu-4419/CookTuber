@@ -9,6 +9,15 @@
         <q-icon name="chevron_left" size="xl" color="black" />
         <span class="text-h6 text-grey-7 vertical-middle">トップページへ</span>
       </router-link>
+      <router-link
+        v-else-if="from == 'videoDetail'"
+        :to="{ name: 'video', query: { key: VDID, from: 'menuPage' } }"
+      >
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle"
+          >動画詳細ページへ</span
+        >
+      </router-link>
     </div>
     <!-- ーーーーーーーーーーー -->
     <!-- ページ上部のプロフィール載せる欄 -->
@@ -16,14 +25,15 @@
     <div class="row YoutuberDetailcard-holder">
       <div class="YoutuberDetailcard-wrapperLEFT">
         <div class="YoutuberDetailcard-imgWrapper">
-          <q-img class="YoutuberDetailcard-img" :src="YoutubersChannel_info[key].iconUrl"></q-img>
+          <q-img
+            class="YoutuberDetailcard-img"
+            :src="YoutubersChannel_info[key].iconUrl"
+          ></q-img>
         </div>
         <div class="YoutuberDetail-reviewNumberWrapper">
           <span style="font-size:15px;margin-top:4px;">レビュー投稿数</span>
           <span style="font-size:20px;font-weight:bold;margin-left:10px">
-            {{
-            YoutubersChannel_info[key].reviewCount
-            }}
+            {{ YoutubersChannel_info[key].reviewCount }}
           </span>
         </div>
         <div class="YoutuberDetail-starWrapperLarge">
@@ -51,27 +61,38 @@
       </div>
       <div class="YoutuberDetailcard-wrapperRIGHT">
         <div class="row">
-          <div class="YoutuberDetail-name">{{ YoutubersChannel_info[key].name }}</div>
+          <div class="YoutuberDetail-name">
+            {{ YoutubersChannel_info[key].name }}
+          </div>
         </div>
         <div class="q-mt-lg">
           <q-scroll-area style="height: 250px; max-width: 450px;">
-            <div class="text-body1 text-grey-7">{{ YoutubersChannel_info[key].description }}</div>
+            <div class="text-body1 text-grey-7">
+              {{ YoutubersChannel_info[key].description }}
+            </div>
           </q-scroll-area>
         </div>
         <div class="infoWrapper">
           <!-- チャンネル登録日 -->
           <div class="registerDateWrapper">
             <span>チャンネル登録日：</span>
-            <span class="text-bold">{{ YoutubersChannel_info[key].register_date }}</span>
+            <span class="text-bold">{{
+              YoutubersChannel_info[key].register_date
+            }}</span>
           </div>
           <!-- 現時点でのチャンネル登録者数 -->
           <div class="subscriberCountsWrapper">
             <span>現チャンネル登録者数：</span>
-            <span class="text-bold">{{ YoutubersChannel_info[key].subscriberCounts }}</span>
+            <span class="text-bold">{{
+              YoutubersChannel_info[key].subscriberCounts
+            }}</span>
           </div>
           <!-- Twitterアカウント -->
           <div class="iconsWrapper" v-if="YoutubersChannel_info[key].twitterId">
-            <a v-bind:href="YoutubersChannel_info[key].twitterId" target="_blank">
+            <a
+              v-bind:href="YoutubersChannel_info[key].twitterId"
+              target="_blank"
+            >
               <img src="../../statics/socialIcons/twitter.png" width="40px" />
             </a>
           </div>
@@ -104,6 +125,7 @@
             :key="id"
             :videoId="id"
             :cookVideoDetail="cookVideoDetail"
+            from="YoutuberDetail"
           />
         </transition-group>
       </div>
@@ -125,6 +147,7 @@ export default {
     return {
       key: "",
       from: "",
+      VDID: "",
       alertToSignUp: false,
       writeReview: false,
       confirmReview: false,
@@ -172,6 +195,7 @@ export default {
   created() {
     this.key = this.getParam("key");
     this.from = this.getParam("from");
+    this.VDID = this.getParam("VDID");
     this.starYoutuberDetail = this.YoutubersChannel_info[this.key].averageStar;
   }
 };

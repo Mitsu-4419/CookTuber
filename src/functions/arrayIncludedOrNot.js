@@ -2,6 +2,7 @@
 // A,Bは配列出なくてはいけない
 
 export function arrayIncludedOrNot(A, B) {
+  console.log(B);
   // Tagが付いていないVideoを弾く
   if (B) {
     if (B.length == 0) {

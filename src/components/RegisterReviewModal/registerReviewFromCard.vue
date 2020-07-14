@@ -6,7 +6,8 @@
           <div>お気に入り料理登録</div>
         </q-card-section>
       </div>
-      <div class="SubmitStarWrapperLarge">
+      <div class="SubmitStarWrapperLarge column">
+        <q-slider class="starSlider" v-model="ratingModel" :min="0.1" :max="5" :step="0.1" />
         <star-rating
           v-model="ratingModel"
           :star-size="33"
@@ -15,9 +16,11 @@
           :glow="1"
           active-color="yellow"
           text-class="custom-text"
+          class="starRating"
         ></star-rating>
       </div>
-      <div class="SubmitStarWrapperSmall">
+      <div class="SubmitStarWrapperSmall column">
+        <q-slider class="starSlider" v-model="ratingModel" :min="0.1" :max="5" :step="0.1" />
         <star-rating
           v-model="ratingModel"
           :star-size="23"
@@ -26,6 +29,7 @@
           :glow="1"
           active-color="yellow"
           text-class="custom-textSmall"
+          class="starRating"
         ></star-rating>
       </div>
       <q-form @submit="submitReviewFromCard">
@@ -92,14 +96,12 @@ export default {
         uid: this.userId,
         channelId: this.channelId,
         favoriteVTRvideoID: this.videoId,
-        star_number: this.ratingModel,
-        channelId: this.channelId
+        star_number: this.ratingModel
       });
       this.$emit("closeRegiModal");
       // this.$router.push({ name: "mypage", query: { id: this.userId } });
     }
   },
-  mounted() {},
   components: {
     ChipTopPageModal: require("components/Chip/ChipTopPageModal.vue").default
   }
@@ -143,6 +145,20 @@ export default {
 .optionSelected {
   color: blue;
 }
+.custom-textSmall {
+  color: yellow;
+  font-size: 18px;
+  margin-bottom: 3px;
+}
+.starSlider {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.starRating {
+  margin-left: auto;
+  margin-right: auto;
+}
 @media screen and (min-width: 500px) {
   .SubmitStarWrapperSmall {
     display: none;
@@ -155,11 +171,23 @@ export default {
 }
 @media screen and (min-width: 414px) and (max-width: 499px) {
   .reviewSubmitTitleCard {
-    width: 300px;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  .custom-textSmall {
-    color: yellow;
-    font-size: 18px;
+}
+@media screen and (min-width: 375px) and (max-width: 414px) {
+  .reviewSubmitTitleCard {
+    width: 330px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media screen and (min-width: 300px) and (max-width: 374px) {
+  .reviewSubmitTitleCard {
+    width: 272px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 </style>

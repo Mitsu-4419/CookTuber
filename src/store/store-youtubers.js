@@ -16,19 +16,30 @@ const mutations = {
   addYoutuberInfoMutate(state, payload) {
     Vue.set(state.YoutubersChannel_info, payload.channelId, payload);
   },
-  updateYoutuberInfoMutate(state, payload) {
-    let reviewCount = Number(
-      state.YoutubersChannel_info[payload.channelId]["reviewCount"]
+  addYoutuberInfoFromCardMutate(state, payload) {
+    let newRevieweCount =
+      Number(state.YoutubersChannel_info[payload.channelId].reviewCount) + 1;
+    console.log(newRevieweCount);
+    Vue.set(
+      state.YoutubersChannel_info[payload.channelId],
+      "reviewCount",
+      newRevieweCount
     );
+    const oldStarPoint = Number(
+      state.YoutubersChannel_info[payload.channelId].starPoint
+    );
+    Vue.set(
+      state.YoutubersChannel_info[payload.channelId],
+      "starPoint",
+      oldStarPoint + Number(payload.star_number)
+    );
+  },
+  updateYoutuberInfoMutate(state, payload) {
+    console.log(payload);
     let starPoints = Number(
       state.YoutubersChannel_info[payload.channelId]["starPoint"]
     );
     let newStarNumber = starPoints + Number(payload.star_number);
-    Vue.set(
-      state.YoutubersChannel_info[payload.channelId],
-      "reviewCount",
-      reviewCount++
-    );
     Vue.set(
       state.YoutubersChannel_info[payload.channelId],
       "starPoint",
@@ -125,7 +136,7 @@ const actions = {
         });
     } else {
       // すでにYoutuberが登録してあった場合、登録数と、星の数を加算する
-      commit("updateYoutuberInfoMutate", payload);
+      commit("addYoutuberInfoFromCardMutate", payload);
       firestoreDb
         .collection("YouTubers_basic_info")
         .doc(payload.channelId)
@@ -138,16 +149,29 @@ const actions = {
     }
   },
   // Youtuberの情報の更新をVideoCardから行う。
+  updateYoutuberInfoFromCard({ commit }, payload) {
+    let changeAmount =
+      Number(payload.afterStar_number) - Number(payload.beforeStarNumber);
+    let payyload = {
+      starPoint: changeAmount,
+      channelId: payload.channelId
+    };
+    commit("updateYoutuberInfoMutate", payyload);
+    firestoreDb
+      .collection("YouTubers_basic_info")
+      .doc(payload.channelId)
+      .update({
+        starPoint: firestorebase.FieldValue.increment(changeAmount)
+      });
+  }, // Youtuberの情報のdをVideoCardから行う。
   addYoutuberInfoFromCard({ commit }, payload) {
-    commit("updateYoutuberInfoMutate", payload);
+    commit("addYoutuberInfoFromCardMutate", payload);
     firestoreDb
       .collection("YouTubers_basic_info")
       .doc(payload.channelId)
       .update({
         reviewCount: firestorebase.FieldValue.increment(1),
-        starPoint: firestorebase.FieldValue.increment(
-          Number(payload.star_number)
-        )
+        starPoint: firestorebase.FieldValue.increment(payload.star_number)
       });
   },
   async addNewYoutuberInfo({ commit, state }, payload) {
@@ -206,16 +230,16 @@ const actions = {
   },
   // Youtuberの投稿数ポイントを減らす
   reduceYoutuberData({ commit }, payload) {
-    commit("reduceYoutuberDataMutate", payload),
-      firestoreDb
-        .collection("YouTubers_basic_info")
-        .doc(payload.channelId)
-        .update({
-          reviewCount: firestorebase.FieldValue.increment(-1),
-          starPoint: firestorebase.FieldValue.increment(
-            -Number(payload.star_number)
-          )
-        });
+    commit("reduceYoutuberDataMutate", payload);
+    firestoreDb
+      .collection("YouTubers_basic_info")
+      .doc(payload.channelId)
+      .update({
+        reviewCount: firestorebase.FieldValue.increment(-1),
+        starPoint: firestorebase.FieldValue.increment(
+          -Number(payload.star_number)
+        )
+      });
   }
 };
 
@@ -234,7 +258,17 @@ const getters = {
     return youtubers;
   },
   getSortedYoutubers: (state, getters) => model => {
-    const array = Object.values(getters.setAverageStar);
+    let youtubers = state.YoutubersChannel_info;
+    Object.keys(youtubers).forEach(key => {
+      if (Number(youtubers[key].reviewCount) > 0) {
+        let averageStar =
+          Number(youtubers[key].starPoint) / Number(youtubers[key].reviewCount);
+        youtubers[key]["averageStar"] = averageStar;
+      } else {
+        youtubers[key]["averageStar"] = 0;
+      }
+    });
+    const array = Object.values(youtubers);
     if (model == "高評価が多い順") {
       array.sort(function(e, f) {
         if (Number(e.averageStar) < Number(f.averageStar)) return 1;

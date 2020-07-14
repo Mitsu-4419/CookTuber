@@ -13,6 +13,20 @@
         <q-icon name="chevron_left" size="xl" color="black" />
         <span class="text-h6 text-grey-7 vertical-middle">料理動画一覧</span>
       </router-link>
+      <router-link
+        v-else-if="from == 'YoutuberDetail'"
+        :to="{
+          name: 'show',
+          query: {
+            from: 'videoDetail',
+            key: cookVideos[key].channelId,
+            VDID: key
+          }
+        }"
+      >
+        <q-icon name="chevron_left" size="xl" color="black" />
+        <span class="text-h6 text-grey-7 vertical-middle">Youtuber詳細</span>
+      </router-link>
       <router-link v-else-if="from == 'mypage'" :to="{ name: 'mypage', query: { id: pageUid } }">
         <q-icon name="chevron_left" size="xl" color="black" />
         <span class="text-h6 text-grey-7 vertical-middle">マイページへ</span>
@@ -22,32 +36,32 @@
         <span class="text-h6 text-grey-7 vertical-middle">トップページへ</span>
       </router-link>
     </div>
+
     <!-- ーーーーーーーーーーー -->
     <!-- ページ上部のプロフィール載せる欄 -->
     <!-- ーーーーーーーーーーー -->
     <div class="card-holder">
       <div class="row cookDetailPageVideoTitleWrapper">
-        <q-avatar
-          size="60px;"
-          style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
-          class="avatorLarge"
+        <router-link
+          :to="{
+            name: 'show',
+            query: {
+              key: cookVideos[key].channelId,
+              from: 'videoDetail',
+              VDID: key
+            }
+          }"
         >
-          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
-        </q-avatar>
-        <q-avatar
-          size="lg"
-          style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
-          class="avatorMedium"
-        >
-          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
-        </q-avatar>
-        <q-avatar
-          size="md"
-          style="margin-right:5px;margin-top:auto;margin-bottom:auto;"
-          class="avatorSmall"
-        >
-          <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
-        </q-avatar>
+          <q-avatar size="60px;" style="margin-right:5px;margin-top:15px;" class="avatorLarge">
+            <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
+          </q-avatar>
+          <q-avatar size="lg" style="margin-right:5px;margin-top:15px;" class="avatorMedium">
+            <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
+          </q-avatar>
+          <q-avatar size="md" style="margin-right:5px;margin-top:15px;" class="avatorSmall">
+            <img :src="YoutubersChannel_info[cookVideos[key].channelId].iconUrl" style="width:100%" />
+          </q-avatar>
+        </router-link>
         <div class="videoTitleAndName column">
           <div>
             <q-icon
@@ -96,16 +110,8 @@
                       v-model="val"
                       size="xs"
                     />
-                    <q-item-section class="materialItem">
-                      {{
-                      key
-                      }}
-                    </q-item-section>
-                    <q-item-section class="materialItem">
-                      {{
-                      volume
-                      }}
-                    </q-item-section>
+                    <q-item-section class="materialItem">{{ key }}</q-item-section>
+                    <q-item-section class="materialItem">{{ volume }}</q-item-section>
                   </q-item>
                 </div>
               </div>
@@ -129,16 +135,8 @@
                     style="z-index:100;cursor:pointer;color:blue"
                     @click.prevent="changeURL(Number(key))"
                     class="howtoLeft"
-                  >
-                    {{ Math.floor(Number(key) / 60) }}:{{
-                    Number(key) % 60
-                    }}
-                  </q-item-section>
-                  <q-item-section class="howtoRight">
-                    {{
-                    howto
-                    }}
-                  </q-item-section>
+                  >{{ Math.floor(Number(key) / 60) }}:{{ Number(key) % 60 }}</q-item-section>
+                  <q-item-section class="howtoRight">{{ howto }}</q-item-section>
                 </q-item>
               </div>
             </q-list>
@@ -165,7 +163,10 @@
         <div v-if="Object.keys(userReviews).length > 0">
           <q-scroll-area class="userRecommendVideoScroll">
             <router-link
-              :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
+              :to="{
+                name: 'mypage',
+                query: { id: userkey, from: 'videoDetail', videoId: key }
+              }"
               v-for="(review, userkey) in userReviews"
               :key="userkey"
               class="routerDec"
@@ -184,9 +185,7 @@
         </div>
         <q-scroll-area class="userRecommendVideoScroll">
           <CookRecommendVideo
-            v-for="videoId in getReviewersFavoriteVideos(
-              key
-            )"
+            v-for="videoId in getReviewersFavoriteVideos(key)"
             :key="videoId"
             :videoId="videoId"
             :cookVideoDetail="cookVideos[videoId]"
@@ -202,16 +201,19 @@
         </div>
         <q-separator style="height:3px;margin-top:10px;margin-bottom:13px;" />
         <div v-if="Object.keys(userReviews).length > 0">
-          <q-scroll-area class="userRecommendVideoScroll">
+          <div class="userRecommendVideoScrollMobile">
             <router-link
-              :to="{ name: 'mypage', query: { id: userkey, from:'videoDetail', videoId:key } }"
+              :to="{
+                name: 'mypage',
+                query: { id: userkey, from: 'videoDetail', videoId: key }
+              }"
               v-for="(review, userkey) in userReviews"
               :key="userkey"
               class="routerDec"
             >
               <userReviewList :id="key" :review="review" />
             </router-link>
-          </q-scroll-area>
+          </div>
         </div>
         <div v-else>
           <q-card flat class="nonReviewCard">まだレビューはありません</q-card>
@@ -223,9 +225,7 @@
         </div>
         <q-scroll-area class="userRecommendVideoScroll">
           <CookRecommendVideo
-            v-for="videoId in getReviewersFavoriteVideos(
-              key
-            )"
+            v-for="videoId in getReviewersFavoriteVideos(key)"
             :key="videoId"
             :videoId="videoId"
             :cookVideoDetail="cookVideos[videoId]"
@@ -250,6 +250,10 @@
         @closeRegiModal="reviewMaded"
       />
     </q-dialog>
+    <!-- 料理を後でつくるに登録しましたのModal -->
+    <q-dialog v-model="noticeRegistered" persistent>
+      <NoticeRegistered :userId="userId" />
+    </q-dialog>
   </q-page>
 </template>
 <script>
@@ -263,6 +267,7 @@ export default {
   data() {
     return {
       key: "",
+      noticeRegistered: false,
       alertToSignUp: false,
       writeReview: false,
       confirmReview: false,
@@ -349,6 +354,7 @@ export default {
           channelId: this.cookVideos[this.key].channelId,
           cooked: false
         });
+        this.noticeRegistered = true;
       }
     },
     changeURL(value) {
@@ -372,7 +378,8 @@ export default {
     registerReviewFromCard: require("components/RegisterReviewModal/registerReviewFromCard.vue")
       .default,
     CookRecommendVideo: require("components/Card/CookRecommendVideo.vue")
-      .default
+      .default,
+    NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default
   },
   mounted() {
     this.getUserReviews();
@@ -573,6 +580,9 @@ export default {
   width: 100%;
   height: 400px;
 }
+.userRecommendVideoScrollMobile {
+  width: 100%;
+}
 .review_title_wrapper {
   font-size: 19px;
 }
@@ -696,7 +706,7 @@ export default {
 @media screen and (max-width: 620px) {
   .receipeWrapper {
     .q-item__section--main {
-      width: 90px;
+      width: 55px;
       height: 25px;
       flex: none;
     }
@@ -779,6 +789,7 @@ export default {
   }
   .q-item {
     min-height: 41px;
+    padding-left: 0px;
   }
   .CookVideoDetail {
     padding: 10px;
