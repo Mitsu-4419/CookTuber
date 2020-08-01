@@ -164,7 +164,6 @@ const actions = {
   },
   async deleteVideoData({ commit }, payload) {
     commit("deleteVideoDataMutate", payload);
-    console.log("hohohohohohohoho");
     firestoreDb
       .collection("video_info")
       .doc(payload.favoriteVTRvideoID)

@@ -4,10 +4,7 @@
       <q-toolbar-title>
         <div class="row">
           <q-btn flat to="/" class="headerTitleIcon">
-            <q-img
-              src="../../statics/Logo/CookTuber_LOGO.png"
-              class="cooktuberLogoIcon"
-            ></q-img>
+            <q-img src="../../statics/Logo/CookTuber_LOGO.png" class="cooktuberLogoIcon"></q-img>
             <!-- <q-toolbar-title>
               <span class="headerTitle">Cook Tuber</span>
             </q-toolbar-title>-->
@@ -33,35 +30,19 @@
               ]"
             >
               <template v-slot:append>
-                <q-icon
-                  name="close"
-                  @click="searchField = ''"
-                  class="cursor-pointer deleteicon"
-                />
+                <q-icon name="close" @click="searchField = ''" class="cursor-pointer deleteicon" />
               </template>
             </q-input>
           </router-link>
         </div>
       </q-toolbar-title>
       <router-link to="/search" style="text-decoration: none;">
-        <q-icon
-          name="fas fa-search"
-          size="sm"
-          color="black"
-          class="searchIcon"
-        ></q-icon>
+        <q-icon name="fas fa-search" size="sm" color="black" class="searchIcon"></q-icon>
       </router-link>
       <!-- 未ログインSTART -->
       <div class="loginWrapper">
         <div v-if="!loggedIn">
-          <q-btn
-            class="newRegisterButton"
-            push
-            color="black"
-            label="新規登録"
-            flat
-            to="/auth/sign_up"
-          ></q-btn>
+          <q-btn class="newRegisterButton" push color="black" label="新規登録" flat to="/auth/sign_up"></q-btn>
           <q-btn
             class="loginButtonLarge"
             push
