@@ -88,20 +88,20 @@ export default {
       userOrNot: false,
       tab: "cooked",
       from: "",
-      videoId: ""
+      videoId: "",
     };
   },
   computed: {
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
-    ...mapGetters("usersPublic", ["getfavoriteCookedObject"])
+    ...mapGetters("usersPublic", ["getfavoriteCookedObject"]),
   },
   methods: {},
   components: {
     MyPageCookVideoReviewCard: require("components/MyPageVideoCard/MyPageCookVideoReviewCard.vue")
       .default,
     MyPageNonCookVideoCard: require("components/MyPageVideoCard/MyPageNonCookVideoCard.vue")
-      .default
+      .default,
   },
   mounted() {
     this.pageUserId = getParam("id");
@@ -117,8 +117,8 @@ export default {
       if (this.userId == this.pageUserId) {
         this.userOrNot = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -178,7 +178,7 @@ Cardコンポーネントでカードの大きさを指定 */
 /* 画面のサイズが1808以上の時は横にCard5枚並べる */
 @media screen and (min-width: 1691px) {
   .cookVideoReview {
-    width: 1443px;
+    width: 1317px;
     margin-right: auto;
     margin-left: auto;
     margin-top: 25px;

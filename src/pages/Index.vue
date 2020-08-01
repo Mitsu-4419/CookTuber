@@ -34,12 +34,7 @@
               ]"
             ></q-input>
             </form>-->
-            <q-btn
-              class="registerButton shadow-5"
-              label="登録"
-              style="font-weight:bold; background-color:#ff9933;color:white;"
-              type="submit"
-            ></q-btn>
+            <q-btn class="registerButton shadow-5" label="登録" type="submit"></q-btn>
           </form>
         </div>
       </div>
@@ -50,9 +45,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="restaurant" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >ジャンルで選ぶ</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">ジャンルで選ぶ</span>
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -122,12 +115,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/genreCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/genreCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Menuで料理を選ぶところ -->
@@ -135,14 +123,8 @@
       <div class="cookImageWrapperTopPage">
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
-            <q-icon
-              name="fas fa-book-open"
-              size="sm"
-              class="topPageIcon"
-            ></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >メニューで選ぶ</span
-            >
+            <q-icon name="fas fa-book-open" size="sm" class="topPageIcon"></q-icon>
+            <span class="cookImageWrapperTopPage-title-span">メニューで選ぶ</span>
           </div>
           <q-select
             class="topPageFirstSelect"
@@ -237,12 +219,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/menuCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/menuCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- -------------------------->
       <!-- Materialのタグを選ぶ -->
@@ -367,12 +344,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/materialCookvideos"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/materialCookvideos" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Youtuberのところ -->
@@ -381,9 +353,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="live_tv" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >高評価の多い料理チャンネル</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">高評価の多い料理チャンネル</span>
           </div>
         </div>
         <div class="cookImageTopPageWrapper">
@@ -400,12 +370,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/youtubers"
-          class="moreButton"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
       </div>
       <!-- --------------------------- -->
       <!-- Reviewrのところ -->
@@ -414,9 +379,7 @@
         <div class="cookImageWrapperTopPage-title row">
           <div style="padding-top:5px;">
             <q-icon name="fas fa-users" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span"
-              >高評価の多いReviewer</span
-            >
+            <span class="cookImageWrapperTopPage-title-span">高評価の多いReviewer</span>
           </div>
         </div>
         <div class="cookImageTopPageWrapper row">
@@ -432,12 +395,7 @@
         </div>
       </div>
       <div class="MoreButton_wrapper">
-        <q-btn
-          flat
-          to="/reviewtotal"
-          class="moreButton moreButton-bottom"
-          label="もっとみる"
-        ></q-btn>
+        <q-btn flat to="/reviewtotal" class="moreButton moreButton-bottom" label="もっとみる"></q-btn>
       </div>
     </q-page>
 
@@ -473,12 +431,17 @@
     <q-dialog v-model="noticeRegistered" persistent>
       <NoticeRegistered :userId="userId" />
     </q-dialog>
+    <!-- 最初におとづれたときのチュートリアル的なモーダル -->
+    <q-dialog v-model="firstVisitOrNot">
+      <FirstVisitModal @closeIntro="firstVisitOrNot = false" />
+    </q-dialog>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
 import axios from "axios";
+import { LocalStorage } from "quasar";
 import mixinSortTags from "src/mixins/mixin-sortTags";
 export default {
   mixins: [mixinSortTags],
@@ -493,6 +456,7 @@ export default {
       Snippet: "",
       cookedOrWillCook: false,
       SETMadeOrNot: false,
+      firstVisitOrNot: true,
       VideoId: "",
       TAGArray: [],
       tagTimeArray: ["time1", "time2", "time3"],
@@ -508,15 +472,15 @@ export default {
         "星の数順",
         "再生回数順",
         "レビュー数多い順",
-        "投稿日が最近順"
+        "投稿日が最近順",
       ],
       materialModel: "星の数順",
       optionsMaterial: [
         "星の数順",
         "再生回数順",
         "レビュー数多い順",
-        "投稿日が最近順"
-      ]
+        "投稿日が最近順",
+      ],
     };
   },
   computed: {
@@ -536,7 +500,7 @@ export default {
         document.getElementsByClassName("youtuberURL").item(0).textContent
       );
       return document.getElementsByClassName("youtuberURL").item(0).textContent;
-    }
+    },
   },
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTR"]),
@@ -544,17 +508,17 @@ export default {
     ...mapActions("youtubers", ["addNewYoutuberInfo"]),
     async showReviewMakeModal() {
       const RegisterURL = document.urlSubmitForm.registerURL.value;
-      if (
-        !RegisterURL.includes("https://www.youtube.com/watch?v=") ||
-        RegisterURL == ""
-      ) {
-        alert("有効なURLを入れてください");
-        this.registerURL = "";
-      } else if (!this.loggedIn) {
+      if (!this.loggedIn) {
         // ログインしていなかったらユーザー登録する様にDialogをだす
         this.alertToSignUp = true;
         this.registerURL = "";
-      } else if (this.loggedIn) {
+      } else if (RegisterURL == "") {
+        alert("有効なURLを入れてください");
+        this.registerURL = "";
+      } else if (
+        RegisterURL.includes("https://m.youtube.com/watch?v=") ||
+        RegisterURL.includes("https://www.youtube.com/watch?v=")
+      ) {
         // VideoId をURLから取り出す
         let splicedURL1 = RegisterURL.split("&")[0];
         let videoId = splicedURL1.split("v=")[1];
@@ -566,8 +530,8 @@ export default {
             params: {
               key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
               id: videoId,
-              part: "snippet"
-            }
+              part: "snippet",
+            },
           }
         );
         const snippet = res.data.items[0].snippet;
@@ -594,6 +558,9 @@ export default {
         } else {
           this.genreAlert = true;
         }
+      } else {
+        alert("有効なURLを入れてください");
+        this.registerURL = "";
       }
     },
     SetMadeOrNot(value) {
@@ -608,22 +575,22 @@ export default {
           favoriteVTRvideoID: this.VideoId,
           star_number: 0,
           snippet: this.Snippet,
-          cooked: false
+          cooked: false,
         });
         this.addNewVideoData({
           uid: this.userId,
           favoriteVTRvideoID: this.VideoId,
-          snippet: this.Snippet
+          snippet: this.Snippet,
         });
         this.addNewYoutuberInfo({
           uid: this.userId,
           channelId: this.Snippet.channelId,
           favoriteVTRvideoID: this.VideoId,
-          snippet: this.Snippet
+          snippet: this.Snippet,
         });
         this.noticeRegistered = true;
       }
-    }
+    },
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
@@ -638,8 +605,17 @@ export default {
     ChipComponent: require("components/Chip/ChipComponent.vue").default,
     NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default,
     doubleRegistered: require("components/doubleRegisterd/doubleRegistered.vue")
-      .default
-  }
+      .default,
+    FirstVisitModal: require("components/FirstVisitModal/FirstVisitModal.vue")
+      .default,
+  },
+  created() {
+    if (LocalStorage.getItem("CookTuber-first-visit") == null) {
+      LocalStorage.set("CookTuber-first-visit", false);
+    } else {
+      this.firstVisitOrNot = false;
+    }
+  },
 };
 </script>
 
@@ -683,6 +659,8 @@ export default {
   font-weight: bold;
   margin-right: auto;
   margin-left: auto;
+  background-color: #ff9933;
+  color: white;
 }
 .TopPageTagWrapper {
   width: 90%;
