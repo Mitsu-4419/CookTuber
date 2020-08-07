@@ -22,7 +22,7 @@ const actions = {
     firebaseAuth.onAuthStateChanged(async user => {
       Loading.hide();
       let isNewUser = localStorage.getItem("isNewUser");
-      let isMailUser = localStorage.getItem("isMailUser");
+      // let isMailUser = localStorage.getItem("isMailUser");
       if (user) {
         commit("setLoggedIn", true);
         commit("setUserInfo", user.uid);
@@ -31,12 +31,9 @@ const actions = {
         if (isNewUser == "true") {
           //新規登録時にヘッダーに名前表示のため、別ファイルのactionを呼び出し
           this.$router.push("/registerDisplayName").catch(err => {});
-          dispatch("usersPublic/setNewUserProfile", user.uid, { root: true });
+          // dispatch("usersPublic/setNewUserProfile", user.uid, { root: true });
         } else if (isNewUser == "false") {
           this.$router.push("/").catch(err => {});
-        } else if (isMailUser == "true" && user.emailVerified == true) {
-          this.$router.push("/registerDisplayName").catch(err => {});
-          dispatch("usersPublic/setNewUserProfile", user.uid, { root: true });
         }
       } else {
         commit("setLoggedIn", false);

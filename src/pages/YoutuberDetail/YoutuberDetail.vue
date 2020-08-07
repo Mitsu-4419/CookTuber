@@ -14,9 +14,7 @@
         :to="{ name: 'video', query: { key: VDID, from: 'menuPage' } }"
       >
         <q-icon name="chevron_left" size="xl" color="black" />
-        <span class="text-h6 text-grey-7 vertical-middle"
-          >動画詳細ページへ</span
-        >
+        <span class="text-h6 text-grey-7 vertical-middle">動画詳細ページへ</span>
       </router-link>
     </div>
     <!-- ーーーーーーーーーーー -->
@@ -25,16 +23,13 @@
     <div class="row YoutuberDetailcard-holder">
       <div class="YoutuberDetailcard-wrapperLEFT">
         <div class="YoutuberDetailcard-imgWrapper">
-          <q-img
-            class="YoutuberDetailcard-img"
-            :src="YoutubersChannel_info[key].iconUrl"
-          ></q-img>
+          <q-img class="YoutuberDetailcard-img" :src="YoutubersChannel_info[key].iconUrl"></q-img>
         </div>
         <div class="YoutuberDetail-reviewNumberWrapper">
           <span style="font-size:15px;margin-top:4px;">レビュー投稿数</span>
-          <span style="font-size:20px;font-weight:bold;margin-left:10px">
-            {{ YoutubersChannel_info[key].reviewCount }}
-          </span>
+          <span
+            style="font-size:20px;font-weight:bold;margin-left:10px"
+          >{{ YoutubersChannel_info[key].reviewCount }}</span>
         </div>
         <div class="YoutuberDetail-starWrapperLarge">
           <star-rating
@@ -61,38 +56,35 @@
       </div>
       <div class="YoutuberDetailcard-wrapperRIGHT">
         <div class="row">
-          <div class="YoutuberDetail-name">
-            {{ YoutubersChannel_info[key].name }}
-          </div>
+          <div class="YoutuberDetail-name">{{ YoutubersChannel_info[key].name }}</div>
         </div>
         <div class="q-mt-lg">
           <q-scroll-area style="height: 250px; max-width: 450px;">
-            <div class="text-body1 text-grey-7">
-              {{ YoutubersChannel_info[key].description }}
-            </div>
+            <div class="text-body1 text-grey-7">{{ YoutubersChannel_info[key].description }}</div>
           </q-scroll-area>
         </div>
         <div class="infoWrapper">
           <!-- チャンネル登録日 -->
           <div class="registerDateWrapper">
             <span>チャンネル登録日：</span>
-            <span class="text-bold">{{
+            <span class="text-bold">
+              {{
               YoutubersChannel_info[key].register_date
-            }}</span>
+              }}
+            </span>
           </div>
           <!-- 現時点でのチャンネル登録者数 -->
           <div class="subscriberCountsWrapper">
             <span>現チャンネル登録者数：</span>
-            <span class="text-bold">{{
+            <span class="text-bold">
+              {{
               YoutubersChannel_info[key].subscriberCounts
-            }}</span>
+              }}
+            </span>
           </div>
           <!-- Twitterアカウント -->
           <div class="iconsWrapper" v-if="YoutubersChannel_info[key].twitterId">
-            <a
-              v-bind:href="YoutubersChannel_info[key].twitterId"
-              target="_blank"
-            >
+            <a v-bind:href="YoutubersChannel_info[key].twitterId" target="_blank">
               <img src="../../statics/socialIcons/twitter.png" width="40px" />
             </a>
           </div>
@@ -157,14 +149,14 @@ export default {
       documentId: "",
       starYoutuberDetail: 0,
       model: "星の数順",
-      options: ["星の数順", "再生回数順", "レビュー数多い順", "投稿日が最近順"]
+      options: ["星の数順", "再生回数順", "レビュー数多い順", "投稿日が最近順"],
     };
   },
   computed: {
     ...mapState("youtubers", ["YoutubersChannel_info"]),
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
-    ...mapGetters("videos", ["cookVideoYoutuberSort"])
+    ...mapGetters("videos", ["cookVideoYoutuberSort"]),
   },
   methods: {
     getParam(name, url) {
@@ -185,11 +177,11 @@ export default {
       } else if (this.loggedIn == true && this.ratingModel == 1) {
         console.log("nothing");
       }
-    }
+    },
   },
   components: {
     ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
-    CookVideoCard: require("components/Card/CookVideoCard.vue").default
+    CookVideoCard: require("components/Card/CookVideoCard.vue").default,
   },
   mounted() {},
   created() {
@@ -197,7 +189,7 @@ export default {
     this.from = this.getParam("from");
     this.VDID = this.getParam("VDID");
     this.starYoutuberDetail = this.YoutubersChannel_info[this.key].averageStar;
-  }
+  },
 };
 </script>
 <style scoped>
