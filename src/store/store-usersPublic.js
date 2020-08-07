@@ -9,16 +9,11 @@ const mutations = {
     Vue.set(state.usersPublicInfo, payload.id, payload);
   },
   // 新規ユーザー登録時のMutation
-  setNewUserProfileMutate(state, payload) {
-    Vue.set(state.usersPublicInfo, payload.id, payload);
-  },
+  // setNewUserProfileMutate(state, payload) {
+  //   Vue.set(state.usersPublicInfo, payload.id, payload);
+  // },
   updateNewLoginUsersProfileMutate(state, payload) {
-    Vue.set(state.usersPublicInfo[payload.id], "nickName", payload.nickName);
-    Vue.set(
-      state.usersPublicInfo[payload.id],
-      "introduction",
-      payload.introduction
-    );
+    Vue.set(state.usersPublicInfo, payload.id, payload);
   },
   update_mypageNameMutate(state, payload) {
     Vue.set(state.usersPublicInfo[payload.id], "nickName", payload.userName);
@@ -120,8 +115,7 @@ const actions = {
         nickName: data.data().nickName,
         introduction: data.data().introduction,
         photoURL: data.data().photoURL,
-        photoName: data.data().photoName,
-        favoriteCount: data.data().favoriteCount
+        photoName: data.data().photoName
       };
       const sp = await firestoreDb
         .collection("userPublicInfo")
@@ -137,26 +131,36 @@ const actions = {
     });
   },
   // 新規ログインユーザーが入った時にstore-authでこのアクションを発火させることで新規ユーザーの情報をまずステートに入れる
-  async setNewUserProfile({ commit }, value) {
-    console.log(value);
-    const sp = await firestoreDb
-      .collection("userPublicInfo")
-      .doc(value)
-      .get();
-    let obj = {
-      id: sp.id,
-      created_at: sp.data().created_at,
-      updated_at: sp.data().updated_at,
-      nickName: sp.data().nickName,
-      introduction: sp.data().introduction,
-      photoURL: sp.data().photoURL
-    };
-    obj["favoriteVTRObj"] = {};
-    commit("setNewUserProfileMutate", obj);
-  },
+  // async setNewUserProfile({ commit }, value) {
+  //   console.log(value);
+  //   const sp = await firestoreDb
+  //     .collection("userPublicInfo")
+  //     .doc(value)
+  //     .get();
+  //   let obj = {
+  //     id: sp.id,
+  //     created_at: sp.data().created_at,
+  //     updated_at: sp.data().updated_at,
+  //     nickName: sp.data().nickName,
+  //     introduction: sp.data().introduction,
+  //     photoURL: sp.data().photoURL
+  //   };
+  //   obj["favoriteVTRObj"] = {};
+  //   commit("setNewUserProfileMutate", obj);
+  // },
   // Stateに新規ユーザーの情報を入れる。
   // nickNameとIntroductionの情報の更新
   async updateNewLoginUsersProfile({ commit }, payload) {
+    const sp = await firestoreDb
+      .collection("userPublicInfo")
+      .doc(payload.id)
+      .get();
+    (payload["created_at"] = sp.data().created_at),
+      (payload["updated_at"] = sp.data().updated_at),
+      (payload["nickName"] = payload.nickName),
+      (payload["introduction"] = payload.introduction),
+      (payload["photoURL"] = sp.data().photoURL);
+    payload["favoriteVTRObj"] = {};
     commit("updateNewLoginUsersProfileMutate", payload);
   },
   // ------------------------------

@@ -432,9 +432,9 @@
       <NoticeRegistered :userId="userId" />
     </q-dialog>
     <!-- 最初におとづれたときのチュートリアル的なモーダル -->
-    <q-dialog v-model="firstVisitOrNot">
+    <!-- <q-dialog v-model="firstVisitOrNot">
       <FirstVisitModal @closeIntro="firstVisitOrNot = false" />
-    </q-dialog>
+    </q-dialog>-->
   </div>
 </template>
 
@@ -456,7 +456,7 @@ export default {
       Snippet: "",
       cookedOrWillCook: false,
       SETMadeOrNot: false,
-      firstVisitOrNot: true,
+      // firstVisitOrNot: true,
       VideoId: "",
       TAGArray: [],
       tagTimeArray: ["time1", "time2", "time3"],
@@ -517,12 +517,23 @@ export default {
         this.registerURL = "";
       } else if (
         RegisterURL.includes("https://m.youtube.com/watch?v=") ||
-        RegisterURL.includes("https://www.youtube.com/watch?v=")
+        RegisterURL.includes("https://www.youtube.com/watch?v=") ||
+        RegisterURL.includes("https://youtu.be/")
       ) {
         // VideoId をURLから取り出す
-        let splicedURL1 = RegisterURL.split("&")[0];
-        let videoId = splicedURL1.split("v=")[1];
+        let videoId;
+        if (
+          RegisterURL.includes("https://m.youtube.com/watch?v=") ||
+          RegisterURL.includes("https://www.youtube.com/watch?v=")
+        ) {
+          const splicedURL1 = RegisterURL.split("&")[0];
+          videoId = splicedURL1.split("v=")[1];
+        } else if (RegisterURL.includes("https://youtu.be/")) {
+          videoId = RegisterURL.split("youtu.be/")[1];
+        }
+        // dataのVideoIdにデータを入れている。
         this.VideoId = videoId;
+        console.log(videoId);
         // videoIdのsnippetを取ってきて、Categoryが明らかに違うものは弾くようにする。
         const res = await axios.get(
           "https://www.googleapis.com/youtube/v3/videos",
@@ -606,15 +617,15 @@ export default {
     NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default,
     doubleRegistered: require("components/doubleRegisterd/doubleRegistered.vue")
       .default,
-    FirstVisitModal: require("components/FirstVisitModal/FirstVisitModal.vue")
-      .default,
+    // FirstVisitModal: require("components/FirstVisitModal/FirstVisitModal.vue")
+    //   .default,
   },
   created() {
-    if (LocalStorage.getItem("CookTuber-first-visit") == null) {
-      LocalStorage.set("CookTuber-first-visit", false);
-    } else {
-      this.firstVisitOrNot = false;
-    }
+    // if (LocalStorage.getItem("CookTuber-first-visit") == null) {
+    //   LocalStorage.set("CookTuber-first-visit", false);
+    // } else {
+    //   this.firstVisitOrNot = false;
+    // }
   },
 };
 </script>

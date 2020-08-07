@@ -1,10 +1,13 @@
 <template>
-  <q-header elevated class="headerTotal">
+  <q-header elevated>
     <q-toolbar class="bg-head headerTop">
       <q-toolbar-title>
         <div class="row">
           <q-btn flat to="/" class="headerTitleIcon">
-            <q-img src="../../statics/Logo/CookTuber_LOGO.png" class="cooktuberLogoIcon"></q-img>
+            <q-img
+              src="../../statics/Logo/CookTuber_LOGO.png"
+              class="cooktuberLogoIcon"
+            ></q-img>
             <!-- <q-toolbar-title>
               <span class="headerTitle">Cook Tuber</span>
             </q-toolbar-title>-->
@@ -30,19 +33,35 @@
               ]"
             >
               <template v-slot:append>
-                <q-icon name="close" @click="searchField = ''" class="cursor-pointer deleteicon" />
+                <q-icon
+                  name="close"
+                  @click="searchField = ''"
+                  class="cursor-pointer deleteicon"
+                />
               </template>
             </q-input>
           </router-link>
         </div>
       </q-toolbar-title>
       <router-link to="/search" style="text-decoration: none;">
-        <q-icon name="fas fa-search" size="sm" color="black" class="searchIcon"></q-icon>
+        <q-icon
+          name="fas fa-search"
+          size="sm"
+          color="black"
+          class="searchIcon"
+        ></q-icon>
       </router-link>
       <!-- 未ログインSTART -->
       <div class="loginWrapper">
         <div v-if="!loggedIn">
-          <q-btn class="newRegisterButton" push color="black" label="新規登録" flat to="/auth/sign_up"></q-btn>
+          <q-btn
+            class="newRegisterButton"
+            push
+            color="black"
+            label="新規登録"
+            flat
+            to="/auth/sign_up"
+          ></q-btn>
           <q-btn
             class="loginButtonLarge"
             push
@@ -324,8 +343,7 @@ export default {
     display: none;
   }
   .headerTop {
-    position: initial;
-    min-height: 90px;
+    height: 66px;
   }
   .headerTitleIcon {
     width: 200px;
@@ -338,12 +356,11 @@ export default {
   .searchIcon {
     margin-top: 30px;
   }
-  .q-pa-md {
-    padding-right: 4px;
-    padding-left: 8px;
-  }
   .q-toolbar {
-    padding: 0px;
+    padding-bottom: 10px;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 /* iPhoneX, 8PLUS, 8 */
@@ -356,8 +373,7 @@ export default {
     display: none;
   }
   .headerTop {
-    position: initial;
-    min-height: 90px;
+    height: 70px;
   }
   .headerTitleIcon {
     width: 200px;
@@ -373,12 +389,11 @@ export default {
   .loginButtonLarge {
     display: none;
   }
-  .q-pa-md {
-    padding-right: 4px;
-    padding-left: 8px;
-  }
   .q-toolbar {
-    padding: 0px;
+    padding-bottom: 3px;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 /* iPhone5など*/
@@ -388,8 +403,7 @@ export default {
     display: none;
   }
   .headerTop {
-    position: initial;
-    min-height: 90px;
+    height: 52px;
   }
   .headerTitleIcon {
     width: 200px;
@@ -405,12 +419,11 @@ export default {
   .loginButtonLarge {
     display: none;
   }
-  .q-pa-md {
-    padding-right: 4px;
-    padding-left: 8px;
-  }
   .q-toolbar {
-    padding: 0px;
+    padding-bottom: 24px;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 </style>

@@ -128,7 +128,7 @@
       </q-btn>
       <q-btn
         class="footerMenuButton"
-        size="11px"
+        size="14px"
         color="#3d3760"
         flat
         stack
@@ -267,7 +267,7 @@ export default {
     display: none;
   }
   .footerExtraSmallSmall {
-    height: 68px;
+    height: 66px !important;
     position: fixed;
     bottom: 0;
     background: #f9f6f1;
@@ -289,7 +289,7 @@ export default {
     display: none;
   }
   .footerExtraSmallSmall {
-    height: 65px;
+    height: 65px !important;
     position: fixed;
     bottom: 0;
     background: #f9f6f1;
@@ -325,7 +325,7 @@ export default {
     display: none;
   }
   .footerExtraSmallSmall {
-    height: 55px;
+    height: 50px !important;
     position: fixed;
     bottom: 0;
     background: #f9f6f1;
