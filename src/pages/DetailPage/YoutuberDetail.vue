@@ -180,7 +180,7 @@ export default {
     },
   },
   components: {
-    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
+    ToLoginAlert: require("components/Modals/ToLoginAlert.vue").default,
     CookVideoCard: require("components/Card/CookVideoCard.vue").default,
   },
   mounted() {},

@@ -1,8 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= htmlWebpackPlugin.options.productName %></title>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-YTXYE0HFBL"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
+      gtag("config", "G-YTXYE0HFBL");
+    </script>
+    <!-- User Heat Tag -->
+    <script type="text/javascript">
+      (function(add, cla) {
+        window["UserHeatTag"] = cla;
+        (window[cla] =
+          window[cla] ||
+          function() {
+            (window[cla].q = window[cla].q || []).push(arguments);
+          }),
+          (window[cla].l = 1 * new Date());
+        var ul = document.createElement("script");
+        var tag = document.getElementsByTagName("script")[0];
+        ul.async = 1;
+        ul.src = add;
+        tag.parentNode.insertBefore(ul, tag);
+      })("//uh.nakanohito.jp/uhj2/uh.js", "_uhtracker");
+      _uhtracker({ id: "uhsksBAdQU" });
+    </script>
+    <!-- End User Heat Tag -->
+    <title>
+      CookTuber |
+      Youtubeの簡単料理,簡単レシピをまとめて検索、ブックマークできるサイトです
+    </title>
     <meta charset="utf-8" />
     <meta
       name="description"
@@ -14,7 +48,46 @@
       name="viewport"
       content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (htmlWebpackPlugin.options.ctx.mode.cordova || htmlWebpackPlugin.options.ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
     />
-
+    <meta
+      name="description"
+      content="Youtubeの料理動画から簡単で手短に作れる美味しいレシピをまとめています！また、自分でお気に入りのレシピ動画をブックマークしてレビューを書いたりできます！"
+    />
+    <meta
+      name="keywords"
+      content="簡単 レシピ,簡単 料理,簡単 おつまみ,料理系 Youtube,レシピ,きょうの料理,簡単 夕飯,料理レシピ,時短料理,動画ブックマーク,まとめサイト,料理動画,つくれぽ"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:site_name"
+      content="CookTuber |
+      Youtubeの簡単料理,簡単レシピをまとめて検索、ブックマークできるサイトです"
+    />
+    <meta
+      property="og:title"
+      content="CookTuber |
+      Youtubeの簡単料理,簡単レシピをまとめて検索、ブックマークできるサイトです"
+    />
+    <meta
+      property="og:description"
+      content="Youtubeの料理動画から簡単で手短に作れる美味しいレシピをまとめています！また、自分でお気に入りのレシピ動画をブックマークしてレビューを書いたりできます！"
+    />
+    <meta property="og:image" content="statics/app-logo-128x128.png" />
+    <meta property="og:url" content="https://cooktuber.com" />
+    <meta name="author" content="株式会社Block Aid" />
+    <meta name="theme-color" content="#F8F7F8" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@CTuber2020" />
+    <meta name="twitter:creator" content="@CTuber2020" />
+    <meta
+      name="twitter:title"
+      content="CookTuber | Youtubeの料理動画をまとめて検索、ブックマークできるサイトです"
+    />
+    <meta
+      name="twitter:description"
+      content="Youtubeの料理動画から簡単で手短に作れる美味しいレシピをまとめています！また、自分でお気に入りのレシピ動画をブックマークしてレビューを書いたりできます！"
+    />
+    <meta name="twitter:image" content="statics/CookTuber_logo.png" />
+    <meta name="twitter:url" content="https://cooktuber.com" />
     <link
       rel="icon"
       type="image/png"
@@ -41,7 +114,7 @@
     />
     <link rel="icon" type="image/ico" href="statics/icons/favicon.ico" />
   </head>
-  <body style="height:100%;">
+  <body>
     <!-- DO NOT touch the following DIV -->
     <div id="q-app"></div>
   </body>

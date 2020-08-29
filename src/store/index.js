@@ -2,12 +2,10 @@ import Vue from "vue";
 import Vuex from "vuex";
 import auth from "./store-auth.js";
 import usersPublic from "./store-usersPublic.js";
-import materialTag from "./store-materialTag.js";
-import menuTag from "./store-menuTag.js";
-import genreTag from "./store-genreTag.js";
-import timeTag from "./store-timeTag.js";
 import youtubers from "./store-youtubers.js";
 import videos from "./store-videos.js";
+import topPageImage from "./store-topPageImage.js";
+import allTag from "./store-allTag";
 // import example from './module-example'
 
 Vue.use(Vuex);
@@ -29,10 +27,8 @@ export default function(/* { ssrContext } */) {
       usersPublic,
       youtubers,
       videos,
-      menuTag,
-      materialTag,
-      genreTag,
-      timeTag
+      topPageImage,
+      allTag
     },
 
     // enable strict mode (adds overhead!)

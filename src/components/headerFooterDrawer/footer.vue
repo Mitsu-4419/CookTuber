@@ -187,7 +187,7 @@ export default {
     ...mapState("auth", ["loggedIn", "userId"])
   },
   components: {
-    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default
+    ToLoginAlert: require("components/Modals/ToLoginAlert.vue").default
   }
 };
 </script>

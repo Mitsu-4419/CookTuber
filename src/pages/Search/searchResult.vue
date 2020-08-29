@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <!-- 検索バー -->
-    <div v-if="key == 'webPage'" class="fromWebPageTitle">
+    <div v-if="keyword == 'webPage'" class="fromWebPageTitle">
       <span style="margin-left:18px;">検索結果一覧</span>
     </div>
     <div class="searchBarInMobile" v-else>
@@ -36,42 +36,8 @@
         <CookVideoCardTopPage
           v-for="(cookVideoDetail, key) in searchAllVideo"
           :key="key"
-          :videoId="key"
+          :videoId="cookVideoDetail.videoId"
           :cookVideoDetail="cookVideoDetail"
-        />
-      </div>
-    </div>
-    <!-- 中段 -->
-    <div class="indexWrapperSearch" v-if="Object.keys(searchAllYoutubers).length > 0">
-      <div class="wrapperFront">
-        <div class="wrapperTitle">
-          <q-icon name="fas fa-desktop" size="sm" style="margin-right:5px;"></q-icon>
-          <span class="wrapperSubTitle">料理チャンネル</span>
-        </div>
-      </div>
-      <div class="row overflow-auto cardWrapper">
-        <CardYoutuber
-          v-for="(channelInfo, key) in searchAllYoutubers"
-          :key="key"
-          :channelId="key"
-          :channelInfo="channelInfo"
-        />
-      </div>
-    </div>
-    <!-- 下段 -->
-    <div class="indexWrapperSearch" v-if="Object.keys(searchAllReviewer).length > 0">
-      <div class="wrapperFront">
-        <div class="wrapperTitle">
-          <q-icon name="fas fa-user" size="sm" style="margin-right:5px;"></q-icon>
-          <span class="wrapperSubTitle">Reviewer一覧</span>
-        </div>
-      </div>
-      <div class="row overflow-auto cardWrapper">
-        <ReviewerTotalPageCard
-          :usersInfo="usersInfo"
-          :uid="key"
-          v-for="(usersInfo, key) in searchAllReviewer"
-          :key="key"
         />
       </div>
     </div>
@@ -83,35 +49,30 @@ import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      key: ""
+      keyword: "",
     };
   },
   computed: {
-    ...mapState("youtubers", ["search"]),
+    ...mapState("videos", ["search"]),
     ...mapGetters("videos", ["searchAllVideo"]),
-    ...mapGetters("youtubers", ["searchAllYoutubers"]),
-    ...mapGetters("usersPublic", ["searchAllReviewer"]),
     searchField: {
       get() {
         return this.search;
       },
       set(value) {
         this.setSearch(value);
-      }
-    }
+      },
+    },
   },
   methods: {
-    ...mapActions("youtubers", ["setSearch"])
+    ...mapActions("videos", ["setSearch"]),
   },
   components: {
     CookVideoCardTopPage: require("components/Card/CookVideoCard.vue").default,
-    CardYoutuber: require("components/Card/CardYoutuber.vue").default,
-    ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
-      .default
   },
   created() {
-    this.key = this.$route.query.key;
-  }
+    this.keyword = this.$route.query.key;
+  },
 };
 </script>
 <style>

@@ -56,12 +56,12 @@ export default {
   props: ["cookVideoDetail", "id", "from"],
   data() {
     return {
-      rankInfo: this.id + 1
+      rankInfo: this.id + 1,
     };
   },
   computed: {
-    ...mapState("youtubers", ["YoutubersChannel_info"])
-  }
+    ...mapState("youtubers", ["YoutubersChannel_info"]),
+  },
 };
 </script>
 

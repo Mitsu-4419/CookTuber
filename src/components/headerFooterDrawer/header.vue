@@ -3,11 +3,8 @@
     <q-toolbar class="bg-head headerTop">
       <q-toolbar-title>
         <div class="row">
-          <q-btn flat to="/" class="headerTitleIcon">
-            <q-img
-              src="../../statics/Logo/CookTuber_LOGO.png"
-              class="cooktuberLogoIcon"
-            ></q-img>
+          <q-btn flat to="/" class="headerTitleIcon" id="headerHomeButton">
+            <q-img src="../../statics/Logo/CookTuber_LOGO.png" class="cooktuberLogoIcon"></q-img>
             <!-- <q-toolbar-title>
               <span class="headerTitle">Cook Tuber</span>
             </q-toolbar-title>-->
@@ -33,35 +30,19 @@
               ]"
             >
               <template v-slot:append>
-                <q-icon
-                  name="close"
-                  @click="searchField = ''"
-                  class="cursor-pointer deleteicon"
-                />
+                <q-icon name="close" @click="searchField = ''" class="cursor-pointer deleteicon" />
               </template>
             </q-input>
           </router-link>
         </div>
       </q-toolbar-title>
       <router-link to="/search" style="text-decoration: none;">
-        <q-icon
-          name="fas fa-search"
-          size="sm"
-          color="black"
-          class="searchIcon"
-        ></q-icon>
+        <q-icon name="fas fa-search" size="sm" color="black" class="searchIcon"></q-icon>
       </router-link>
       <!-- 未ログインSTART -->
       <div class="loginWrapper">
         <div v-if="!loggedIn">
-          <q-btn
-            class="newRegisterButton"
-            push
-            color="black"
-            label="新規登録"
-            flat
-            to="/auth/sign_up"
-          ></q-btn>
+          <q-btn class="newRegisterButton" push color="black" label="新規登録" flat to="/auth/sign_up"></q-btn>
           <q-btn
             class="loginButtonLarge"
             push
@@ -217,7 +198,7 @@ export default {
   computed: {
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
-    ...mapState("youtubers", ["search"]),
+    ...mapState("videos", ["search"]),
     LoginUserPublicData() {
       return this.usersPublicInfo[this.userId];
     },
@@ -227,13 +208,13 @@ export default {
       },
       set(value) {
         this.setSearch(value);
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapActions("auth", ["logoutUser"]),
-    ...mapActions("youtubers", ["setSearch"])
-  }
+    ...mapActions("videos", ["setSearch"]),
+  },
 };
 </script>
 
@@ -246,9 +227,11 @@ export default {
 }
 .headerTop {
   position: initial;
-  height: 70px;
+  height: 75px;
+  padding-top: 25px;
   background: #f7f3e8;
 }
+
 .headerTitleIcon {
   width: 220px;
 }
@@ -315,6 +298,10 @@ export default {
   }
   .qBtnDropdownSmall {
     display: none;
+  }
+  .headerTop {
+    padding-top: 5px;
+    height: 65px;
   }
 }
 @media screen and (min-width: 835px) {

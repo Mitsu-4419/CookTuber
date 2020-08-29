@@ -3,16 +3,13 @@ import Vue from "vue";
 import axios from "axios";
 
 const state = {
-  YoutubersChannel_info: {},
-  search: ""
+  YoutubersChannel_info: {}
 };
 const mutations = {
   setYoutuber_Info(state, payload) {
     Vue.set(state.YoutubersChannel_info, payload.id, payload);
   },
-  setSearch(state, value) {
-    state.search = value;
-  },
+
   addYoutuberInfoMutate(state, payload) {
     Vue.set(state.YoutubersChannel_info, payload.channelId, payload);
   },
@@ -224,10 +221,7 @@ const actions = {
         });
     }
   },
-  //検索バーから文字列を渡す
-  setSearch({ commit }, value) {
-    commit("setSearch", value);
-  },
+
   // Youtuberの投稿数ポイントを減らす
   reduceYoutuberData({ commit }, payload) {
     commit("reduceYoutuberDataMutate", payload);
@@ -306,26 +300,6 @@ const getters = {
       }
     }
     return keyArray;
-  },
-  // Searchに言語があった時に引っかかったYoutuberをObjectとして返すゲッター
-  searchAllYoutubers: state => {
-    let YoutuberInfo = state.YoutubersChannel_info;
-    let returnObject = {};
-    if (state.search.length > 2) {
-      Object.keys(YoutuberInfo).forEach(key => {
-        if (
-          YoutuberInfo[key].name
-            .toLowerCase()
-            .includes(state.search.toLowerCase()) ||
-          YoutuberInfo[key].description
-            .toLowerCase()
-            .includes(state.search.toLowerCase())
-        ) {
-          returnObject[key] = YoutuberInfo[key];
-        }
-      });
-    }
-    return returnObject;
   }
 };
 

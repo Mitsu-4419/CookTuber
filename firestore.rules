@@ -20,6 +20,10 @@ match /YouTubers_basic_info/{channelId}{
    allow create: if isAuthenticated();
    allow update: if isAuthenticated();
  }
+
+match /topPageImage/{imageId}{
+   allow read: if true;
+}
 match /genreTag/{tagId}{
    allow read: if true;
 }

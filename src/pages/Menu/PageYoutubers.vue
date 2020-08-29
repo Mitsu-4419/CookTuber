@@ -52,7 +52,7 @@ export default {
         "高評価が多い順",
         "登録者数が多い順",
         "登録者数が少ない順",
-        "レビュー数が多い順"
+        "レビュー数順"
       ]
     };
   },
@@ -73,7 +73,7 @@ export default {
     }
   },
   components: {
-    YoutuberCard: require("components/Card/CardYoutuber.vue").default
+    YoutuberCard: require("components/Card/YoutuberCard.vue").default
   }
 };
 </script>

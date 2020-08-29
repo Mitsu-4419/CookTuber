@@ -1,10 +1,15 @@
 import { firestoreDb, firestorebase } from "src/boot/firebase";
 import Vue from "vue";
 import axios from "axios";
+
 const state = {
-  cookVideos: {}
+  cookVideos: {},
+  search: ""
 };
 const mutations = {
+  setSearch(state, value) {
+    state.search = value;
+  },
   setAllCookingVideosMutation(state, payload) {
     Vue.set(state.cookVideos, payload.id, payload.obj);
   },
@@ -41,6 +46,30 @@ const mutations = {
 };
 
 const actions = {
+  // async getWatchNumber() {
+  //   const SP = await firestoreDb.collection("video_info").get();
+  //   SP.forEach(async doc => {
+  //     await axios
+  //       .get("https://www.googleapis.com/youtube/v3/videos", {
+  //         params: {
+  //           key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
+  //           id: doc.id,
+  //           part: "statistics"
+  //         }
+  //       })
+  //       .then(res => {
+  //         firestoreDb
+  //           .collection("video_info")
+  //           .doc(doc.id)
+  //           .update({
+  //             viewCount: res.data.items[0].statistics.viewCount
+  //           });
+  //       })
+  //       .catch(err => {
+  //         console.log(err);
+  //       });
+  //   });
+  // },
   // ーーーーーーーーーーー
   // Video情報を入れる処理
   // ーーーーーーーーーーー
@@ -173,48 +202,42 @@ const actions = {
           -Number(payload.star_number)
         )
       });
+  },
+  //検索バーから文字列を渡す
+  setSearch({ commit }, value) {
+    commit("setSearch", value);
   }
 };
 
 const getters = {
+  // ==============================
+  // Video全体を星の数順にソート
+  // ===============================
   CookVideoStarOrder: state => {
-    const videos = state.cookVideos;
+    const videos = Object.values(state.cookVideos);
     // channelIdと星を１対１に対応したObjの配列をつく
-    let newVideos = {};
-    Object.keys(videos).forEach(key => {
-      if (Number(videos[key].registerCount) > 0) {
-        let averageStar =
-          Number(videos[key].starPoint) / Number(videos[key].registerCount);
-        videos[key]["AverageStar"] = averageStar;
-        newVideos[key] = videos[key];
+    const array = videos.filter(data => {
+      if (Number(data.registerCount) > 0) {
+        let averageStar = Number(data.starPoint) / Number(data.registerCount);
+        data["AverageStar"] = averageStar;
       } else {
-        videos[key]["AverageStar"] = 0;
-        newVideos[key] = videos[key];
+        data["AverageStar"] = 0;
       }
+      return data;
     });
-    let array = Object.values(newVideos);
-    let returnObj = {};
     array.sort(function(a, b) {
       if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
       if (Number(a.AverageStar) > Number(b.AverageStar)) return -1;
       return 0;
     });
-    for (let k in array) {
-      returnObj[array[k].videoId] = array[k];
-    }
-    return returnObj;
+    return array;
   },
   // ==============================
   // YoutuberDetailの人気VideoをGETする関数
   // ===============================
   cookVideoYoutuberSort: (state, getters) => (youtuberId, model) => {
-    let videoObj = getters.CookVideoStarOrder;
-    let array = [];
-    Object.keys(videoObj).forEach(key => {
-      if (videoObj[key].channelId == youtuberId) {
-        array.push(videoObj[key]);
-      }
-    });
+    const starOrderArray = getters.CookVideoStarOrder;
+    const array = starOrderArray.filter(data => data.channelId == youtuberId);
     if (model == "星の数順") {
       array.sort(function(a, b) {
         if (Number(a.AverageStar) < Number(b.AverageStar)) return 1;
@@ -245,48 +268,28 @@ const getters = {
     return array;
   },
   // ==============================
-  // TopPggeでビデオを表示する関数
-  // ===============================
-  getTop5VideoAtTopPage: (state, getters) => {
-    let videoObj = getters.CookVideoStarOrder;
-    let returnObj = {};
-    for (let j = 0; j < 5; j++) {
-      let KEY = Object.keys(videoObj)[j];
-      returnObj[KEY] = videoObj[KEY];
-      if (returnObj[KEY]) {
-        returnObj[KEY]["rankInfo"] = Number(j) + 1;
-      }
-    }
-    return returnObj;
-  },
-  // ==============================
   // 検索でビデオを表示する関数
   // ===============================
-  //別ファイルのstateは第三引数で取得可能
-  //https://vuex.vuejs.org/ja/guide/modules.html
-  searchAllVideo: (state, getters, rootState) => {
+  searchAllVideo: state => {
     let VideoInfo = state.cookVideos;
     let returnObject = {};
-    // console.log(rootState.youtubers.search);
-    // console.log(VideoInfo);
-    if (rootState.youtubers.search.length > 2) {
+    if (state.search.length > 2) {
       Object.keys(VideoInfo).forEach(key => {
         if (
           VideoInfo[key].videoTitle
             .toLowerCase()
-            .includes(rootState.youtubers.search.toLowerCase()) ||
+            .includes(state.search.toLowerCase()) ||
           VideoInfo[key].videoDescription
             .toLowerCase()
-            .includes(rootState.youtubers.search.toLowerCase()) ||
+            .includes(state.search.toLowerCase()) ||
           VideoInfo[key].channelTitle
             .toLowerCase()
-            .includes(rootState.youtubers.search.toLowerCase())
+            .includes(state.search.toLowerCase())
         ) {
           returnObject[key] = VideoInfo[key];
         }
       });
     }
-    // console.log(returnObject);
     return returnObject;
   },
   // ======================================
@@ -295,7 +298,6 @@ const getters = {
   getReviewersFavoriteVideos: state => key => {
     const videoInfo = state.cookVideos;
     const genreArray = videoInfo[key].genreTag;
-    const menuArray = videoInfo[key].menuTag;
     let returnArray = [];
     Object.keys(videoInfo).forEach(kkey => {
       if (kkey !== key) {
@@ -303,15 +305,6 @@ const getters = {
           if (
             videoInfo[kkey].genreTag &&
             videoInfo[kkey].genreTag.includes(genreArray[i]) &&
-            !returnArray.includes(kkey)
-          ) {
-            returnArray.push(kkey);
-          }
-        }
-        for (let j in menuArray) {
-          if (
-            videoInfo[kkey].menuTag &&
-            videoInfo[kkey].menuTag.includes(menuArray[j]) &&
             !returnArray.includes(kkey)
           ) {
             returnArray.push(kkey);

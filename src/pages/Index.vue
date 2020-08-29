@@ -1,359 +1,156 @@
 <template>
   <div>
     <q-page>
-      <div class="topPageImageWrapper">
-        <div class="column registerWrapper">
-          <form
-            @submit.prevent="showReviewMakeModal"
-            class="urlInputForm column"
-            name="urlSubmitForm"
-          >
-            <input
-              type="text"
-              id="youtubeURLInput"
-              name="registerURL"
-              v-model="registerURL"
-              placeholder="好きな料理Youtube動画のURLを貼ってください"
-            />
-            <!-- <form name="URLForm">
-            <q-input
-              name="URLForm2"
-              ref="VTRurl"
-              bg-color="white"
-              class="registerURLInput"
-              id="youtubeURLInput"
-              rounded
-              outlined
-              v-model="registerURL"
-              label="好きな料理Youtube動画のURLを貼ってください"
-              label-color="black"
-              :rules="[
-                val =>
-                  val.includes('https://www.youtube.com/watch?v=') ||
-                  '登録できるのはYoutube動画のみです'
-              ]"
-            ></q-input>
-            </form>-->
-            <q-btn class="registerButton shadow-5" label="登録" type="submit"></q-btn>
-          </form>
+      <div class="topPageImageWrapper row" v-if="Object.keys(TopPageImage).length > 0">
+        <div class="topImageWrapperLeft col">
+          <div class="topImageTitleWrapper">
+            <span>本日のおすすめ簡単料理</span>
+          </div>
+          <div class="topImage-1-wrapper">
+            <router-link
+              :to="{
+                name: 'video',
+                query: {
+                  key: TopPageImage['topImage']['top1'].id,
+                  from: 'topPage'
+                }
+              }"
+              style="text-decoration:none;color:black;"
+            >
+              <q-img
+                class="topImage-1"
+                :src="TopPageImage['topImage']['top1'].url"
+                :ratio="16 / 9"
+              />
+              <div class="topPagetitleImageWrapper">
+                <q-avatar
+                  class="topPageAvator"
+                  v-if="
+                    YoutubersChannel_info[
+                      TopPageImage['topImage']['top1'].channelId
+                    ]
+                  "
+                >
+                  <img
+                    :src="
+                      YoutubersChannel_info[
+                        TopPageImage['topImage']['top1'].channelId
+                      ].iconUrl
+                    "
+                  />
+                </q-avatar>
+                <div
+                  class="topPagetitleImageDescriptionWrapper"
+                  v-if="Object.keys(cookVideos).length>0"
+                >
+                  <div class="topPagevideoTitleCookPage2">
+                    {{
+                    cookVideos[TopPageImage['topImage']['top1'].id].videoTitle
+                    }}
+                  </div>
+                  <div class="topPagevideoChannel">
+                    {{
+                    cookVideos[TopPageImage['topImage']['top1'].id].channelTitle
+                    }}
+                  </div>
+                </div>
+                <div v-else>お待ちください</div>
+              </div>
+            </router-link>
+          </div>
+        </div>
+        <!-- ---------------------------------------- -->
+        <!--  幅が５００px以上の時のトップページのレイアウト -->
+        <!-- ---------------------------------------- -->
+        <div class="topImageWrapperRight" v-if="Object.keys(TopPageImage).length>0">
+          <q-virtual-scroll :items="heavylist">
+            <template v-slot="{ item, index }">
+              <router-link
+                :to="{
+              name: 'video',
+              query: {
+                key: TopPageImage['topImage'][item].id,
+                from: 'topPage'
+              }
+            }"
+                style="text-decoration:none;color:black;"
+                :key="index"
+              >
+                <div class="topImage-2-wrapper">
+                  <q-img
+                    class="topImage-2"
+                    :src="TopPageImage['topImage'][item].url"
+                    :ratio="16 / 9"
+                  />
+                </div>
+              </router-link>
+            </template>
+          </q-virtual-scroll>
         </div>
       </div>
+      <div v-else>
+        <div class="spinnerWrapper">
+          <q-spinner color="black" size="4em" />
+        </div>
+      </div>
+      <!-- ---------------------------------------- -->
+      <!--  幅が５００px以下の時のトップページのレイアウト -->
+      <!-- ---------------------------------------- -->
+      <q-virtual-scroll
+        virtual-scroll-horizontal
+        :items="heavylist"
+        class="topImageWrapperRightSmall"
+        v-if="Object.keys(TopPageImage).length>0"
+      >
+        <template v-slot="{ item, index }">
+          <router-link
+            :to="{
+              name: 'video',
+              query: {
+                key: TopPageImage['topImage'][item].id,
+                from: 'topPage'
+              }
+            }"
+            style="text-decoration:none;color:black;"
+            :key="index"
+          >
+            <div class="topImage-2-wrapper">
+              <q-img class="topImage-2" :src="TopPageImage['topImage'][item].url" :ratio="16 / 9" />
+            </div>
+          </router-link>
+        </template>
+      </q-virtual-scroll>
+      <form @submit.prevent="showReviewMakeModal" class="urlInputForm column" name="urlSubmitForm">
+        <input
+          type="text"
+          id="youtubeURLInput"
+          name="registerURL"
+          v-model="registerURL"
+          placeholder="好きな料理Youtube動画のURLを貼ってください"
+        />
+
+        <q-btn class="registerButton shadow-5" label="登録" type="submit"></q-btn>
+      </form>
       <!-- --------------------------- -->
       <!-- １段目のジャンルで選択するのところ -->
       <!-- --------------------------- -->
-      <div class="cookImageWrapperTopPage">
-        <div class="cookImageWrapperTopPage-title row">
-          <div style="padding-top:5px;">
-            <q-icon name="restaurant" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">ジャンルで選ぶ</span>
-          </div>
-          <q-select
-            class="topPageFirstSelect"
-            dense
-            rounded
-            outlined
-            v-model="model"
-            :options="options"
-            bg-color="white"
-            color="grey-5"
-          />
-        </div>
-        <div class="TopPageTagWrapper">
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedGenreTag('country'))"
-              :key="tag"
-              :tagName="genreTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setTagArray"
-              flag="topPage"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedGenreTag('material'))"
-              :key="tag"
-              :tagName="genreTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setTagArray"
-              flag="topPage"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedGenreTag('special'))"
-              :key="tag"
-              :tagName="genreTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setTagArray"
-              flag="topPage"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(timeTag)"
-              :key="tag"
-              :tagName="timeTag[tag].name"
-              :id="tag"
-              :TAGArray="tagTimeArray"
-              @setActivatedTag="setTagArray"
-              flag="topPage"
-            />
-          </div>
-        </div>
-        <div class="cookImageTopPageWrapper row">
-          <CookVideoCardTopPage
-            v-for="(cookVideoDetail, key) in sortByTagOfCookVideosTop5(
-              { genreArray: tagGenreArray, timeArray: tagTimeArray },
-              model
-            )"
-            :key="key"
-            :id="key"
-            :cookVideoDetail="cookVideoDetail"
-            from="topPage"
-          />
-        </div>
-      </div>
-      <div class="MoreButton_wrapper">
-        <q-btn flat to="/genreCookvideos" class="moreButton" label="もっとみる"></q-btn>
-      </div>
-      <!-- -------------------------->
-      <!-- Menuで料理を選ぶところ -->
-      <!-- -------------------------->
-      <div class="cookImageWrapperTopPage">
-        <div class="cookImageWrapperTopPage-title row">
-          <div style="padding-top:5px;">
-            <q-icon name="fas fa-book-open" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">メニューで選ぶ</span>
-          </div>
-          <q-select
-            class="topPageFirstSelect"
-            dense
-            rounded
-            outlined
-            v-model="menuModel"
-            :options="optionsMenu"
-            bg-color="white"
-            color="grey-5"
-          />
-        </div>
-        <div class="TopPageTagWrapper">
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMenuTag('meat'))"
-              :key="tag"
-              :tagName="menuTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMenuTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMenuTag('rice'))"
-              :key="tag"
-              :tagName="menuTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMenuTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMenuTag('chinese'))"
-              :key="tag"
-              :tagName="menuTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMenuTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMenuTag('noodle'))"
-              :key="tag"
-              :tagName="menuTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMenuTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMenuTag('other'))"
-              :key="tag"
-              :tagName="menuTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMenuTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(timeTag)"
-              :key="tag"
-              :tagName="timeTag[tag].name"
-              :id="tag"
-              :TAGArray="tagMenuTimeArray"
-              @setActivatedTag="setMenuTag"
-              flag="topPage"
-            />
-          </div>
-        </div>
-        <div class="cookImageTopPageWrapper row">
-          <CookVideoCardTopPage
-            v-for="(cookVideoDetail, key) in sortByMenuOfCookVideosTop5(
-              { menuArray: tagMenuArray, timeMenuArray: tagMenuTimeArray },
-              menuModel
-            )"
-            :key="key"
-            :id="key"
-            :cookVideoDetail="cookVideoDetail"
-            from="topPage"
-          />
-        </div>
-      </div>
-      <div class="MoreButton_wrapper">
-        <q-btn flat to="/menuCookvideos" class="moreButton" label="もっとみる"></q-btn>
-      </div>
-      <!-- -------------------------->
-      <!-- Materialのタグを選ぶ -->
-      <!-- -------------------------->
-      <div class="cookImageWrapperTopPage">
-        <div class="cookImageWrapperTopPage-title row">
-          <div style="padding-top:5px;">
-            <q-icon name="fas fa-carrot" size="sm" class="topPageIcon"></q-icon>
-            <span class="cookImageWrapperTopPage-title-span">材料で選ぶ</span>
-          </div>
-          <q-select
-            class="topPageFirstSelect"
-            dense
-            rounded
-            outlined
-            v-model="materialModel"
-            :options="optionsMaterial"
-            bg-color="white"
-            color="grey-5"
-          />
-        </div>
-        <div class="TopPageTagWrapper">
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMaterialTag('vegetable'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMaterialTag('meat'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMaterialTag('rice'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMaterialTag('noodle'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMaterialTag('fish'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMaterialTag('alcohol'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMaterialTag('wheat'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-          <div class="row">
-            <ChipComponent
-              v-for="tag in Object.keys(sortedMaterialTag('seasoning'))"
-              :key="tag"
-              :tagName="materialTag[tag].name"
-              :id="tag"
-              @setActivatedTag="setMaterialTag"
-              flag="topPage"
-              ref="menuchip"
-            />
-          </div>
-        </div>
-        <div class="cookImageTopPageWrapper row">
-          <CookVideoCardTopPage
-            v-for="(cookVideoDetail, key) in getTop5MaterialVideo(
-              {
-                materialArray: tagMaterialArray,
-                timeArray: tagMaterialTimeArray
-              },
-              materialModel
-            )"
-            :key="key"
-            :id="key"
-            :cookVideoDetail="cookVideoDetail"
-            from="topPage"
-          />
-        </div>
-      </div>
-      <div class="MoreButton_wrapper">
-        <q-btn flat to="/materialCookvideos" class="moreButton" label="もっとみる"></q-btn>
-      </div>
+      <topPageSegment flag="genre" />
+      <topPageSegment flag="material" />
+      <topPageSegment flag="menu" />
       <!-- --------------------------- -->
       <!-- Youtuberのところ -->
       <!-- --------------------------- -->
       <div class="cookImageWrapperTopPage">
         <div class="cookImageWrapperTopPage-title row">
-          <div style="padding-top:5px;">
+          <div class="menuIconWrapper">
             <q-icon name="live_tv" size="sm" class="topPageIcon"></q-icon>
+          </div>
+          <div class="menuTitleWrapper">
             <span class="cookImageWrapperTopPage-title-span">高評価の多い料理チャンネル</span>
+          </div>
+          <q-space />
+          <div class="MoreButton_wrapper">
+            <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
           </div>
         </div>
         <div class="cookImageTopPageWrapper">
@@ -369,17 +166,20 @@
           </div>
         </div>
       </div>
-      <div class="MoreButton_wrapper">
-        <q-btn flat to="/youtubers" class="moreButton" label="もっとみる"></q-btn>
-      </div>
       <!-- --------------------------- -->
       <!-- Reviewrのところ -->
       <!-- --------------------------- -->
       <div class="cookImageWrapperTopPage">
         <div class="cookImageWrapperTopPage-title row">
-          <div style="padding-top:5px;">
+          <div class="menuIconWrapper">
             <q-icon name="fas fa-users" size="sm" class="topPageIcon"></q-icon>
+          </div>
+          <div class="menuTitleWrapper">
             <span class="cookImageWrapperTopPage-title-span">高評価の多いReviewer</span>
+          </div>
+          <q-space />
+          <div class="MoreButton_wrapper">
+            <q-btn flat to="/reviewtotal" class="moreButton" label="もっとみる"></q-btn>
           </div>
         </div>
         <div class="cookImageTopPageWrapper row">
@@ -393,9 +193,6 @@
             />
           </div>
         </div>
-      </div>
-      <div class="MoreButton_wrapper">
-        <q-btn flat to="/reviewtotal" class="moreButton moreButton-bottom" label="もっとみる"></q-btn>
       </div>
     </q-page>
 
@@ -442,9 +239,8 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import axios from "axios";
 import { LocalStorage } from "quasar";
-import mixinSortTags from "src/mixins/mixin-sortTags";
+
 export default {
-  mixins: [mixinSortTags],
   data() {
     return {
       noticeRegistered: false,
@@ -457,48 +253,20 @@ export default {
       cookedOrWillCook: false,
       SETMadeOrNot: false,
       // firstVisitOrNot: true,
+      heavylist: ["top2", "top3", "top4", "top5", "top6", "top7", "top8"],
       VideoId: "",
       TAGArray: [],
-      tagTimeArray: ["time1", "time2", "time3"],
-      tagMenuTimeArray: ["time1", "time2", "time3"],
-      tagMaterialTimeArray: [],
-      tagMenuArray: [],
-      tagMaterialArray: [],
-      tagGenreArray: [],
-      model: "星の数順",
-      options: ["星の数順", "再生回数順", "レビュー数多い順", "投稿日が最近順"],
-      menuModel: "星の数順",
-      optionsMenu: [
-        "星の数順",
-        "再生回数順",
-        "レビュー数多い順",
-        "投稿日が最近順",
-      ],
-      materialModel: "星の数順",
-      optionsMaterial: [
-        "星の数順",
-        "再生回数順",
-        "レビュー数多い順",
-        "投稿日が最近順",
-      ],
     };
   },
   computed: {
+    ...mapState("youtubers", ["YoutubersChannel_info"]),
+    ...mapState("videos", ["cookVideos"]),
     ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
-    ...mapState("menuTag", ["menuTag"]),
-    ...mapState("materialTag", ["materialTag"]),
-    ...mapState("timeTag", ["timeTag"]),
-    ...mapState("genreTag", ["genreTag"]),
+    ...mapState("topPageImage", ["TopPageImage"]),
     ...mapGetters("youtubers", ["getTop5Youtuber"]),
     ...mapGetters("usersPublic", ["getTop5Reviewer"]),
-    ...mapGetters("genreTag", ["sortedGenreTag", "sortByTagOfCookVideosTop5"]),
-    ...mapGetters("menuTag", ["sortByMenuOfCookVideosTop5", "sortedMenuTag"]),
-    ...mapGetters("materialTag", ["sortedMaterialTag", "getTop5MaterialVideo"]),
     getYoutubeURL() {
-      console.log(
-        document.getElementsByClassName("youtuberURL").item(0).textContent
-      );
       return document.getElementsByClassName("youtuberURL").item(0).textContent;
     },
   },
@@ -604,33 +372,28 @@ export default {
     },
   },
   components: {
-    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
-    registerReviewModal: require("components/RegisterReviewModalTopPage/registerReviewModal.vue")
+    ToLoginAlert: require("components/Modals/ToLoginAlert.vue").default,
+    registerReviewModal: require("components/Modals/registerReviewModal.vue")
       .default,
-    CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
-      .default,
-    CookVideoCardTopPage: require("components/Card/CookVideoCard.vue").default,
-    CardYoutuber: require("components/Card/CardYoutuber.vue").default,
+    CookedOrWillCook: require("components/Modals/CookedOrWillCook.vue").default,
+    CardYoutuber: require("components/Card/YoutuberCard.vue").default,
     ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
       .default,
-    ChipComponent: require("components/Chip/ChipComponent.vue").default,
     NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default,
-    doubleRegistered: require("components/doubleRegisterd/doubleRegistered.vue")
-      .default,
+    doubleRegistered: require("components/Notice/doubleRegistered.vue").default,
+    topPageSegment: require("components/topPageSegment.vue").default,
     // FirstVisitModal: require("components/FirstVisitModal/FirstVisitModal.vue")
     //   .default,
   },
-  created() {
-    // if (LocalStorage.getItem("CookTuber-first-visit") == null) {
-    //   LocalStorage.set("CookTuber-first-visit", false);
-    // } else {
-    //   this.firstVisitOrNot = false;
-    // }
-  },
+  mounted() {},
+  created() {},
 };
 </script>
 
-<style scoped lang="scss">
+<style  lang="scss">
+// ---------------------------------
+// ページのトップ画面
+// ----------------------------------
 #youtubeURLInput {
   width: 350px;
   background: white;
@@ -640,20 +403,128 @@ export default {
   border-radius: 25px;
 }
 .topPageImageWrapper {
-  width: 100%;
-  height: 350px;
-  /* background: red; */
-  background-image: url("../statics/topPage/topPage_dishImg.jpg");
-  background-size: 90%;
-  background-repeat: no-repeat;
-  background-position: center;
+  width: 95%;
+  height: 400px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+.topPageAvator {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+.topPagetitleImageWrapper {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  width: 98%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   display: flex;
   justify-content: center;
+}
+.topPagetitleImageDescriptionWrapper {
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topImage-1-wrapper {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 555.66px;
+}
+.topImage-1 {
+  width: 100%;
+}
+.topPagevideoTitleCookPage2 {
+  font-size: 15px;
+  font-weight: bold;
+}
+.topPagevideoChannel {
+  font-size: 13px;
+  color: #606060;
+}
+.topImageWrapperLeft {
+  width: 70%;
+  height: 100%;
+}
+.topImageTitleWrapper {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  background: #fff8e3;
+  border-radius: 20px;
+  padding-left: 10px;
+  height: 40px;
+  text-align: center;
+  padding-top: 5px;
+}
+@media screen and (min-width: 1500px) and (max-width: 1750px) {
+  .topImage-1-wrapper {
+    max-width: 650.66px;
+  }
+  .topPageImageWrapper {
+    height: 450px;
+  }
+  .topPagevideoTitleCookPage2 {
+    font-size: 17px;
+  }
+  .topPagevideoChannel {
+    font-size: 15px;
+  }
+}
+@media screen and (min-width: 1750px) {
+  .topImage-1-wrapper {
+    max-width: 700.66px;
+  }
+  .topPageImageWrapper {
+    height: 500px;
+  }
+  .topPagevideoTitleCookPage2 {
+    font-size: 18px;
+  }
+  .topPagevideoChannel {
+    font-size: 16px;
+  }
+}
+.topImageWrapperRight {
+  width: 30%;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: #fffcf5;
+}
+.topImage-2-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+}
+.topImage-2 {
+  width: 80%;
+  margin: 5px;
 }
 .topPageImage {
   width: 95%;
   max-width: 681.18px;
 }
+.spinnerWrapper {
+  width: 100%;
+  height: 280px;
+  margin-top: 180px;
+  display: flex;
+  justify-content: center;
+}
+// ==========================
+//  URLのインプットのところ
+// ==========================
 .registerWrapper {
   width: 360px;
   margin-top: 131px;
@@ -673,15 +544,25 @@ export default {
   background-color: #ff9933;
   color: white;
 }
+// ==========================
+//  タグをのせるところ
+// ==========================
 .TopPageTagWrapper {
   width: 90%;
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 30px;
 }
+.menuIconWrapper {
+  margin-top: auto;
+  margin-bottom: auto;
+}
 .topPageIcon {
-  margin-left: 10px;
-  margin-top: 0px;
+  margin-left: 7px;
+}
+.menuTitleWrapper {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 .topPageFirstSelect {
   width: 180px;
@@ -703,28 +584,31 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-top: 10px;
-  background: #f7f3e8;
+  background: #fffaeb;
   border-radius: 20px;
-  height: 60px;
-  padding: 10px;
+  height: 50px;
+  padding: 5px;
 }
 .cookImageWrapperTopPage-title-span {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
-  margin-left: 25px;
+  margin-left: 10px;
+  margin-bottom: 5px;
 }
 /* --------------- */
 /* もっとみるボタン */
 /* --------------- */
 .MoreButton_wrapper {
   text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 .moreButton {
   height: 37px;
   font-size: 14px;
   font-weight: normal;
   color: #161422;
-  background-color: rgba(68, 63, 95, 0.1);
+  background-color: rgba(118, 115, 138, 0.1);
   white-space: nowrap;
   cursor: pointer;
   padding: 0px 4px;
@@ -760,11 +644,29 @@ export default {
     margin-right: auto;
   }
 }
+@media screen and (min-width: 995px) and (max-width: 1050px) {
+  .topPageImageWrapper {
+    height: 380px;
+  }
+}
+@media screen and (min-width: 905px) and (max-width: 994px) {
+  .topPageImageWrapper {
+    height: 350px;
+  }
+}
+@media screen and (min-width: 857px) and (max-width: 904px) {
+  .topPageImageWrapper {
+    height: 320px;
+  }
+}
 @media screen and (min-width: 769px) and (max-width: 856px) {
   .topPageYoutuberWrapper {
     width: 420px;
     margin-left: auto;
     margin-right: auto;
+  }
+  .topPageImageWrapper {
+    height: 350px;
   }
 }
 @media screen and (min-width: 680px) and (max-width: 768px) {
@@ -773,15 +675,49 @@ export default {
     margin-left: auto;
     margin-right: auto;
   }
+  .topPageImageWrapper {
+    height: 330px;
+  }
+  .topImageTitleWrapper {
+    font-size: 19px;
+  }
 }
-@media screen and (min-width: 500px) and (max-width: 679px) {
+@media screen and (min-width: 659px) and (max-width: 679px) {
   .topPageYoutuberWrapper {
     width: 420px;
     margin-left: auto;
     margin-right: auto;
   }
+  .topPageImageWrapper {
+    height: 300px;
+  }
+  .topImageTitleWrapper {
+    font-size: 17px;
+  }
 }
-
+@media screen and (min-width: 500px) and (max-width: 658px) {
+  .topPageYoutuberWrapper {
+    width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .topPageImageWrapper {
+    height: 280px;
+  }
+  .topImageTitleWrapper {
+    font-size: 17px;
+  }
+  .topPagevideoTitleCookPage2 {
+    font-size: 13px;
+  }
+  .topPagevideoChannel {
+    font-size: 12px;
+  }
+  .topPageAvator {
+    width: 30px;
+    height: 30px;
+  }
+}
 @media screen and (min-width: 590px) and (max-width: 880px) {
   .cookImageWrapperTopPage-title-span {
     font-size: 18px;
@@ -790,7 +726,6 @@ export default {
   }
   .topPageFirstSelect {
     width: 150px;
-
     margin-left: 20px;
   }
 }
@@ -807,9 +742,53 @@ export default {
   }
 }
 
+@media screen and (min-width: 500px) {
+  .topImageWrapperRightSmall {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 300px) and (max-width: 499px) {
+  .topPageAvator {
+    width: 20px;
+    height: 20px;
+  }
+  .topPagevideoTitleCookPage2 {
+    font-size: 12px;
+  }
+  .topPagevideoChannel {
+    font-size: 12px;
+  }
   .topPageImageWrapper {
-    height: 260px;
+    height: 240px;
+  }
+  .topImage-1-wrapper {
+    width: 86%;
+  }
+  .topImageTitleWrapper {
+    font-size: 15px;
+    height: 30px;
+    width: 95%;
+  }
+  .TopPageTagWrapper {
+    margin-bottom: 15px;
+  }
+  .moreButton {
+    height: 30px;
+    font-size: 13px;
+    font-weight: normal;
+    color: #161422;
+    background-color: rgba(118, 115, 138, 0.1);
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 0px 4px;
+    border-radius: 20px;
+  }
+  .cookImageTopPageWrapper {
+    margin-top: 25px;
+  }
+  .topPageFirstSelect {
+    display: none;
   }
   .registerWrapper {
     margin-top: 74px;
@@ -818,16 +797,29 @@ export default {
     margin-top: 4px;
   }
   .cookImageWrapperTopPage-title-span {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
-    margin-left: 15px;
+    margin-left: 9px;
   }
   .topPageFirstSelect {
-    width: 150px;
+    width: 158px;
     margin-left: 15px;
   }
   .topPageIcon {
     margin-left: 10px;
+  }
+  .topImageWrapperRight {
+    display: none;
+  }
+  .topImageWrapperLeft {
+    width: 90%;
+    height: 100%;
+  }
+  .topImage-2-wrapper {
+    width: 130px;
+  }
+  .topImageWrapperRightSmall {
+    margin-bottom: 10px;
   }
 }
 @media screen and (min-width: 300px) and (max-width: 413px) {
@@ -837,5 +829,48 @@ export default {
     margin-left: auto;
     font-size: 10px;
   }
+  .topImage-2 {
+    width: 90%;
+    margin: 2px;
+  }
 }
 </style>
+
+<!-- <div class="column registerWrapper">
+          <form
+            @submit.prevent="showReviewMakeModal"
+            class="urlInputForm column"
+            name="urlSubmitForm"
+          >
+            <input
+              type="text"
+              id="youtubeURLInput"
+              name="registerURL"
+              v-model="registerURL"
+              placeholder="好きな料理Youtube動画のURLを貼ってください"
+            /> -->
+<!-- <form name="URLForm">
+            <q-input
+              name="URLForm2"
+              ref="VTRurl"
+              bg-color="white"
+              class="registerURLInput"
+              id="youtubeURLInput"
+              rounded
+              outlined
+              v-model="registerURL"
+              label="好きな料理Youtube動画のURLを貼ってください"
+              label-color="black"
+              :rules="[
+                val =>
+                  val.includes('https://www.youtube.com/watch?v=') ||
+                  '登録できるのはYoutube動画のみです'
+              ]"
+            ></q-input>
+            </form>-->
+<!-- <q-btn
+              class="registerButton shadow-5"
+              label="登録"
+              type="submit"
+            ></q-btn>
+          </form> -->

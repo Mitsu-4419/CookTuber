@@ -98,9 +98,9 @@ export default {
   },
   methods: {},
   components: {
-    MyPageCookVideoReviewCard: require("components/MyPageVideoCard/MyPageCookVideoReviewCard.vue")
+    MyPageCookVideoReviewCard: require("components/Card/MyPageVideoCard/MyPageCookVideoReviewCard.vue")
       .default,
-    MyPageNonCookVideoCard: require("components/MyPageVideoCard/MyPageNonCookVideoCard.vue")
+    MyPageNonCookVideoCard: require("components/Card/MyPageVideoCard/MyPageNonCookVideoCard.vue")
       .default,
   },
   mounted() {
