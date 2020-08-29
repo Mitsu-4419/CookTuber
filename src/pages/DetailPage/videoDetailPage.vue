@@ -1,15 +1,33 @@
 <template>
   <q-page padding>
     <div class="back_button row">
-      <router-link v-if="from == 'genrePage'" to="/genreCookvideos">
+      <router-link
+        v-if="from == 'genre'"
+        :to="{
+                    name: 'allVideos',
+                    query: { flag: 'genre' }
+                  }"
+      >
         <q-icon name="chevron_left" size="xl" color="black" />
         <span class="text-h6 text-grey-7 vertical-middle">料理動画一覧</span>
       </router-link>
-      <router-link v-else-if="from == 'menuPage'" to="/menuCookvideos">
+      <router-link
+        v-else-if="from == 'menu'"
+        :to="{
+                    name: 'allVideos',
+                    query: { flag: 'menu' }
+                  }"
+      >
         <q-icon name="chevron_left" size="xl" color="black" />
         <span class="text-h6 text-grey-7 vertical-middle">料理動画一覧</span>
       </router-link>
-      <router-link v-else-if="from == 'materialPage'" to="/materialCookvideos">
+      <router-link
+        v-else-if="from == 'material'"
+        :to="{
+                    name: 'allVideos',
+                    query: { flag: 'material' }
+                  }"
+      >
         <q-icon name="chevron_left" size="xl" color="black" />
         <span class="text-h6 text-grey-7 vertical-middle">料理動画一覧</span>
       </router-link>
@@ -282,7 +300,7 @@ export default {
       videoURL: "",
       reviewUserUidArray: [],
       from: "",
-      pageUid: ""
+      pageUid: "",
     };
   },
   computed: {
@@ -293,7 +311,7 @@ export default {
     ...mapState("auth", ["userId", "loggedIn"]),
     ...mapState("youtubers", ["YoutubersChannel_info"]),
     ...mapState("timeTag", ["timeTag"]),
-    ...mapState("genreTag", ["genreTag"])
+    ...mapState("genreTag", ["genreTag"]),
   },
   methods: {
     ...mapActions("usersPublic", ["addFavoriteVTRFromCard"]),
@@ -301,7 +319,7 @@ export default {
       this.userReviews = {};
       const videoId = getParam("key");
       let obj = this.getYoutuberReview(videoId);
-      Object.keys(obj).forEach(documentId => {
+      Object.keys(obj).forEach((documentId) => {
         if (obj[documentId].cooked == true) {
           const uid = obj[documentId].uid;
           let payload = {
@@ -313,7 +331,7 @@ export default {
             LikeArray: obj[documentId].LikeArray,
             star_number: this.usersPublicInfo[uid].favoriteVTRObj[documentId]
               .star_number,
-            docId: documentId
+            docId: documentId,
           };
           this.reviewUserUidArray.push(uid);
           Vue.set(this.userReviews, uid, payload);
@@ -352,7 +370,7 @@ export default {
           selectedTags: [],
           star_number: 0,
           channelId: this.cookVideos[this.key].channelId,
-          cooked: false
+          cooked: false,
         });
         this.noticeRegistered = true;
       }
@@ -368,18 +386,17 @@ export default {
     reviewMaded() {
       this.reviewSubmit = false;
       this.cooked = true;
-    }
+    },
   },
   components: {
-    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
+    ToLoginAlert: require("components/Modals/ToLoginAlert.vue").default,
     userReviewList: require("components/Lists/userReviewList.vue").default,
-    CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
-      .default,
-    registerReviewFromCard: require("components/RegisterReviewModal/registerReviewFromCard.vue")
+    CookedOrWillCook: require("components/Modals/CookedOrWillCook.vue").default,
+    registerReviewFromCard: require("components/Modals/registerReviewFromCard.vue")
       .default,
     CookRecommendVideo: require("components/Card/CookRecommendVideo.vue")
       .default,
-    NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default
+    NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default,
   },
   mounted() {
     this.getUserReviews();
@@ -394,13 +411,15 @@ export default {
     this.pageUid = getParam("pageUid");
     this.videoURL = "https://www.youtube.com/embed/" + getParam("key");
     const userInfo = this.usersPublicInfo;
-    const userFavObj = userInfo[this.userId].favoriteVTRObj;
-    let array = [];
-    Object.keys(userFavObj).forEach(key => {
-      array.push(userFavObj[key].videoId);
-    });
-    if (array.includes(this.key)) {
-      this.cooked = true;
+    if (this.userId) {
+      const userFavObj = userInfo[this.userId].favoriteVTRObj;
+      let array = [];
+      Object.keys(userFavObj).forEach((key) => {
+        array.push(userFavObj[key].videoId);
+      });
+      if (array.includes(this.key)) {
+        this.cooked = true;
+      }
     }
   },
   watch: {
@@ -411,14 +430,14 @@ export default {
       const userInfo = this.usersPublicInfo;
       const userFavObj = userInfo[this.userId].favoriteVTRObj;
       let array = [];
-      Object.keys(userFavObj).forEach(key => {
+      Object.keys(userFavObj).forEach((key) => {
         array.push(userFavObj[key].videoId);
       });
       if (array.includes(this.key)) {
         this.cooked = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="scss">

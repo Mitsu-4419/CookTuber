@@ -1,0 +1,107 @@
+{
+  "g1": {
+    "key": "g1",
+    "meta": "country",
+    "name": "洋食"
+  },
+  "g10": {
+    "key": "g10",
+    "meta": "material",
+    "name": "粉物"
+  },
+  "g11": {
+    "key": "g11",
+    "meta": "material",
+    "name": "揚げ物"
+  },
+  "g12": {
+    "key": "g12",
+    "meta": "material",
+    "name": "うどん、そば"
+  },
+  "g13": {
+    "key": "g13",
+    "meta": "material",
+    "name": "ラーメン"
+  },
+  "g14": {
+    "key": "g14",
+    "meta": "material",
+    "name": "パスタ"
+  },
+  "g15": {
+    "key": "g15",
+    "meta": "special",
+    "name": "簡単、時短"
+  },
+  "g16": {
+    "key": "g16",
+    "meta": "special",
+    "name": "男の料理"
+  },
+  "g17": {
+    "key": "g17",
+    "meta": "special",
+    "name": "おつまみ"
+  },
+  "g18": {
+    "key": "g18",
+    "meta": "material",
+    "name": "野菜料理"
+  },
+  "g19": {
+    "key": "g19",
+    "meta": "material",
+    "name": "炒め物"
+  },
+  "g2": {
+    "key": "g2",
+    "meta": "country",
+    "name": "和食"
+  },
+  "g20": {
+    "key": "g20",
+    "meta": "special",
+    "name": "休日の料理"
+  },
+  "g21": {
+    "key": "g21",
+    "meta": "special",
+    "name": "お菓子"
+  },
+  "g3": {
+    "key": "g3",
+    "meta": "country",
+    "name": "中華"
+  },
+  "g4": {
+    "key": "g4",
+    "meta": "country",
+    "name": "韓国料理"
+  },
+  "g5": {
+    "key": "g5",
+    "meta": "country",
+    "name": "エスニック料理"
+  },
+  "g6": {
+    "key": "g6",
+    "meta": "material",
+    "name": "肉料理"
+  },
+  "g7": {
+    "key": "g7",
+    "meta": "material",
+    "name": "魚料理"
+  },
+  "g8": {
+    "key": "g8",
+    "meta": "material",
+    "name": "卵料理"
+  },
+  "g9": {
+    "key": "g9",
+    "meta": "material",
+    "name": "ご飯もの"
+  }
+}

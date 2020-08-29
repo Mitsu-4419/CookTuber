@@ -37,7 +37,7 @@ const providerApple = new firebase.auth.OAuthProvider("apple.com");
 
 const uiConfig = {
   signInFlow: "redirect",
-  signInSuccessUrl: "cooktuber.com",
+  signInSuccessUrl: "https://cooktuber.com/",
   // signInSuccessUrl: "http://127.0.0.1:8080/",
   signInOptions: [
     firebase.auth.TwitterAuthProvider.PROVIDER_ID,

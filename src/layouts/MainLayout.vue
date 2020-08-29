@@ -30,6 +30,9 @@ export default {
 <style lang="scss">
 body {
   color: #3c3c3c;
+  // min-height: 100vh;
+  // transform: translateZ(0);
+  overflow-y: scroll;
 }
 #wrapper {
   display: flex;

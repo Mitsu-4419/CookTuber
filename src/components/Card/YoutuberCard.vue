@@ -101,7 +101,7 @@ export default {
     }
   },
   components: {
-    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default
+    ToLoginAlert: require("components/Modals/ToLoginAlert.vue").default
   }
 };
 </script>

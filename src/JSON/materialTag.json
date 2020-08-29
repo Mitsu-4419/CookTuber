@@ -1,0 +1,317 @@
+{
+  "mat1": {
+    "key": "mat1",
+    "meta": "vegetable",
+    "name": "ちくわ"
+  },
+  "mat10": {
+    "key": "mat10",
+    "meta": "vegetable",
+    "name": "キノコ"
+  },
+  "mat11": {
+    "key": "mat11",
+    "meta": "vegetable",
+    "name": "玉ねぎ"
+  },
+  "mat12": {
+    "key": "mat12",
+    "meta": "vegetable",
+    "name": "にんじん"
+  },
+  "mat13": {
+    "key": "mat13",
+    "meta": "rice",
+    "name": "ご飯"
+  },
+  "mat14": {
+    "key": "mat14",
+    "meta": "fish",
+    "name": "イカ、タコ"
+  },
+  "mat15": {
+    "key": "mat15",
+    "meta": "vegetable",
+    "name": "ニラ"
+  },
+  "mat16": {
+    "key": "mat16",
+    "meta": "fish",
+    "name": "しらす"
+  },
+  "mat17": {
+    "key": "mat17",
+    "meta": "meat",
+    "name": "鶏肉"
+  },
+  "mat18": {
+    "key": "mat18",
+    "meta": "fish",
+    "name": "鮭"
+  },
+  "mat19": {
+    "key": "mat19",
+    "meta": "meat",
+    "name": "レバー"
+  },
+  "mat2": {
+    "key": "mat2",
+    "meta": "vegetable",
+    "name": "ピーマン"
+  },
+  "mat20": {
+    "key": "mat20",
+    "meta": "vegetable",
+    "name": "じゃがいも"
+  },
+  "mat21": {
+    "key": "mat21",
+    "meta": "vegetable",
+    "name": "もやし"
+  },
+  "mat22": {
+    "key": "mat22",
+    "meta": "other",
+    "name": "豆腐"
+  },
+  "mat23": {
+    "key": "mat23",
+    "meta": "vegetable",
+    "name": "ねぎ"
+  },
+  "mat24": {
+    "key": "mat24",
+    "meta": "other",
+    "name": "みそ"
+  },
+  "mat25": {
+    "key": "mat25",
+    "meta": "vegetable",
+    "name": "キャベツ"
+  },
+  "mat26": {
+    "key": "mat26",
+    "meta": "seasoning",
+    "name": "コンソメ"
+  },
+  "mat27": {
+    "key": "mat27",
+    "meta": "milk",
+    "name": "バター"
+  },
+  "mat28": {
+    "key": "mat28",
+    "meta": "wheat",
+    "name": "小麦粉"
+  },
+  "mat29": {
+    "key": "mat29",
+    "meta": "wheat",
+    "name": "片栗粉"
+  },
+  "mat30": {
+    "key": "mat30",
+    "meta": "seasoning",
+    "name": "砂糖"
+  },
+  "mat31": {
+    "key": "mat3",
+    "meta": "fish",
+    "name": "煮干し"
+  },
+  "mat32": {
+    "key": "mat32",
+    "meta": "alcohol",
+    "name": "赤ワイン"
+  },
+  "mat33": {
+    "key": "mat33",
+    "meta": "seasoning",
+    "name": "めんつゆ"
+  },
+  "mat34": {
+    "key": "mat34",
+    "meta": "seasoning",
+    "name": "味の素"
+  },
+  "mat35": {
+    "key": "mat35",
+    "meta": "seasoning",
+    "name": "生姜"
+  },
+  "mat36": {
+    "key": "mat36",
+    "meta": "wheat",
+    "name": "パン粉"
+  },
+  "mat37": {
+    "key": "mat37",
+    "meta": "meat",
+    "name": "合挽肉"
+  },
+  "mat38": {
+    "key": "mat38",
+    "meta": "seasoning",
+    "name": "鶏がらスープの素"
+  },
+  "mat39": {
+    "key": "mat39",
+    "meta": "vegetable",
+    "name": "にんにく"
+  },
+  "mat4": {
+    "key": "mat4",
+    "meta": "meat",
+    "name": "牛肉"
+  },
+  "mat40": {
+    "key": "mat40",
+    "meta": "alcohol",
+    "name": "白ワイン"
+  },
+  "mat41": {
+    "key": "mat41",
+    "meta": "seasoning",
+    "name": "オリーブオイル"
+  },
+  "mat42": {
+    "key": "mat42",
+    "meta": "milk",
+    "name": "牛乳"
+  },
+  "mat43": {
+    "key": "mat43",
+    "meta": "milk",
+    "name": "生クリーム"
+  },
+  "mat44": {
+    "key": "mat44",
+    "meta": "vegetable",
+    "name": "トマト"
+  },
+  "mat45": {
+    "key": "mat45",
+    "meta": "meat",
+    "name": "ウインナー"
+  },
+  "mat46": {
+    "key": "mat46",
+    "meta": "seasoning",
+    "name": "ケチャップ"
+  },
+  "mat47": {
+    "key": "mat47",
+    "meta": "noodle",
+    "name": "うどん•そば"
+  },
+  "mat48": {
+    "key": "mat48",
+    "meta": "fish",
+    "name": "サバ缶"
+  },
+  "mat49": {
+    "key": "mat49",
+    "meta": "fish",
+    "name": "魚粉"
+  },
+  "mat5": {
+    "key": "mat5",
+    "meta": "vegetable",
+    "name": "こんにゃく"
+  },
+  "mat50": {
+    "key": "mat50",
+    "meta": "other",
+    "name": "カレールウ"
+  },
+  "mat51": {
+    "key": "mat51",
+    "meta": "vegetable",
+    "name": "大根"
+  },
+  "mat52": {
+    "key": "mat52",
+    "meta": "noodle",
+    "name": "インスタント麺"
+  },
+  "mat53": {
+    "key": "mat53",
+    "meta": "noodle",
+    "name": "麺"
+  },
+  "mat54": {
+    "key": "mat54",
+    "meta": "other",
+    "name": "キムチ"
+  },
+  "mat55": {
+    "key": "mat55",
+    "meta": "seasoning",
+    "name": "あごだし,白だし"
+  },
+  "mat56": {
+    "key": "mat56",
+    "meta": "vegetable",
+    "name": "なす"
+  },
+  "mat57": {
+    "key": "mat57",
+    "meta": "vegetable",
+    "name": "きゅうり"
+  },
+  "mat58": {
+    "key": "mat58",
+    "meta": "other",
+    "name": "納豆"
+  },
+  "mat59": {
+    "key": "mat59",
+    "meta": "meat",
+    "name": "ソーセージ"
+  },
+  "mat6": {
+    "key": "mat6",
+    "meta": "meat",
+    "name": "ベーコン"
+  },
+  "mat60": {
+    "key": "mat60",
+    "meta": "other",
+    "name": "パン"
+  },
+  "mat61": {
+    "key": "mat61",
+    "meta": "seasoning",
+    "name": "マヨネーズ"
+  },
+  "mat62": {
+    "key": "mat62",
+    "meta": "vegetable",
+    "name": "ごぼう"
+  },
+  "mat63": {
+    "key": "mat63",
+    "meta": "vegetable",
+    "name": "アボガド"
+  },
+  "mat64": {
+    "key": "mat64",
+    "meta": "fish",
+    "name": "エビ"
+  },
+  "mat7": {
+    "key": "mat7",
+    "meta": "noodle",
+    "name": "パスタ"
+  },
+  "mat8": {
+    "key": "mat8",
+    "meta": "milk",
+    "name": "卵"
+  },
+  "mat9": {
+    "key": "mat9",
+    "meta": "milk",
+    "name": "チーズ"
+  }
+}

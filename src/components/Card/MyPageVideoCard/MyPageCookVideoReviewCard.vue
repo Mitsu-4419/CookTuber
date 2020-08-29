@@ -286,14 +286,14 @@ export default {
     this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
   },
   components: {
-    ToLoginAlert: require("components/AlertModal/ToLoginAlert.vue").default,
-    editReviewInfoModal: require("components/EditReviewCard/editReviewModal.vue")
+    ToLoginAlert: require("components/Modals/ToLoginAlert.vue").default,
+    editReviewInfoModal: require("components/Modals/editReviewModal.vue")
       .default,
-    CookedOrWillCook: require("components/CookCheckModal/CookedOrWillCook.vue")
+    CookedOrWillCook: require("components/Modals/CookedOrWillCook.vue")
       .default,
-    registerReviewFromCard: require("components/RegisterReviewModal/registerReviewFromCard.vue")
+    registerReviewFromCard: require("components/Modals/registerReviewFromCard.vue")
       .default,
-    doubleRegistered: require("components/doubleRegisterd/doubleRegistered.vue")
+    doubleRegistered: require("components/Notice/doubleRegistered.vue")
       .default,
     NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default
   }

@@ -14,7 +14,10 @@
             clickable
             v-ripple
             flat
-            to="/genreCookvideos"
+            :to="{
+                    name: 'allVideos',
+                    query: { flag: 'genre' }
+                  }"
             exact
             class="drawerIcon"
           >
@@ -27,7 +30,10 @@
             clickable
             v-ripple
             flat
-            to="/menuCookvideos"
+            :to="{
+                    name: 'allVideos',
+                    query: { flag: 'menu' }
+                  }"
             exact
             class="drawerIcon"
           >
@@ -40,7 +46,10 @@
             clickable
             v-ripple
             flat
-            to="/materialCookvideos"
+            :to="{
+                    name: 'allVideos',
+                    query: { flag: 'material' }
+                  }"
             exact
             class="drawerIcon"
           >
@@ -49,27 +58,13 @@
             </q-item-section>
             <q-item-section>材料で選ぶ</q-item-section>
           </q-item>
-          <q-item
-            clickable
-            v-ripple
-            flat
-            to="/youtubers"
-            exact
-            class="drawerIcon"
-          >
+          <q-item clickable v-ripple flat to="/youtubers" exact class="drawerIcon">
             <q-item-section avatar>
               <q-icon name="live_tv" />
             </q-item-section>
             <q-item-section>料理チャンネル</q-item-section>
           </q-item>
-          <q-item
-            clickable
-            v-ripple
-            flat
-            to="/reviewtotal"
-            exact
-            class="drawerIcon"
-          >
+          <q-item clickable v-ripple flat to="/reviewtotal" exact class="drawerIcon">
             <q-item-section avatar>
               <q-icon name="fas fa-users" />
             </q-item-section>
@@ -92,7 +87,7 @@ import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      drawer: false
+      drawer: false,
     };
   },
   computed: {
@@ -104,14 +99,14 @@ export default {
       },
       set(value) {
         this.setSearch(value);
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapActions("auth", ["logoutUser"]),
-    ...mapActions("youtubers", ["setSearch"])
+    ...mapActions("youtubers", ["setSearch"]),
   },
-  components: {}
+  components: {},
 };
 </script>
 

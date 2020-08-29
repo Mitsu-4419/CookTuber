@@ -1,0 +1,172 @@
+{
+  "menu1": {
+    "key": "menu1",
+    "meta": "meat",
+    "name": "ステーキ"
+  },
+  "menu10": {
+    "key": "menu10",
+    "meta": "meat",
+    "name": "ハンバーグ"
+  },
+  "menu11": {
+    "key": "menu11",
+    "meta": "meat",
+    "name": "鶏ハム"
+  },
+  "menu12": {
+    "key": "menu12",
+    "meta": "rice",
+    "name": "丼"
+  },
+  "menu13": {
+    "key": "menu13",
+    "meta": "rice",
+    "name": "リゾット"
+  },
+  "menu14": {
+    "key": "menu14",
+    "meta": "meat",
+    "name": "チキン南蛮"
+  },
+  "menu15": {
+    "key": "menu15",
+    "meta": "other",
+    "name": "肉じゃが"
+  },
+  "menu16": {
+    "key": "menu16",
+    "meta": "rice",
+    "name": "カレー"
+  },
+  "menu17": {
+    "key": "menu17",
+    "meta": "chinese",
+    "name": "豚キムチ"
+  },
+  "menu18": {
+    "key": "menu18",
+    "meta": "other",
+    "name": "チリマヨ"
+  },
+  "menu19": {
+    "key": "menu19",
+    "meta": "noodle",
+    "name": "焼きそば"
+  },
+  "menu2": {
+    "key": "menu2",
+    "meta": "meat",
+    "name": "牛すじ煮込み"
+  },
+  "menu20": {
+    "key": "menu20",
+    "meta": "chinese",
+    "name": "麻婆豆腐"
+  },
+  "menu21": {
+    "key": "menu21",
+    "meta": "rice",
+    "name": "オムライス"
+  },
+  "menu22": {
+    "key": "menu22",
+    "meta": "chinese",
+    "name": "炒め物"
+  },
+  "menu23": {
+    "key": "menu23",
+    "meta": "noodle",
+    "name": "ナポリタン"
+  },
+  "menu24": {
+    "key": "menu24",
+    "meta": "other",
+    "name": "その他"
+  },
+  "menu25": {
+    "key": "menu25",
+    "meta": "noodle",
+    "name": "カルボナーラ"
+  },
+  "menu26": {
+    "key": "menu26",
+    "meta": "other",
+    "name": "ボンゴレビアンコ"
+  },
+  "menu27": {
+    "key": "menu27",
+    "meta": "other",
+    "name": "たこ焼き"
+  },
+  "menu28": {
+    "key": "menu28",
+    "meta": "other",
+    "name": "たこ焼き"
+  },
+  "menu29": {
+    "key": "menu29",
+    "meta": "other",
+    "name": "パン"
+  },
+  "menu3": {
+    "key": "menu3",
+    "meta": "noodle",
+    "name": "ペペロンチーノ"
+  },
+  "menu30": {
+    "key": "menu30",
+    "meta": "meat",
+    "name": "唐揚げ"
+  },
+  "menu31": {
+    "key": "menu31",
+    "meta": "meat",
+    "name": "とんかつ"
+  },
+  "menu32": {
+    "key": "menu32",
+    "meta": "other",
+    "name": "豚汁"
+  },
+  "menu33": {
+    "key": "menu33",
+    "meta": "other",
+    "name": "サラダ"
+  },
+  "menu34": {
+    "key": "menu34",
+    "meta": "chinese",
+    "name": "餃子"
+  },
+  "menu4": {
+    "key": "menu4",
+    "meta": "other",
+    "name": "イカの塩辛"
+  },
+  "menu5": {
+    "key": "menu5",
+    "meta": "rice",
+    "name": "ピラフ"
+  },
+  "menu6": {
+    "key": "menu6",
+    "meta": "noodle",
+    "name": "ラーメン"
+  },
+  "menu7": {
+    "key": "menu7",
+    "meta": "other",
+    "name": "煮卵"
+  },
+  "menu8": {
+    "key": "menu8",
+    "meta": "rice",
+    "name": "炒飯"
+  },
+  "menu9": {
+    "key": "menu9",
+    "meta": "chinese",
+    "name": "ニラレバ炒め"
+  }
+}

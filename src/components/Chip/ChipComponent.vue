@@ -7,8 +7,7 @@
       clickable
       @click="setActiveTag"
       :class="active ? 'selected' : 'nonSelected'"
-      >{{ tagName }}</q-chip
-    >
+    >{{ tagName }}</q-chip>
     <q-chip
       id="chipSizeMedium"
       size="10.5px"
@@ -16,8 +15,7 @@
       clickable
       @click="setActiveTag"
       :class="active ? 'selected' : 'nonSelected'"
-      >{{ tagName }}</q-chip
-    >
+    >{{ tagName }}</q-chip>
     <q-chip
       id="chipSizeSmall"
       size="9.5px"
@@ -25,18 +23,17 @@
       clickable
       @click="setActiveTag"
       :class="active ? 'selected' : 'nonSelected'"
-      >{{ tagName }}</q-chip
-    >
+    >{{ tagName }}</q-chip>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["tagName", "id", "TAGArray", "flag"],
+  props: ["tagName", "id", "TAGArray"],
   data() {
     return {
       active: false,
-      menuTagArray: []
+      menuTagArray: [],
     };
   },
   methods: {
@@ -50,13 +47,13 @@ export default {
     },
     resetChip() {
       this.active = false;
-    }
+    },
   },
   created() {
     if (this.TAGArray && this.TAGArray.includes(this.id)) {
       this.active = true;
     }
-  }
+  },
 };
 </script>
 

@@ -21,25 +21,19 @@ const routes = [
         component: () => import("pages/Menu/PageYoutubers.vue")
       },
       {
-        path: "/genreCookvideos",
-        component: () => import("pages/Menu/genreCookVideoPage.vue")
-      },
-      {
-        path: "/menuCookvideos",
-        component: () => import("pages/Menu/menuCookVideoPage.vue")
-      },
-      {
-        path: "/materialCookvideos",
-        component: () => import("pages/Menu/materialCookVideoPage.vue")
+        path: "/CookvideoAll",
+        component: () => import("pages/Menu/cookVideoAll.vue"),
+        name: "allVideos",
+        props: true
       },
       {
         path: "/show",
-        component: () => import("pages/YoutuberDetail/YoutuberDetail.vue"),
+        component: () => import("pages/DetailPage/YoutuberDetail.vue"),
         name: "show"
       },
       {
         path: "/video",
-        component: () => import("pages/VideoDetail/videoDetailPage.vue"),
+        component: () => import("pages/DetailPage/videoDetailPage.vue"),
         name: "video"
       },
       {

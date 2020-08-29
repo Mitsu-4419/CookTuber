@@ -79,7 +79,7 @@ export default {
     this.timeBehind = getdiffTimeNonCook(this.reviewInfo.createdAt);
   },
   components: {
-    editReviewInfoModal: require("components/EditReviewCard/editReviewModal.vue")
+    editReviewInfoModal: require("components/Modals/editReviewModal.vue")
       .default
   }
 };

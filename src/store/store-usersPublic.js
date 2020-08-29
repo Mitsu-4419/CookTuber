@@ -8,10 +8,6 @@ const mutations = {
   setYoutuber_FavoriteCount(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
   },
-  // 新規ユーザー登録時のMutation
-  // setNewUserProfileMutate(state, payload) {
-  //   Vue.set(state.usersPublicInfo, payload.id, payload);
-  // },
   updateNewLoginUsersProfileMutate(state, payload) {
     Vue.set(state.usersPublicInfo, payload.id, payload);
   },
