@@ -54,8 +54,11 @@
         flat
         stack
         label="ジャンルで選ぶ"
-        to="/genreCookvideos"
         icon="restaurant"
+        :to="{
+          name: 'allVideos',
+          query: { flag: 'genre' }
+        }"
       >
       </q-btn>
       <q-btn
@@ -66,7 +69,10 @@
         stack
         icon="fas fa-book-open"
         label="メニューで選ぶ"
-        to="/menuCookvideos"
+        :to="{
+          name: 'allVideos',
+          query: { flag: 'menu' }
+        }"
       >
       </q-btn>
       <q-btn
@@ -77,7 +83,10 @@
         stack
         icon="fas fa-carrot"
         label="材料で選ぶ"
-        to="/materialCookvideos"
+        :to="{
+          name: 'allVideos',
+          query: { flag: 'material' }
+        }"
       >
       </q-btn>
       <q-btn
@@ -122,7 +131,10 @@
         color="#3d3760"
         flat
         stack
-        to="/genreCookvideos"
+        :to="{
+          name: 'allVideos',
+          query: { flag: 'genre' }
+        }"
       >
         <q-icon style="width:26px;" name="restaurant" />
       </q-btn>
@@ -132,7 +144,10 @@
         color="#3d3760"
         flat
         stack
-        to="/menuCookvideos"
+        :to="{
+          name: 'allVideos',
+          query: { flag: 'menu' }
+        }"
       >
         <q-icon name="fas fa-book-open" style="width:26px;" />
       </q-btn>
@@ -142,7 +157,10 @@
         color="#3d3760"
         flat
         stack
-        to="/materialCookvideos"
+        :to="{
+          name: 'allVideos',
+          query: { flag: 'material' }
+        }"
       >
         <q-icon name="fas fa-carrot" style="width:30px;" />
       </q-btn>

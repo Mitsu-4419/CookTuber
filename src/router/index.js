@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import StarRating from "vue-star-rating";
 import routes from "./routes";
+import VueGtag from "vue-gtag";
 
 Vue.use(VueRouter);
 Vue.component("star-rating", StarRating);
@@ -25,6 +26,15 @@ export default function(/* { store, ssrContext } */) {
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   });
+
+  Vue.use(
+    VueGtag,
+    {
+      config: { id: "UA-171503015-1" },
+      includes: [{ id: "UA-174254526-1" }, { id: "G-YTXYE0HFBL" }]
+    },
+    Router
+  );
 
   return Router;
 }

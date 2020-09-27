@@ -21,6 +21,7 @@
     "http2": "^3.3.7",
     "nodemailer": "^6.4.11",
     "quasar": "^1.0.0",
+    "vue-gtag": "^1.9.1",
     "vue-star-rating": "^1.6.1"
   },
   "devDependencies": {

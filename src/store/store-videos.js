@@ -46,30 +46,6 @@ const mutations = {
 };
 
 const actions = {
-  // async getWatchNumber() {
-  //   const SP = await firestoreDb.collection("video_info").get();
-  //   SP.forEach(async doc => {
-  //     await axios
-  //       .get("https://www.googleapis.com/youtube/v3/videos", {
-  //         params: {
-  //           key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
-  //           id: doc.id,
-  //           part: "statistics"
-  //         }
-  //       })
-  //       .then(res => {
-  //         firestoreDb
-  //           .collection("video_info")
-  //           .doc(doc.id)
-  //           .update({
-  //             viewCount: res.data.items[0].statistics.viewCount
-  //           });
-  //       })
-  //       .catch(err => {
-  //         console.log(err);
-  //       });
-  //   });
-  // },
   // ーーーーーーーーーーー
   // Video情報を入れる処理
   // ーーーーーーーーーーー

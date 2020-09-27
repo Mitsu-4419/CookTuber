@@ -3,16 +3,31 @@
     <div class="CookVideoTitleWrapper">
       <!-- ソートと検索のところSelect -->
       <div class="row q-mr-md">
-        <div class="videoTitleCookPage row" v-if="flag =='genre'">
-          <q-icon name="restaurant" color="grey-5" size="lg" class="q-mr-md q-ml-sm"></q-icon>
+        <div class="videoTitleCookPage row" v-if="flag == 'genre'">
+          <q-icon
+            name="restaurant"
+            color="grey-5"
+            size="lg"
+            class="q-mr-md q-ml-sm"
+          ></q-icon>
           <div class="cookVideoTitle">ジャンルで選択</div>
         </div>
-        <div class="videoTitleCookPage row" v-else-if="flag =='material'">
-          <q-icon name="fas fa-carrot" color="grey-14" size="md" class="q-mr-md q-ml-sm"></q-icon>
+        <div class="videoTitleCookPage row" v-else-if="flag == 'material'">
+          <q-icon
+            name="fas fa-carrot"
+            color="grey-14"
+            size="md"
+            class="q-mr-md q-ml-sm"
+          ></q-icon>
           <div class="cookVideoTitle">材料で選ぶ</div>
         </div>
-        <div class="videoTitleCookPage row" v-else-if="flag =='menu'">
-          <q-icon name="fas fa-book-open" color="grey-14" size="md" class="q-mr-md q-ml-sm"></q-icon>
+        <div class="videoTitleCookPage row" v-else-if="flag == 'menu'">
+          <q-icon
+            name="fas fa-book-open"
+            color="grey-14"
+            size="md"
+            class="q-mr-md q-ml-sm"
+          ></q-icon>
           <div class="cookVideoTitle">メニューで選ぶ</div>
         </div>
         <q-select
@@ -28,7 +43,7 @@
       </div>
     </div>
     <div class="cookVideoTagWrapper column">
-      <template v-if="flag =='genre'">
+      <template v-if="flag == 'genre'">
         <div v-for="meta in genreMetaArray" :key="meta">
           <div class="row">
             <ChipComponent
@@ -42,7 +57,7 @@
           </div>
         </div>
       </template>
-      <template v-else-if="flag =='menu'">
+      <template v-else-if="flag == 'menu'">
         <div v-for="meta in menuMetaArray" :key="meta">
           <div class="row">
             <ChipComponent
@@ -56,7 +71,7 @@
           </div>
         </div>
       </template>
-      <template v-else-if="flag =='material'">
+      <template v-else-if="flag == 'material'">
         <div v-for="meta in materialMetaArray" :key="meta">
           <div class="row">
             <ChipComponent
@@ -73,7 +88,12 @@
     </div>
     <div class="CookVideoTotalWrapper row">
       <CookVideoCard
-        v-for="(cookVideoDetail, key) in sortByTagOfCookVideos(selectedTag,tagTimeArray,model, flag)"
+        v-for="(cookVideoDetail, key) in sortByTagOfCookVideos(
+          selectedTag,
+          tagTimeArray,
+          model,
+          flag
+        )"
         :key="key"
         :id="key"
         :cookVideoDetail="cookVideoDetail"
@@ -87,6 +107,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 import SetTagArray from "src/functions/sortTags";
 import { getParam } from "src/functions/getParam";
+import VueGtag from "vue-gtag";
 export default {
   data() {
     return {
@@ -100,8 +121,8 @@ export default {
         "noodle",
         "fish",
         "alcohol",
-        "wheat",
-        "seasoning",
+        // "wheat",
+        // "seasoning",
       ],
       chooseTag: false,
       selectedTag: "",
@@ -133,6 +154,12 @@ export default {
         this.selectedTag = value;
       }
     },
+    track() {
+      this.$gtag.pageview({
+        page_path: `/CookvideoAll?flag=${this.flag}`,
+        page_title: this.flag,
+      });
+    },
   },
   components: {
     CookVideoCard: require("components/Card/CookVideoCard.vue").default,
@@ -146,6 +173,7 @@ export default {
       this.flag = getParam("flag");
       this.selectedTag = "";
       this.model = "星の数順";
+      this.track();
     },
   },
 };

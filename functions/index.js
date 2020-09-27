@@ -14,13 +14,11 @@ const mailTransport = nodemailer.createTransport({
     pass: gmailPassword
   }
 });
-
 exports.appendSpreadSheet = functions
   .region("asia-northeast1")
   .firestore.document("video_info/{video_infoId}")
   .onCreate((snap, context) => {
     const video_info = snap.data();
-
     google.auth
       .getClient({
         scopes: ["https://www.googleapis.com/auth/spreadsheets"]
@@ -70,12 +68,10 @@ exports.appendSpreadSheet = functions
         });
       });
   });
-
 const admin = require("firebase-admin");
 if (admin.apps.length < 1) {
   admin.initializeApp();
 }
-
 // // ユーザーのアカウントが作成された時に運営側が保持しておくメールアドレスなど
 // フロントからは読み書きできない
 exports.registerUsersPrivateData = functions
@@ -130,55 +126,33 @@ exports.registerUsersWithdrawl = functions
   });
 
 // 24時間ごとにVideoの再生数を更新する関数
-// const axios = require("axios");
-// exports.routineUpdateWatchNumber = functions
-//   .region("asia-northeast1")
-//   .pubsub.topic("testTopic")
-//   .onPublish(async message => {
-//     const DB = await admin.firestore();
-//     const SP = await DB.collection("video_info").get();
-//     SP.forEach(async doc => {
-//       await axios
-//         .get("https://www.googleapis.com/youtube/v3/videos", {
-//           params: {
-//             key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
-//             id: doc.id,
-//             part: "statistics"
-//           }
-//         })
-//         .then(res => {
-//           DB.collection("video_info")
-//             .doc(doc.id)
-//             .update({
-//               viewCount: res.data.items[0].statistics.viewCount
-//             });
-//         })
-//         .catch(err => {
-//           console.log(err);
-//         });
-//     });
-//   });
-// import { region } from 'firebase-functions'
-// import { credential } from 'firebase-admin'
-// import axios from 'axios' // optional
-
-// export const backupFirestoreToStorage = region('asia-northeast1')
-//   .pubsub.schedule('0 3 * * *')
-//   .timeZone('Asia/Tokyo')
-//   .onRun(async () => {
-//     try {
-//       const accessToken = await credential
-//         .applicationDefault()
-//         .getAccessToken()
-//         .then(result => result.access_token)
-//       const projectID = process.env.GCLOUD_PROJECT
-//       const response = await axios.post(
-//         `https://firestore.googleapis.com/v1/projects/${projectID}/databases/(default):exportDocuments`,
-//         { outputUriPrefix: `gs://${projectID}-firestore-backups` },
-//         { headers: { Authorization: `Bearer ${accessToken}` } }
-//       )
-//       console.log(response)
-//     } catch (err) {
-//       console.error(err)
-//     }
-//   })
+const axios = require("axios");
+exports.routineUpdateWatchNumber = functions
+  .region("asia-northeast1")
+  .pubsub.topic("updateRegisterCount")
+  .onPublish(async message => {
+    const DB = await admin.firestore();
+    const SP = await DB.collection("video_info").get();
+    for (let i = 0; i < SP.docs.length; i++) {
+      const documentID = SP.docs[i]["id"];
+      await axios
+        .get("https://www.googleapis.com/youtube/v3/videos", {
+          params: {
+            key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
+            id: documentID,
+            part: "statistics"
+          }
+        })
+        .then(async res => {
+          await DB.collection("video_info")
+            .doc(documentID)
+            .update({
+              viewCount: res.data.items[0].statistics.viewCount
+            });
+        })
+        .catch(err => {
+          console.log("Yoshidahametyahage");
+          console.log(err);
+        });
+    }
+  });

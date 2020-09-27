@@ -120,20 +120,11 @@
           </router-link>
         </template>
       </q-virtual-scroll>
-      <form @submit.prevent="showReviewMakeModal" class="urlInputForm column" name="urlSubmitForm">
-        <input
-          type="text"
-          id="youtubeURLInput"
-          name="registerURL"
-          v-model="registerURL"
-          placeholder="好きな料理Youtube動画のURLを貼ってください"
-        />
 
-        <q-btn class="registerButton shadow-5" label="登録" type="submit"></q-btn>
-      </form>
       <!-- --------------------------- -->
       <!-- １段目のジャンルで選択するのところ -->
       <!-- --------------------------- -->
+      <!-- <topPageSegment flag="meat" /> -->
       <topPageSegment flag="genre" />
       <topPageSegment flag="material" />
       <topPageSegment flag="menu" />
@@ -196,38 +187,6 @@
       </div>
     </q-page>
 
-    <!-- ユーザー登録をする様に促すDialog -->
-    <q-dialog v-model="alertToSignUp">
-      <ToLoginAlert />
-    </q-dialog>
-    <!-- レビューをかく促すDialog -->
-    <q-dialog v-model="reviewSubmit">
-      <registerReviewModal :registerURL="registerURL" :snippet="Snippet" />
-    </q-dialog>
-    <!-- 同じ動画は投稿できませんModal -->
-    <q-dialog v-model="doubleRegistAlert" persistent>
-      <doubleRegistered />
-    </q-dialog>
-    <!-- 料理動画以外は投稿できません -->
-    <q-dialog v-model="genreAlert" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="warning" color="red" text-color="white" size="sm" />
-          <span class="q-ml-sm">料理動画以外は投稿できません</span>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="black" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-    <!-- 料理を作ったのか、これからつくるかのModal -->
-    <q-dialog v-model="cookedOrWillCook" persistent>
-      <CookedOrWillCook @setMadeOrNot="SetMadeOrNot" />
-    </q-dialog>
-    <!-- 料理を後でつくるに登録しましたのModal -->
-    <q-dialog v-model="noticeRegistered" persistent>
-      <NoticeRegistered :userId="userId" />
-    </q-dialog>
     <!-- 最初におとづれたときのチュートリアル的なモーダル -->
     <!-- <q-dialog v-model="firstVisitOrNot">
       <FirstVisitModal @closeIntro="firstVisitOrNot = false" />
@@ -237,31 +196,31 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-import axios from "axios";
 import { LocalStorage } from "quasar";
-
 export default {
   data() {
     return {
-      noticeRegistered: false,
-      registerURL: "",
-      alertToSignUp: false,
-      reviewSubmit: false,
-      doubleRegistAlert: false,
-      genreAlert: false,
-      Snippet: "",
-      cookedOrWillCook: false,
-      SETMadeOrNot: false,
       // firstVisitOrNot: true,
-      heavylist: ["top2", "top3", "top4", "top5", "top6", "top7", "top8"],
-      VideoId: "",
+      heavylist: [
+        "top2",
+        "top3",
+        "top4",
+        "top5",
+        "top6",
+        "top7",
+        "top8",
+        "top9",
+        "top10",
+        "top11",
+        "top12",
+        "top13",
+      ],
       TAGArray: [],
     };
   },
   computed: {
     ...mapState("youtubers", ["YoutubersChannel_info"]),
     ...mapState("videos", ["cookVideos"]),
-    ...mapState("auth", ["loggedIn", "userId"]),
     ...mapState("usersPublic", ["usersPublicInfo"]),
     ...mapState("topPageImage", ["TopPageImage"]),
     ...mapGetters("youtubers", ["getTop5Youtuber"]),
@@ -270,123 +229,14 @@ export default {
       return document.getElementsByClassName("youtuberURL").item(0).textContent;
     },
   },
-  methods: {
-    ...mapActions("usersPublic", ["addFavoriteVTR"]),
-    ...mapActions("videos", ["addNewVideoData"]),
-    ...mapActions("youtubers", ["addNewYoutuberInfo"]),
-    async showReviewMakeModal() {
-      const RegisterURL = document.urlSubmitForm.registerURL.value;
-      if (!this.loggedIn) {
-        // ログインしていなかったらユーザー登録する様にDialogをだす
-        this.alertToSignUp = true;
-        this.registerURL = "";
-      } else if (RegisterURL == "") {
-        alert("有効なURLを入れてください");
-        this.registerURL = "";
-      } else if (
-        RegisterURL.includes("https://m.youtube.com/watch?v=") ||
-        RegisterURL.includes("https://www.youtube.com/watch?v=") ||
-        RegisterURL.includes("https://youtu.be/")
-      ) {
-        // VideoId をURLから取り出す
-        let videoId;
-        if (
-          RegisterURL.includes("https://m.youtube.com/watch?v=") ||
-          RegisterURL.includes("https://www.youtube.com/watch?v=")
-        ) {
-          const splicedURL1 = RegisterURL.split("&")[0];
-          videoId = splicedURL1.split("v=")[1];
-        } else if (RegisterURL.includes("https://youtu.be/")) {
-          videoId = RegisterURL.split("youtu.be/")[1];
-        }
-        // dataのVideoIdにデータを入れている。
-        this.VideoId = videoId;
-        console.log(videoId);
-        // videoIdのsnippetを取ってきて、Categoryが明らかに違うものは弾くようにする。
-        const res = await axios.get(
-          "https://www.googleapis.com/youtube/v3/videos",
-          {
-            params: {
-              key: "AIzaSyAU2_xBQsYmmlTMvW8nmMbbvfDmfOp5gig",
-              id: videoId,
-              part: "snippet",
-            },
-          }
-        );
-        const snippet = res.data.items[0].snippet;
-        console.log(snippet);
-        this.Snippet = snippet;
-        // ここで同じ動画を登録していないか動画をチェックする
-        // 同じVideoを登録できないようにする処理
-        let ObjectArray = Object.values(
-          this.usersPublicInfo[this.userId].favoriteVTRObj
-        );
-        let videoArray = [];
-        for (let i = 0; i < ObjectArray.length; i++) {
-          videoArray.push(ObjectArray[i].videoId);
-        }
-        if (videoArray.includes(videoId)) {
-          this.doubleRegistAlert = true;
-          return;
-        } else if (
-          snippet.categoryId == 24 ||
-          snippet.categoryId == 26 ||
-          snippet.categoryId == 22
-        ) {
-          this.cookedOrWillCook = true;
-        } else {
-          this.genreAlert = true;
-        }
-      } else {
-        alert("有効なURLを入れてください");
-        this.registerURL = "";
-      }
-    },
-    SetMadeOrNot(value) {
-      this.SETMadeOrNot = value;
-      this.cookedOrWillCook = false;
-      if (value == true) {
-        this.reviewSubmit = true;
-      } else {
-        this.addFavoriteVTR({
-          uid: this.userId,
-          review: "",
-          favoriteVTRvideoID: this.VideoId,
-          star_number: 0,
-          snippet: this.Snippet,
-          cooked: false,
-        });
-        this.addNewVideoData({
-          uid: this.userId,
-          favoriteVTRvideoID: this.VideoId,
-          snippet: this.Snippet,
-        });
-        this.addNewYoutuberInfo({
-          uid: this.userId,
-          channelId: this.Snippet.channelId,
-          favoriteVTRvideoID: this.VideoId,
-          snippet: this.Snippet,
-        });
-        this.noticeRegistered = true;
-      }
-    },
-  },
   components: {
-    ToLoginAlert: require("components/Modals/ToLoginAlert.vue").default,
-    registerReviewModal: require("components/Modals/registerReviewModal.vue")
-      .default,
-    CookedOrWillCook: require("components/Modals/CookedOrWillCook.vue").default,
     CardYoutuber: require("components/Card/YoutuberCard.vue").default,
     ReviewerTotalPageCard: require("components/Card/ReviewerTotalPageCard.vue")
       .default,
-    NoticeRegistered: require("components/Notice/NoticeRegistered.vue").default,
-    doubleRegistered: require("components/Notice/doubleRegistered.vue").default,
     topPageSegment: require("components/topPageSegment.vue").default,
     // FirstVisitModal: require("components/FirstVisitModal/FirstVisitModal.vue")
     //   .default,
   },
-  mounted() {},
-  created() {},
 };
 </script>
 
@@ -394,14 +244,7 @@ export default {
 // ---------------------------------
 // ページのトップ画面
 // ----------------------------------
-#youtubeURLInput {
-  width: 350px;
-  background: white;
-  height: 50px;
-  margin-right: auto;
-  margin-left: auto;
-  border-radius: 25px;
-}
+
 .topPageImageWrapper {
   width: 95%;
   height: 400px;
@@ -468,20 +311,6 @@ export default {
   text-align: center;
   padding-top: 5px;
 }
-@media screen and (min-width: 1500px) and (max-width: 1750px) {
-  .topImage-1-wrapper {
-    max-width: 650.66px;
-  }
-  .topPageImageWrapper {
-    height: 450px;
-  }
-  .topPagevideoTitleCookPage2 {
-    font-size: 17px;
-  }
-  .topPagevideoChannel {
-    font-size: 15px;
-  }
-}
 @media screen and (min-width: 1750px) {
   .topImage-1-wrapper {
     max-width: 700.66px;
@@ -496,6 +325,21 @@ export default {
     font-size: 16px;
   }
 }
+@media screen and (min-width: 1500px) and (max-width: 1750px) {
+  .topImage-1-wrapper {
+    max-width: 650.66px;
+  }
+  .topPageImageWrapper {
+    height: 450px;
+  }
+  .topPagevideoTitleCookPage2 {
+    font-size: 17px;
+  }
+  .topPagevideoChannel {
+    font-size: 15px;
+  }
+}
+
 .topImageWrapperRight {
   width: 30%;
   height: 100%;
@@ -522,28 +366,7 @@ export default {
   display: flex;
   justify-content: center;
 }
-// ==========================
-//  URLのインプットのところ
-// ==========================
-.registerWrapper {
-  width: 360px;
-  margin-top: 131px;
-}
-.urlInputForm {
-  margin-right: auto;
-  margin-left: auto;
-  display: flex;
-  justify-content: center;
-}
-.registerButton {
-  margin-top: 10px;
-  width: 150px;
-  font-weight: bold;
-  margin-right: auto;
-  margin-left: auto;
-  background-color: #ff9933;
-  color: white;
-}
+
 // ==========================
 //  タグをのせるところ
 // ==========================
@@ -651,12 +474,12 @@ export default {
 }
 @media screen and (min-width: 905px) and (max-width: 994px) {
   .topPageImageWrapper {
-    height: 350px;
+    height: 360px;
   }
 }
 @media screen and (min-width: 857px) and (max-width: 904px) {
   .topPageImageWrapper {
-    height: 320px;
+    height: 330px;
   }
 }
 @media screen and (min-width: 769px) and (max-width: 856px) {
@@ -666,7 +489,7 @@ export default {
     margin-right: auto;
   }
   .topPageImageWrapper {
-    height: 350px;
+    height: 360px;
   }
 }
 @media screen and (min-width: 680px) and (max-width: 768px) {
@@ -676,7 +499,7 @@ export default {
     margin-right: auto;
   }
   .topPageImageWrapper {
-    height: 330px;
+    height: 340px;
   }
   .topImageTitleWrapper {
     font-size: 19px;
@@ -689,7 +512,7 @@ export default {
     margin-right: auto;
   }
   .topPageImageWrapper {
-    height: 300px;
+    height: 310px;
   }
   .topImageTitleWrapper {
     font-size: 17px;
@@ -702,7 +525,7 @@ export default {
     margin-right: auto;
   }
   .topPageImageWrapper {
-    height: 280px;
+    height: 290px;
   }
   .topImageTitleWrapper {
     font-size: 17px;
@@ -760,7 +583,7 @@ export default {
     font-size: 12px;
   }
   .topPageImageWrapper {
-    height: 240px;
+    height: 250px;
   }
   .topImage-1-wrapper {
     width: 86%;
