@@ -34,7 +34,6 @@ const getters = {
     model,
     flag
   ) => {
-    console.log(selectedTag);
     let array = [];
     let videos = rootGetters["videos/CookVideoStarOrder"];
     if (selectedTag == "" && timeArray.length == 0) {
@@ -115,7 +114,11 @@ const getters = {
         return 0;
       });
     }
-    return array;
+    if (array.length > 50) {
+      return array.slice(0, 50);
+    } else {
+      return array;
+    }
   },
   sortByTagOfCookVideosTop5: (state, getters) => (
     selectedTag,
@@ -123,16 +126,41 @@ const getters = {
     model,
     flag
   ) => {
-    let videoObj = getters.sortByTagOfCookVideos(
+    let videoArray = getters.sortByTagOfCookVideos(
       selectedTag,
       timeArray,
       model,
       flag
     );
-    if (videoObj.length > 5) {
-      return videoObj.slice(0, 5);
+    if (videoArray.length > 5) {
+      return videoArray.slice(0, 5);
     } else {
-      return videoObj;
+      return videoArray;
+    }
+  },
+  sortByMeatTop5: (state, getters) => (selectedMeat, model) => {
+    console.log(selectedMeat);
+    let videoArray = getters.sortByTagOfCookVideos(
+      "g6",
+      ["time1", "time2", "time3"],
+      model,
+      "genre"
+    );
+    if (selectedMeat.length == 0) {
+      return videoArray.slice(0, 5);
+    } else {
+      console.log("hages");
+      const returnArray = videoArray.filter(
+        data =>
+          data["materialTag"] != undefined &&
+          data.materialTag.includes(selectedMeat)
+      );
+      console.log(returnArray);
+      if (returnArray.length > 5) {
+        return returnArray.slice(0, 5);
+      } else {
+        return returnArray;
+      }
     }
   }
 };

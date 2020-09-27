@@ -4,12 +4,7 @@
       <!-- ソートのSelect　登録者が多い順or登録者が少ない順 -->
       <div class="row PageYoutubers-topContainer">
         <div class="videoTitleCookPage row">
-          <q-icon
-            name="live_tv"
-            color="grey-14"
-            size="md"
-            class="q-mr-md q-ml-sm"
-          ></q-icon>
+          <q-icon name="live_tv" color="grey-14" size="md" class="q-mr-md q-ml-sm"></q-icon>
           <div class="cookVideoTitleYoutuber">料理チャンネル一覧</div>
         </div>
         <q-select
@@ -22,11 +17,7 @@
         />
       </div>
       <div class="row YouTuberCardWrapper widthAdjust" name="youtubers">
-        <transition-group
-          appear
-          enter-active-class="animated fadeInLeft"
-          class="row"
-        >
+        <transition-group appear enter-active-class="animated fadeInLeft" class="row">
           <YoutuberCard
             :channelInfo="channelInfo"
             v-for="(channelInfo, key) in getSortedYoutubers(model)"
@@ -52,29 +43,16 @@ export default {
         "高評価が多い順",
         "登録者数が多い順",
         "登録者数が少ない順",
-        "レビュー数順"
-      ]
+        "レビュー数順",
+      ],
     };
   },
   computed: {
-    ...mapGetters("youtubers", ["getSortedYoutubers"])
-  },
-  methods: {
-    ...mapActions("youtubers", ["setSearch"]),
-    getPageNum() {
-      const pageTotal = Math.ceil(
-        Object.keys(this.YoutubersChannel_info).length / 50
-      );
-      return pageTotal;
-    },
-    setSelectedTab(genre) {
-      this.tab = genre;
-      this.othersmodal = false;
-    }
+    ...mapGetters("youtubers", ["getSortedYoutubers"]),
   },
   components: {
-    YoutuberCard: require("components/Card/YoutuberCard.vue").default
-  }
+    YoutuberCard: require("components/Card/YoutuberCard.vue").default,
+  },
 };
 </script>
 

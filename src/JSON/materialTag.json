@@ -313,5 +313,30 @@
     "key": "mat9",
     "meta": "milk",
     "name": "チーズ"
+  },
+  "mat65": {
+    "key": "mat65",
+    "meta": "vegetable",
+    "name": "白菜"
+  },
+  "mat66": {
+    "key": "mat66",
+    "meta": "vegetable",
+    "name": "アスパラ"
+  },
+  "mat67": {
+    "key": "mat67",
+    "meta": "vegetable",
+    "name": "小松菜"
+  },
+  "mat68": {
+    "key": "mat68",
+    "meta": "fish",
+    "name": "シーチキン"
+  },
+  "mat69": {
+    "key": "mat69",
+    "meta": "meat",
+    "name": "ハム"
   }
 }

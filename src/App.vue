@@ -21,7 +21,6 @@ export default {
     this.handleAuthStateChange();
     this.getUsersPublicProfile();
     this.getYoutubers_info();
-    // this.getWatchNumber();
   },
 };
 </script>

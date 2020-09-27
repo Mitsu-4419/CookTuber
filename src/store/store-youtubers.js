@@ -288,7 +288,8 @@ const getters = {
         return 0;
       });
     }
-    return array;
+    const top50YoutuberArray = array.slice(0, 50);
+    return top50YoutuberArray;
   },
   // トップページでトップ５の高評価Youtuberの表示
   getTop5Youtuber: (state, getters) => {

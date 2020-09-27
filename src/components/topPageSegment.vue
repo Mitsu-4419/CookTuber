@@ -1,6 +1,62 @@
 <template>
   <div>
-    <template v-if="flag=='genre'">
+    <template v-if="flag=='meat'">
+      <div class="cookImageWrapperTopPage">
+        <div class="cookImageWrapperTopPage-title row">
+          <div class="menuIconWrapper">
+            <q-icon name="fas fa-drumstick-bite" size="sm" class="topPageIcon"></q-icon>
+          </div>
+          <div class="menuTitleWrapper">
+            <span class="cookImageWrapperTopPage-title-span">おすすめ肉料理</span>
+          </div>
+          <q-select
+            class="topPageFirstSelect"
+            dense
+            rounded
+            outlined
+            v-model="model"
+            :options="options"
+            bg-color="white"
+            color="grey-5"
+          />
+          <q-space />
+          <!-- <div class="MoreButton_wrapper">
+            <q-btn
+              flat
+              :to="{
+                    name: 'allVideos',
+                    query: { flag: 'genre' }
+                  }"
+              class="moreButton"
+              label="もっとみる"
+            ></q-btn>
+          </div>-->
+        </div>
+        <div class="TopPageTagWrapper">
+          <div class="row">
+            <ChipComponent
+              v-for="tag in sortedTag('meat', 'material')"
+              :key="tag.key"
+              :tagName="tag.name"
+              :id="tag.key"
+              @setActivatedTag="setTagArray"
+              flag="topPage"
+              ref="materialchip"
+            />
+          </div>
+        </div>
+        <div class="cookImageTopPageWrapper row">
+          <CookVideoCardTopPage
+            v-for="(cookVideoDetail, key) in sortByMeatTop5(selectedMaterialTag,model)"
+            :key="key"
+            :id="key"
+            :cookVideoDetail="cookVideoDetail"
+            from="topPage"
+          />
+        </div>
+      </div>
+    </template>
+    <template v-else-if="flag=='genre'">
       <div class="cookImageWrapperTopPage">
         <div class="cookImageWrapperTopPage-title row">
           <div class="menuIconWrapper">
@@ -190,10 +246,10 @@ export default {
         "meat",
         "rice",
         "noodle",
-        "fish",
-        "alcohol",
-        "wheat",
-        "seasoning",
+        // "fish",
+        // "alcohol",
+        // "wheat",
+        // "seasoning",
       ],
       tagTimeArray: ["time1", "time2", "time3"],
       selectedGenreTag: "",
@@ -208,7 +264,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("allTag", ["sortedTag", "sortByTagOfCookVideosTop5"]),
+    ...mapGetters("allTag", [
+      "sortedTag",
+      "sortByTagOfCookVideosTop5",
+      "sortByMeatTop5",
+    ]),
   },
   methods: {
     setTagArray(value) {
